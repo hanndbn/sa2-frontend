@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -64,6 +65,7 @@ class SiteController extends Controller
         $this->layout = 'login';
         return $this->render('login');
     }
+
     public function actionHelp()
     {
         return $this->render('help');
@@ -223,4 +225,22 @@ class SiteController extends Controller
             echo $msg;
         }
     }
+
+    public function actionLoginphp()
+    {
+        $this->layout = 'login';
+        return $this->render('loginphp');
+    }
+    public function actionAuthenlogin()
+    {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $sql = "select username,password from user";
+        //$user = new User();
+
+        $user = User::find()->all();
+
+        return "{ads:add}";
+    }
+
 }
