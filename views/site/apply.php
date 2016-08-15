@@ -36,7 +36,7 @@ use yii\helpers\Html;
 						<option value="PR / Marketting">
 							PR / Marketting
 						</option>
-						<opti2on value="Hành chính nhân sự">
+						<option value="Hành chính nhân sự">
 							Hành chính nhân sự
 						</option>
 						<option value="QA / TEST">

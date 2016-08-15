@@ -11,6 +11,7 @@ use yii\helpers\Html;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Job;
+use app\models\JobPosition;
 
 class SiteController extends Controller
 {
@@ -56,6 +57,16 @@ class SiteController extends Controller
         $jobs = Job::findBySql($sql)->all();
         $sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 3';
         $banner_jobs = Job::findBySql($sql)->all();
+
+//        s
+//        $doc = new DOMDocument();
+//        @$doc->loadHTML($html);
+//        $tags = $doc->getElementsByTagName('article')->item(0);
+
+//        foreach ($tags as $tag) {
+//            echo $tag->getAttribute('src');
+//        }
+
         return $this->render('index',['jobs'=>$jobs,'banner_jobs'=>$banner_jobs]);
     }
 
@@ -71,8 +82,11 @@ class SiteController extends Controller
     public function actionDanhsach()
     {
         $sql = 'SELECT COUNT(*) FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4)';
+        //sql select job positions
+        $sqlSelect = 'SELECT * FROM jobposition';
         $count = Yii::$app->db->createCommand($sql)->queryScalar();
-        return $this->render('list',['count'=>$count]);
+        $lstPosition = JobPosition::findBySql($sqlSelect)->all();
+        return $this->render('list',['count'=>$count,'lstPosition'=>$lstPosition]);
     }
     public function actionGioithieu()
     {
@@ -114,6 +128,7 @@ class SiteController extends Controller
             $key = strip_tags($_POST['keyword']);
             $add = strip_tags($_POST['address']);
             $sal = strip_tags($_POST['salary']);
+            $position = strip_tags($_POST['position']);
             $key = '%'.$key.'%';
             $add = '%'.$add.'%';
             $sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) AND ( title LIKE "'.$key.'" OR description LIKE "'.$key.'") AND (contact LIKE "'.$add.'")';
@@ -121,6 +136,10 @@ class SiteController extends Controller
             if($sal != '' && $sal != NULL) {
                 $sql .= ' AND salary = "'.$sal.'"';
                 $sql_count .= ' AND salary = "'.$sal.'"';
+            }
+            if($position != null && $position != ''){
+                $sql .= ' AND position = "'.$position.'"';
+                $sql_count .= ' AND position = "'.$position.'"';
             }
             if($org != 0) {
                 $sql .= ' AND orgid = '.$org;

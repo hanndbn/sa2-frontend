@@ -13,6 +13,14 @@
 
 			<div class="search_keywords col-lg-4">
 				<input type="text" name="keyword" id="keyword" placeholder="Nhập tiêu đề công việc" value="">
+				<div class="select" style="float: right;width: 50%" >
+					<select name="position" id="position" class="search_region" style="border: 0px;">
+						<option value="">Vị Trí</option>
+						<?php foreach ($lstPosition as $item){?>
+							<option class="level-0" value="<?=$item->id?>"><?=$item->name?></option>
+						<?php }?>
+					</select>
+				</div>
 			</div>
 
 			<div class="search_location col-lg-2">
@@ -88,7 +96,7 @@
 			function loading_hide(){
 				$('#loading').fadeOut('fast');
 			}
-			function loadData(page,keyword,org,address,salary){
+			function loadData(page,keyword,org,address,salary,position){
                     loading_show();
                     var csrfToken = $('meta[name="csrf-token"]').attr("content");
                     $.ajax
@@ -101,6 +109,7 @@
                     		org: org,
                     		address: address,
                     		salary: salary,
+							position: position,
                     		_csrf : csrfToken
                     	},
                     	success: function(msg)
@@ -115,14 +124,16 @@
                 var address= $('#address').val();
                 var company = $('#company').val();
                 var keyword = $('#keyword').val();
-                loadData(1,keyword,company,address,salary);  // For first time page load default results
+				var position = $('#position').val();
+                loadData(1,keyword,company,address,salary,position);  // For first time page load default results
                 $(document).on('click','#container li.active',function(){
                 	var page = $(this).attr('p');
                 	var salary = $('#salary').val();
                 	var address= $('#address').val();
                 	var company = $('#company').val();
-                	var keyword = $('#keyword').val();
-                	loadData(page,keyword,company,address,salary);
+					var keyword = $('#keyword').val();
+					var position = $('#position').val();
+                	loadData(page,keyword,company,address,salary,position);
 
                 });
                 $(document).on('click','#search',function(){
@@ -130,7 +141,8 @@
                 	var address= $('#address').val();
                 	var company = $('#company').val();
                 	var keyword = $('#keyword').val();
-                	loadData(1,keyword,company,address,salary);
+					var position = $('#position').val();
+                	loadData(1,keyword,company,address,salary,position);
 
                 });
                 $(document).on("keypress",'#keyword', function(e) {
@@ -139,7 +151,8 @@
                 		var address= $('#address').val();
                 		var company = $('#company').val();
                 		var keyword = $('#keyword').val();
-                		loadData(1,keyword,company,address,salary);
+						var position = $('#position').val();
+                		loadData(1,keyword,company,address,salary,position);
 
                 	}
                 });

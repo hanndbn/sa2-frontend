@@ -121,10 +121,10 @@ AppAsset::register($this);
                           <a href="<?=Yii::$app->homeUrl?>" style="color: #fff !important; font-size: 0;">
                            <img src="<?=Yii::$app->request->baseUrl?>/img/House.png" alt="Search" style="width: 20px; vertical-align: top;">
                            Trang chủ</a></li>
-                           <li><a href="<?=Url::toRoute('site/gioithieu')?>" class="td-text">Về Tinh Vân </a></li>
+                           <li><a target="_blank" href="http://tinhvan.vn/gioi-thieu/gioi-thieu-chung/" class="td-text">Về Tinh Vân </a></li>
                            <li><a href="<?=Url::toRoute('site/danhsach')?>" class="td-text">Cơ hội nghề nghiệp</a></li>
                            <li><a href="<?=Url::toRoute('site/help')?>" class="td-text">Trợ giúp</a></li>
-                           <li><a target="_blank" href="http://vuonuomtinhvan.com/" class="td-text">Vườn ươm</a></li>
+<!--                           <li><a target="_blank" href="http://vuonuomtinhvan.com/" class="td-text">Vườn ươm</a></li>-->
                          </ul>
                        </div>
                      </div>

@@ -1,5 +1,4 @@
 <?php use yii\helpers\Html;?>
-
 <div id="carousel-example-generic" class="container carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
@@ -11,7 +10,7 @@
     <div class="item active">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-          <img src="<?=Yii::$app->request->baseUrl?>/img/slide1.jpg" alt="Apply" class="img-responsive">
+          <img src="<?=$banner_jobs[0]->picture?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -30,7 +29,7 @@
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-          <img src="<?=Yii::$app->request->baseUrl?>/img/slide2.jpg" alt="Apply" class="img-responsive">
+            <img src="<?=$banner_jobs[1]->picture?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -49,7 +48,7 @@
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-          <img src="<?=Yii::$app->request->baseUrl?>/img/slide3.jpg" alt="Apply" class="img-responsive">
+            <img src="<?=$banner_jobs[2]->picture?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -72,6 +71,41 @@
 <script type="text/javascript">
   $('.des-banner').find('*').removeAttr('style');
 </script>
+<?php
+function get_url_contents($url){
+    $crl = curl_init();
+    $timeout = 5;
+    curl_setopt ($crl, CURLOPT_URL,$url);
+    curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
+    //curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
+    $ret = curl_exec($crl);
+    curl_close($crl);
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($ret);
+    $data = $dom->getElementsByTagName('article')->item(0);
+    $article = $data->getElementsByTagName('section')->item(0)->nodeValue;
+    return $article;
+}
+
+function get_url_image($url){
+    $crl = curl_init();
+    $timeout = 5;
+    curl_setopt ($crl, CURLOPT_URL,$url);
+    curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
+    //curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
+    $ret = curl_exec($crl);
+    curl_close($crl);
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($ret);
+    $data = $dom->getElementsByTagName('article')->item(0);
+    $image = $data->getElementsByTagName('img')->item(0);
+    $src = $image->getAttribute('src');
+    return $src;
+}
+//
+//echo file_get_contents("http://my.tinhvan.com/category/nguoi_tinhvan/feed/"); ?>
 <div class="container" style="margin-top: 15px; margin-bottom: 0;">
  <div class="col-md-9">
    <div class="list-tv">
@@ -150,40 +184,18 @@
    <li class="slogan" style="">
     <h3><span>Người Tinh Vân</span></h3>
     <p style="text-align: justify; font-style: italic;float:left">
-      <a target="_blank" href="http://my.tinhvan.com/category/nguoi_tinhvan/"><img src="<?=Yii::$app->request->baseUrl?>/img/anhto.jpg" alt="Sếp" style='width:120px;padding-right:10px;float:left;'></a>
-      <span style="font-size: 13px;">“Không chỉ là một Phó Tổng Giám đốc  xuất sắc trong  định hướng chiến lược sản phẩm của Tinhvan Group, anh Phạm Thúc Trương Lương vừa lập kỷ lục là một trong ba người Việt Nam đầu tiên hoàn thành chặng đua marathon dài hơn 42km tại Cuộc thi  việt dã vượt núi – Moutain Marathon 2014 diễn ra tại Sapa ngày 20/9 vừa qua.</span>
+      <a target="_blank" href="http://my.tinhvan.com/category/nguoi_tinhvan/"><img src="<?php echo get_url_image("http://my.tinhvan.com/category/nguoi_tinhvan/");?>" alt="Sếp" style='width:120px;padding-right:10px;float:left;'></a>
+      <span style="font-size: 13px;"><?php echo get_url_contents("http://my.tinhvan.com/category/nguoi_tinhvan/");?></span>
     </li>
     <li>
-      <h3 style=''><span>Hoạt động văn hóa</span></h3>
-      <div class="carousel" data-ride="carousel">
-        <div class="carousel-thumb col-xs-12 col-md-12 x">
-          <a class="right-col" target="_blank" href="<?=Yii::$app->request->baseUrl?>/img/hdvh1.jpg">
-            <img src="<?=Yii::$app->request->baseUrl?>/img/hdvh1.jpg" alt="Apply">
-          </a>
-          <a class="right-col" target="_blank" href="<?=Yii::$app->request->baseUrl?>/img/hdvh2.jpg">
-            <img src="<?=Yii::$app->request->baseUrl?>/img/hdvh2.jpg" alt="Apply">
-          </a>
-          <a class="right-col" target="_blank" href="http://my.tinhvan.com/category/xa-lo-tinh-van/">
-            <img src="<?=Yii::$app->request->baseUrl?>/img/img3.jpg" alt="Apply">
-          </a>
-          <a class="right-col" target="_blank" href="http://my.tinhvan.com/phuot-trong-toi-la/">
-            <img src="<?=Yii::$app->request->baseUrl?>/img/img4.jpg" alt="Apply">
-          </a>
-        </div>
-      </div>
+      <h3 style=''><span>Xa Lộ Tinh Vân</span></h3>
+        <a target="_blank" href="http://my.tinhvan.com/category/xa-lo-tinh-van/"><img src="<?php echo get_url_image("http://my.tinhvan.com/category/xa-lo-tinh-van/");?>" alt="Sếp" style='width:120px;padding-right:10px;float:left;'></a>
+        <span style="font-size: 13px;"><?php echo get_url_contents("http://my.tinhvan.com/category/xa-lo-tinh-van/");?></span>
     </li>
     <li>
-      <h3 style=''><span>Tiện ích</span></h3>
-      <div class="carousel" data-ride="carousel">
-        <div class="carousel-thumb col-xs-12 col-md-12 x">
-          <a target="_blank"   class="right-col" href="http://my.tinhvan.com/tron-bo-su-ky-tinh-van-20-nam-se-chia-va-sang-tao/"><img src="<?=Yii::$app->request->baseUrl?>/img/suky.jpg" alt=""></a>
-          <a target="_blank" class="right-col" href="http://lamtho.vn"><img src="<?=Yii::$app->request->baseUrl?>/img/thomay.jpg" alt=""></a>
-          <a target="_blank" class="right-col" href="http://xalovansu.com"><img src="<?=Yii::$app->request->baseUrl?>/img/vansu.jpg" alt=""></a>
-          <a target="_blank" class="right-col" href="http://my.tinhvan.com/category/tu-lieu/tap-chi-mytinhvan/"><img src="<?=Yii::$app->request->baseUrl?>/img/mytinhvan.jpg" alt=""></a>
-        </div>
-
-
-      </div>
+      <h3 style=''><span>Hành Trình Tuổi 20</span></h3>
+        <a target="_blank" href="http://my.tinhvan.com/category/hanh_trinh_tuoi_20/"><img src="<?php echo get_url_image("http://my.tinhvan.com/category/hanh_trinh_tuoi_20/");?>" alt="Sếp" style='width:120px;padding-right:10px;float:left;'></a>
+        <span style="font-size: 13px;"><?php echo get_url_contents("http://my.tinhvan.com/category/hanh_trinh_tuoi_20/");?></span>
     </li>
 
   </ul>
