@@ -1,6 +1,5 @@
-<?php use yii\helpers\Url;?>
 <div class="login-align">
-    <img alt="Apply2" src="http://apply.vuonuom.tv/res/Image/login.png">
+    <img alt="Apply2" src="/res/Image/login.png">
     <h1>
       Đăng nhập
     </h1>
@@ -54,16 +53,17 @@
       return "";
     }
     function submitLogin(){
-      var data={};
-      data.username=document.getElementById('username').value;
-      data.password= document.getElementById('password').value;
-      //var url = "<?=Yii::$app->homeUrl?>apply/user/login?"+ser(data);
+      var username=document.getElementById('username').value;
+      var password= document.getElementById('password').value;
+      var url = "<?=Yii::$app->homeUrl?>authenlogin";
       loading_show();
-      var csrfToken = $('meta[name="csrf-token"]').attr("content");
       $.ajax({
         type: "POST",
-        url: "<?=Url::toRoute('site/authenlogin')?>",
-        data: data,
+        url: url,
+        data:{
+            username: username,
+            password: password
+        },
         async: true,
         cache: false,
         error: function(xhr, status, error) {
@@ -77,8 +77,13 @@
         },
         success: function(msg)
         {
-          loading_hide();
-         // window.location.href="<?=Yii::$app->homeUrl?>ui/html/";
+            loading_hide();
+            if(msg == 'success'){
+                window.location.href="<?=Yii::$app->homeUrl?>admin";
+            }else{
+                $('#error').html('<h4 style="color:red">Tài khoản hoặc mật khẩu không đúng</h4>');
+            }
+
         }
       });
     }
@@ -109,7 +114,6 @@
         alert('Vui lòng nhập đầy đủ tài khoản và mật khẩu');
         return false;
       }
-
     });
   });
 </script>

@@ -250,16 +250,127 @@ class SiteController extends Controller
         $this->layout = 'login';
         return $this->render('loginphp');
     }
+
     public function actionAuthenlogin()
     {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $sql = "select username,password from user";
-        //$user = new User();
+        if (isset($_POST['username'])) {
+            $username = $_POST['username'];
+        }
+        if (isset($_POST['password'])) {
+            $password = $_POST['password'];
+        }
 
-        $user = User::find()->all();
+        $list = User::find()
+            ->where(['username' => $username, 'password' => hash('sha256', $password)])
+            ->asArray()
+            ->count();
+        if ($list > 0) {
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
 
-        return "{ads:add}";
+    public function actionAdmin()
+    {
+        $this->layout = 'mainAdmin';
+        return $this->render('admin');
+    }
+
+    public function actionAjaxuser()
+    {
+        if (isset($_POST['page'])) {
+            $page = $_POST['page'];
+            //$org = $_POST['org'];
+            $currentpage = $page;
+            $page -= 1;
+            $prv = true;
+            $next = true;
+            $end = 10;
+            $start = $page * $end;
+            //$key = strip_tags($_POST['keyword']);
+            //$add = strip_tags($_POST['address']);
+            //$sal = strip_tags($_POST['salary']);
+            //$key = '%' . $key . '%';
+            //$add = '%' . $add . '%';
+            //$sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) AND ( title LIKE "' . $key . '" OR description LIKE "' . $key . '") AND (contact LIKE "' . $add . '")';
+            $sql_count = Job::find()->count();
+            //if ($sal != '' && $sal != NULL) {
+            //    $sql .= ' AND salary = "' . $sal . '"';
+            //    $sql_count .= ' AND salary = "' . $sal . '"';
+            //}
+            //if ($org != 0) {
+            //    $sql .= ' AND orgid = ' . $org;
+            //    $sql_count .= ' AND orgid = ' . $org;
+            //}
+            $listUsers = User::find()->asArray()->all();
+            $msg = "<div style='border-bottom: 1px #ccc solid;'>";
+            if (!empty($listUsers)) {
+                foreach ($listUsers as $user) {
+                    $msg .= '
+                    <div class="tv-item">
+                       <div class="content col-xs-12 col-sm-10 col-md-7 col-lg-5">'
+                        . Html::a('<h4>' . $user['id'] . '</h4>') . '
+                    </div>
+
+                    <div class="thumb col-xs-12 col-md-3 col-lg-2">
+                        <span class="tv-salary tt" data-placement="left">' . $user['username'] . '</span>
+                    </div>
+                    ';
+                    $msg .= "</div>";
+                }
+            }
+            $count = Yii::$app->db->createCommand($sql_count)->queryScalar();
+            $numberpage = ceil($count / $end);
+            if ($currentpage >= 7) {
+                $start_loop = $currentpage - 3;
+                if ($numberpage > $currentpage + 3)
+                    $end_loop = $currentpage + 3;
+                else if ($currentpage <= $numberpage && $currentpage > $numberpage - 6) {
+                    $start_loop = $numberpage - 6;
+                    $end_loop = $numberpage;
+                } else {
+                    $end_loop = $numberpage;
+                }
+            } else {
+                $start_loop = 1;
+                if ($numberpage > 7)
+                    $end_loop = 7;
+                else
+                    $end_loop = $numberpage;
+            }
+            $msg .= " </div><div class='page-paging'>
+               <div class='pagination js-pagination'>
+                   <ul class='pagination__list' style='margin-right: 19px;'>";
+            if ($prv && $currentpage > 1) {
+                $pre = $currentpage - 1;
+                $msg .= "<li p='" . $pre . "' class='active pagination_previous'><b>Prev</b></li>";
+            } else if ($prv) {
+                $msg .= "<li class='inactive pagination_page-current' style='display:none'><b>Prev</b></li>";
+            }
+
+            for ($i = $start_loop; $i <= $end_loop; $i++) {
+                if ($end_loop > $start_loop) {
+                    if ($currentpage == $i)
+                        $msg .= "<li p='" . $i . "' class='active pagination_page-current'>" . $i . "</li>";
+                    else
+                        $msg .= "<li p='" . $i . "'  class='active pagination_page'>" . $i . "</li> ";
+                }
+
+            }
+            if ($next && $currentpage < $numberpage) {
+                $nex = $currentpage + 1;
+                $msg .= "<li p='" . $nex . "' class='active pagination_next'><b>Next</b></li>";
+            } else if ($next) {
+                $msg .= "<li class='inactive pagination_page-current' style='display:none'><b>Next</b></li>";
+            }
+
+            $msg .= "</ul>
+                   </div>
+               </div>";
+            //} else $msg = '<h4 style="text-align:center">Không có công việc nào</h4>';
+            echo $msg;
+        }
     }
 
 }
