@@ -94,6 +94,9 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+    public function actionUnsubcribe(){
+        return $this->render('unsubcribe');
+    }
     public function actionVitri($id)
     {
         $job = Job::findOne($id);
