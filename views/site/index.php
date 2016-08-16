@@ -1,4 +1,8 @@
-<?php use yii\helpers\Html;?>
+<?php
+use yii\helpers\Html;
+use yii\helpers\Url;
+header('Content-Type: application/json');
+?>
 <div id="carousel-example-generic" class="container carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
@@ -10,7 +14,7 @@
     <div class="item active">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-          <img src="<?=$banner_jobs[0]->picture?>" alt="Apply" class="img-responsive" style="height: 228px;">
+          <img src="<?=($banner_jobs[0]->picture == null) ? Yii::$app->request->baseUrl.'/img/slide1.png' : $banner_jobs[0]->picture ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -29,7 +33,7 @@
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-            <img src="<?=$banner_jobs[1]->picture?>" alt="Apply" class="img-responsive" style="height: 228px;">
+            <img src="<?=($banner_jobs[1]->picture == null) ? Yii::$app->request->baseUrl.'/img/slide2.png' : $banner_jobs[1]->picture ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -48,7 +52,7 @@
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-            <img src="<?=$banner_jobs[2]->picture?>" alt="Apply" class="img-responsive" style="height: 228px;">
+            <img src="<?=($banner_jobs[2]->picture == null) ? Yii::$app->request->baseUrl.'/img/slide3.png' : $banner_jobs[1]->picture ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -70,42 +74,59 @@
 </div>
 <script type="text/javascript">
   $('.des-banner').find('*').removeAttr('style');
+  //$(document).ready(function(){
+      $.ajax
+       ({
+           type: "POST",
+           url: "<?=Url::toRoute('site/getsourcedata')?>",
+           data: {
+               url: 'http://my.tinhvan.com/category/nguoi_tinhvan/'
+           },
+           async: true,
+           success: function(msg)
+           {
+               $('.loadingTV').hide();
+               var objData = jQuery.parseJSON(msg);
+               //alert(objData.msg);
+               $('#image-tv').attr('src',objData.image)
+               $('#article-tv').text(objData.article);
+               $.ajax
+               ({
+                   type: "POST",
+                   url: "<?=Url::toRoute('site/getsourcedata')?>",
+                   data: {
+                       url: 'http://my.tinhvan.com/category/xa-lo-tinh-van/'
+                   },
+                   async: true,
+                   success: function(msg)
+                   {
+                       $('.loadingXL').hide();
+                       var objData = jQuery.parseJSON(msg);
+                       $('#image-xl').attr('src',objData.image)
+                       $('#article-xl').text(objData.article);
+                       $.ajax
+                       ({
+                           type: "POST",
+                           url: "<?=Url::toRoute('site/getsourcedata')?>",
+                           data: {
+                               url: 'http://my.tinhvan.com/category/hanh_trinh_tuoi_20/'
+                           },
+                           async: true,
+                           success: function(msg)
+                           {
+                               $('.loadingHT').hide();
+                               var objData = jQuery.parseJSON(msg);
+                               //alert(objData.msg);
+                               $('#image-ht').attr('src',objData.image)
+                               $('#article-ht').text(objData.article);
+                           }
+                       });
+                   }
+               });
+           }
+       });
+   //})
 </script>
-<?php
-function get_url_contents($url){
-    $crl = curl_init();
-    $timeout = 5;
-    curl_setopt ($crl, CURLOPT_URL,$url);
-    curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
-    //curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
-    $ret = curl_exec($crl);
-    curl_close($crl);
-    $dom = new DOMDocument();
-    libxml_use_internal_errors(true);
-    $dom->loadHTML($ret);
-    $data = $dom->getElementsByTagName('article')->item(0);
-    $article = $data->getElementsByTagName('section')->item(0)->nodeValue;
-    return $article;
-}
-
-function get_url_image($url){
-    $crl = curl_init();
-    $timeout = 5;
-    curl_setopt ($crl, CURLOPT_URL,$url);
-    curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
-    //curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
-    $ret = curl_exec($crl);
-    curl_close($crl);
-    $dom = new DOMDocument();
-    libxml_use_internal_errors(true);
-    $dom->loadHTML($ret);
-    $data = $dom->getElementsByTagName('article')->item(0);
-    $image = $data->getElementsByTagName('img')->item(0);
-    $src = $image->getAttribute('src');
-    return $src;
-}
-//
-//echo file_get_contents("http://my.tinhvan.com/category/nguoi_tinhvan/feed/"); ?>
 <div class="container" style="margin-top: 15px; margin-bottom: 0;">
  <div class="col-md-9">
    <div class="list-tv">
@@ -180,22 +201,32 @@ function get_url_image($url){
  <h3 class="caption-home">
    MY TINH VÂN
  </h3>
+
  <ul style="">
-   <li class="slogan" style="">
+   <li class="slogan" style="min-height: 200px;">
     <h3><span>Người Tinh Vân</span></h3>
     <p style="text-align: justify; font-style: italic;float:left">
-      <a target="_blank" href="http://my.tinhvan.com/category/nguoi_tinhvan/"><img src="<?php echo get_url_image("http://my.tinhvan.com/category/nguoi_tinhvan/");?>" alt="Sếp" style='width:120px;padding-right:10px;float:left;'></a>
-      <span style="font-size: 13px;"><?php echo get_url_contents("http://my.tinhvan.com/category/nguoi_tinhvan/");?></span>
+      <a target="_blank" href="http://my.tinhvan.com/category/nguoi_tinhvan/"><img src="" style='width:120px;padding-right:10px;float:left;' id="image-tv"></a>
+      <span style="font-size: 13px;" id="article-tv"></span>
+        <div style="padding-left: 74px;margin-top:  51px;" class="loadingTV">
+          <img src='<?=Yii::$app->request->baseUrl?>/img/ajax-loader.gif'/>
+        </div>
     </li>
-    <li>
+    <li style="min-height: 200px;">
       <h3 style=''><span>Xa Lộ Tinh Vân</span></h3>
-        <a target="_blank" href="http://my.tinhvan.com/category/xa-lo-tinh-van/"><img src="<?php echo get_url_image("http://my.tinhvan.com/category/xa-lo-tinh-van/");?>" alt="Sếp" style='width:120px;padding-right:10px;float:left;'></a>
-        <span style="font-size: 13px;"><?php echo get_url_contents("http://my.tinhvan.com/category/xa-lo-tinh-van/");?></span>
+        <a target="_blank" href="http://my.tinhvan.com/category/xa-lo-tinh-van/"><img src="" style='width:120px;padding-right:10px;float:left;' id="image-xl"></a>
+        <span style="font-size: 13px;" id="article-xl"></span>
+        <div style="padding-left: 74px;margin-top:  51px;" class="loadingXL">
+            <img src='<?=Yii::$app->request->baseUrl?>/img/ajax-loader.gif' />
+        </div>
     </li>
-    <li>
+    <li style="min-height: 200px;">
       <h3 style=''><span>Hành Trình Tuổi 20</span></h3>
-        <a target="_blank" href="http://my.tinhvan.com/category/hanh_trinh_tuoi_20/"><img src="<?php echo get_url_image("http://my.tinhvan.com/category/hanh_trinh_tuoi_20/");?>" alt="Sếp" style='width:120px;padding-right:10px;float:left;'></a>
-        <span style="font-size: 13px;"><?php echo get_url_contents("http://my.tinhvan.com/category/hanh_trinh_tuoi_20/");?></span>
+        <a target="_blank" href="http://my.tinhvan.com/category/hanh_trinh_tuoi_20/"><img src=""  style='width:120px;padding-right:10px;float:left;' id="image-ht"></a>
+        <span style="font-size: 13px;" id="article-ht"></span>
+        <div style="padding-left: 74px;margin-top:  51px;" class="loadingHT">
+            <img src='<?=Yii::$app->request->baseUrl?>/img/ajax-loader.gif'/>
+        </div>
     </li>
 
   </ul>
