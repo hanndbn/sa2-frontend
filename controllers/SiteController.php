@@ -261,5 +261,47 @@ class SiteController extends Controller
 
         return "{ads:add}";
     }
-
+    /**Get source data from site my.tinhvan.com
+     * @return string
+     */
+    public function actionGetsourcedata()
+    {
+        $url = $_POST['url'];
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 3);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT , 10);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+        $ret = curl_exec($curl);
+        $http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        if ($http_status==503){
+            $data =  array('article' => '', 'image' => '','msg'=>$ret);
+            $result = json_encode($data);
+            return $result;
+        }
+        curl_close($curl);
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $article = '';
+        $src = '';
+        if (isset($dom)) {
+            $dom->loadHTML($ret);
+            $data = $dom->getElementsByTagName('article')->item(0);
+            if (isset($data)) {
+                $article = $data->getElementsByTagName('section')->item(0)->nodeValue;
+                $image = $data->getElementsByTagName('img')->item(0);
+                if (isset($image)) {
+                    $src = $image->getAttribute('src');
+                }
+            }
+        }
+        $data =  array('article' => $article, 'image' => $src,'msg'=>$ret);
+        $result = json_encode($data);
+        return $result;
+    }
 }
