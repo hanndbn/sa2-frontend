@@ -24,6 +24,8 @@ AppAsset::register($this);
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
   <link rel="icon" href="<?=Yii::$app->request->baseUrl?>/img/logo.ico" type="image/x-icon"/>
   <script src="<?=Yii::$app->homeUrl?>js/jquery-2.1.3.min.js"></script>
+    <script src="<?=Yii::$app->homeUrl?>js/react.js"></script>
+    <script src="<?=Yii::$app->homeUrl?>js/react-dom.js"></script>
   <script src="<?=Yii::$app->homeUrl?>js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="<?=Yii::$app->homeUrl?>css/bootstrap-multiselect.css" type="text/css"/>
   <?= Html::csrfMetaTags() ?>

@@ -84,6 +84,60 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+<script type="text/babel">
+    var User = React.createClass({
+        render: function () {
+            console.log(this.props.users);
+            var userdetail = this.props.users.map(function (user) {//
+                return (
+                    <div>{user.id} name: {user.username}</div>
+                )
+            });
+            return (
+                <div className="user">{userdetail}</div>
+            )
+        }
+
+    });
+    var UserList = React.createClass({
+        getInitialState: function () {
+            return ({
+                users: []
+            });
+        },
+        componentWillMount: function () {
+            this.loadUsers();
+        },
+        loadUsers: function () {
+            $.ajax
+            ({
+                type: "GET",
+                url: "<?=Url::toRoute('site/ajaxuser')?>",
+                data: null,
+                datatype: 'json',
+                success: function (data) {
+                    this.setState({users: JSON.parse(data)});
+                }.bind(this),
+                error: function (xhr, status, err) {
+                    console.error(url, status, err.toString());
+                }.bind(this)
+            });
+        },
+        render: function () {
+            var users = this.state.users;
+            return (
+                <div className="userList">
+                    {<User users = {this.state.users}/>}
+                </div>
+            );
+        }
+    });
+    ReactDOM.render(
+        <UserList url="<?=Url::toRoute('site/ajaxuser') ?>"/>,
+        document.getElementById("container")
+    );
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
         function loading_show() {
@@ -94,54 +148,5 @@
             $('#loading').fadeOut('fast');
         }
 
-        function loadData(page, id) {
-            loading_show();
-            $.ajax
-            ({
-                type: "POST",
-                url: "<?=Url::toRoute('site/ajaxuser')?>",
-                data: {
-                    page: page,
-                    id: id
-                },
-                success: function (msg) {
-                    loading_hide();
-                    $("#container").html(msg);
-                    //console.log(msg);
-                }
-            });
-        }
-
-        //var salary = $('#salary').val();
-        //var address = $('#address').val();
-        //var company = $('#company').val();
-        //var keyword = $('#keyword').val();//
-        loadData(1, '');  // For first time page load default results
-       //$(document).on('click', '#container li.active', function () {
-       //    var page = $(this).attr('p');
-       //    var salary = $('#salary').val();
-       //    var address = $('#address').val();
-       //    var company = $('#company').val();
-       //    var keyword = $('#keyword').val();
-       //    loadData(page, keyword, company, address, salary);
-
-       //});
-       //$(document).on('click', '#search', function () {
-       //    var salary = $('#salary').val();
-       //    var address = $('#address').val();
-       //    var company = $('#company').val();
-       //    var keyword = $('#keyword').val();
-       //    loadData(1, keyword, company, address, salary);
-
-       //});
-       //$(document).on("keypress", '#keyword', function (e) {
-       //    if (e.keyCode == 13) {
-       //        var salary = $('#salary').val();
-       //        var address = $('#address').val();
-       //        var company = $('#company').val();
-       //        var keyword = $('#keyword').val();
-       //        loadData(1, keyword, company, address, salary);
-       //    }
-       //});
     });
 </script>
