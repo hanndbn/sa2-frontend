@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use app\common\Common;
 
 AppAsset::register($this);
 ?>
@@ -23,6 +24,8 @@ AppAsset::register($this);
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
   <link rel="icon" href="<?=Yii::$app->request->baseUrl?>/img/logo.ico" type="image/x-icon"/>
   <script src="<?=Yii::$app->homeUrl?>js/jquery-2.1.3.min.js"></script>
+  <script src="<?=Yii::$app->homeUrl?>js/bootstrap-multiselect.js"></script>
+  <link rel="stylesheet" href="<?=Yii::$app->homeUrl?>css/bootstrap-multiselect.css" type="text/css"/>
   <?= Html::csrfMetaTags() ?>
   <?php if(isset($this->title)):?>
   <title><?= Html::encode($this->title)?></title>
@@ -39,6 +42,11 @@ AppAsset::register($this);
         var anchor = location.hash;
         $('body').html("<iframe  frameborder='0' width='100%' height='2000px' src='{{constant('URL')}}admin/"+anchor+"'></iframe>");
       };
+      $('#position-select').multiselect({
+          buttonWidth: '200px',
+          nonSelectedText: 'Lựa chọn vị trí'
+      });
+
     });
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -48,6 +56,39 @@ AppAsset::register($this);
     ga('create', 'UA-56630009-1', 'auto');
     ga('send', 'pageview');
 
+    function receiveEmail() {
+        var list = $('#position-select').val();
+
+        if (list) {
+            if (validateEmail($('#txt_email').val())) {
+                var postion = '';
+                for(var i = 0; i< list.length; i++ ){
+                    if(i==0){
+                        postion += list[i];
+                    }else{
+                        postion += ','+list[i];
+                    }
+                }
+               // $.post("http://localhost:8080/HRWeb/apply/subscriber/add",
+                 $.post("http://192.168.53.68:8080/apply/subscriber/add",
+                    {
+                        email: $('#txt_email').val(),
+                        position: postion
+                    });
+                alert('Bạn đã đăng ký nhận bản tin tuyển dụng Tinh Vân thành công');
+            }
+            else {
+                alert('Định dạng email không đúng');
+            }
+        } else {
+            alert('Vui lòng chọn công việc cần theo dõi');
+        }
+    };
+
+    function validateEmail(emailVal) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(emailVal);
+    }
 
   </script>
   <?php $this->beginBody() ?>
@@ -155,8 +196,20 @@ AppAsset::register($this);
                            <div class="mail_box">
                              <div class="email_form clearfix">
                                <div class="keyword">
-                                 <input style="border-radius: 0px; width:50%" id="txt_email" type="email" class="col-xs-9 txt_email" placeholder="Địa chỉ email...">
-                                 <button id="btn_email"  class="col-xs-3 btn btn_email" onclick="$.post('/apply/subscriber/add', {email: $('#txt_email').val()}, function(){alert('Bạn đã đăng ký nhận bản tin tuyển dụng Tinh Vân thành công')}); "><p>Submit</p></button>
+                                 <div>
+                                     <input style="border-radius: 0px; width:100%; margin-bottom: 5px;" id="txt_email" type="email" class="col-xs-12 txt_email" placeholder="Địa chỉ email...">
+                                 </div>
+                                   <div>
+                                       <select id="position-select"  style="height: 31px; margin-bottom: 5px" multiple="multiple" >
+                                           <?php
+                                                $positions = Common::getListJob();
+                                                foreach ($positions as $position){
+                                                    echo "<option value='".$position["id"]."'>".$position["name"]."</option>";
+                                                }
+                                           ?>
+                                       </select>
+                                       <button style="float:right; margin-right: 20px" id="btn_email"  class="col-xs-2 btn btn_email" onclick="receiveEmail();"><p>Submit</p></button>
+                                   </div>
                                </div>
                              </div>
                            </div>
@@ -216,7 +269,7 @@ AppAsset::register($this);
                           </div>
                           <div class="foot_find" style="float:right;margin-right: 20px;">
                             <p>
-                              Find us:                      </p>
+                              Find us:                     </p>
                             </div>
                           </div>
                         </div>
