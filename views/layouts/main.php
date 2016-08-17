@@ -71,8 +71,8 @@ AppAsset::register($this);
                         postion += ','+list[i];
                     }
                 }
-                $.post("http://localhost:8080/HRWeb/apply/subscriber/add",
-     //            $.post("http://192.168.53.68:8080/apply/subscriber/add",
+      //          $.post("http://localhost:8080/apply/subscriber/add",
+                 $.post("http://192.168.53.68:8080/apply/subscriber/add",
                     {
                         email: $('#txt_email').val(),
                         position: postion
