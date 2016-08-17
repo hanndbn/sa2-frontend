@@ -2,6 +2,7 @@
 $this->title = $job->title;
 use yii\helpers\Html;
 ?>
+
 <div class="upload-header">
 	<div class="container">
 		<h1 class="upload-title"><?= $job->title?></h1>
@@ -14,65 +15,137 @@ use yii\helpers\Html;
 		<h3 style="text-align:center;font-weight:bold;font-size: 20px;margin: 10px 0 20px 0;">FORM ỨNG TUYỂN</h3>
 		<input type="hidden" id="jobid" value="<?=$job->id?>">
 		<div class="col-xs-offset-1 col-xs-10">
-			<div class="col-xs-6">
-				<div class="form-group">
-					<label>Họ và tên</label>
-					<input type="text" class="form-control required" name="name" id="account_name" placeholder="Nguyễn Văn A">
+			<div class="col-xs-12">
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Họ và tên</label><span style="color:red">*</span>
+						<input type="text" class="form-control required" name="name" id="account_name" placeholder="Nguyễn Văn A">
+					</div>
+					<div class="form-group">
+						<label>Email</label><span style="color:red">*</span>
+						<input type="email" name="email" class="form-control required" id="account_mail" placeholder="example@gmail.com">
+					</div>
+					<div class="form-group">
+						<label>Số điện thoại</label><span style="color:red">*</span>
+						<input type="text" class="form-control required" id="phone">
+					</div>
+					<div class="form-group">
+						<label>Facebook</label>
+						<input type="text" class="form-control" id="facebook-add">
+					</div>
+
+					<div id="container2"></div>
 				</div>
-				<div class="form-group">
-					<label>Email</label>
-					<input type="email" name="email" class="form-control required" id="account_mail" placeholder="example@gmail.com">
-				</div>
-				<div class="form-group">
-					<label>Chuyên ngành</label>
-					<select class="form-control required" id="spec">
-						<option value="">Vui lòng chọn ...</option>
-						<option value="Lập trình viên">
-							Lập trình viên
-						</option>
-						<option value="Nhân viên kinh doanh">
-							Nhân viên kinh doanh
-						</option>
-						<option value="PR / Marketting">
-							PR / Marketting
-						</option>
-						<option value="Hành chính nhân sự">
-							Hành chính nhân sự
-						</option>
-						<option value="QA / TEST">
-							QA / TEST
-						</option>
-						<option value="Kế toán">
-							Kế toán
-						</option>
-						<option value="Khác">
-							Khác
-						</option>
-					</select>
-				</div>
-				<div id="container"></div>
-				<div class="form-group">
-					<label>Kinh nghiệm</label>
-					<textarea class="form-control required" name="name" id="exp" rows="5" placeholder="Mô tả vắn tắt quá trình làm việc và kinh nghiệm của bạn..."></textarea>
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Ngày sinh</label><span style="color:red">*</span>
+						<input type="date" class="form-control required" id="birth">
+					</div>
+					<div class="form-group">
+						<label>Giới tính</label><span style="color:red">*</span>
+						<select class="form-control" id="gender">
+							<option value="1">Nam</option>
+							<option value="0">Nữ</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Địa chỉ hiện tại</label><span style="color:red">*</span>
+						<input type="text" class="form-control required" id="curent-add">
+					</div>
+
+					<div id="container2"></div>
 				</div>
 			</div>
-			<div class="col-xs-6">
-				<div class="form-group">
-					<label>Ngày sinh</label>
-					<input type="date" class="form-control required" id="birth">
+			<br>
+			<div class="col-xs-12">
+				<div class="col-xs-12">
+					<label>Trường đào tạo (chỉ ghi bằng cấp cao nhất)</label><span style="color:red">*</span>
 				</div>
-				<div class="form-group">
-					<label>Giới tính</label>
-					<select class="form-control" id="gender">
-						<option value="1">Nam</option>
-						<option value="0">Nữ</option>
-					</select>
+				<div class="col-xs-12">
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Tên trường</label><span style="color:red">*</span>
+						<input type="text" class="form-control required" name="name" id="university-name">
+					</div>
+					<div class="form-group">
+						<label>Hình thức đào tạo</label><span style="color:red">*</span>
+						<input type="text" class="form-control required" name="name" id="type-of-trainning">
+					</div>
 				</div>
-				<div class="form-group">
-					<label>Số điện thoại</label>
-					<input type="text" class="form-control required" id="phone">
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Chuyên ngành</label><span style="color:red">*</span>
+						<input type="text" class="form-control required" name="name" id="mayjor">
+					</div>
+					<div class="form-group">
+						<label>Xếp loại</label><span style="color:red">*</span>
+						<select class="form-control required" id="rank">
+							<option value="Xuất sắc">
+								Xuất sắc
+							</option>
+							<option value="Giỏi">
+								Giỏi
+							</option>
+							<option value="Khá" selected>
+								Khá
+							</option>
+							<option value="Trung bình">
+								Trung bình
+							</option>
+						</select>
+					</div>
 				</div>
-				<div id="container2"></div>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Các chứng chỉ, bằng cấp khác</label>
+						<textarea class="form-control" name="name" id="otherquality" rows="5" placeholder="Ghi rõ thời gian học, tên chứng chỉ/khóa học, đơn vị đào tạo"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Vị trí ứng tuyển</label><span style="color:red">*</span>
+						<select class="form-control required" id="spec">
+							<option value="">Vui lòng chọn ...</option>
+							<option value="Lập trình viên">
+								Lập trình viên
+							</option>
+							<option value="Nhân viên kinh doanh">
+								Nhân viên kinh doanh
+							</option>
+							<option value="PR / Marketting">
+								PR / Marketting
+							</option>
+							<option value="Hành chính nhân sự">
+								Hành chính nhân sự
+							</option>
+							<option value="QA / TEST">
+								QA / TEST
+							</option>
+							<option value="Kế toán">
+								Kế toán
+							</option>
+							<option value="Khác">
+								Khác
+							</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>Quá trình công tác</label><span style="color:red">*</span>
+						<textarea class="form-control required" name="name" id="exp" rows="5" placeholder="Ghi rõ từ ngày-đến ngày, vị trí, công ty"></textarea>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Thời gian sẵn sàng làm việc</label><span style="color:red">*</span>
+						<input type="date" class="form-control required" id="start-date">
+					</div>
+				</div>
 			</div>
 			<div class="col-xs-12">
 				<div class="form-group">
@@ -81,10 +154,10 @@ use yii\helpers\Html;
 					<div class="field upload_file">
 						<input type="radio" id="r1" name="optionsRadios" class="optionsRadios" value="file" checked>
 						<form id="submit-job-form" class="job-manager-form" enctype="multipart/form-data">
-							<input type="file" id="file_cv" class="input-text" name="file_cv"  accept="docx|doc|pdf|odt|ppt|png|jpg|rar|zip" placeholder="">
+							<input type="file" id="file_cv" class="input-text" name="file_cv"  accept="docx|doc|pdf placeholder="">
 						</form>
 						<small class="description">
-							Định dạng docx, doc, pdf, odt, ppt, png, jpg, rar,zip dung lượng tối đa là 50MB. </small>
+							Định dạng docx, doc, pdf dung lượng tối đa là 2MB. </small>
 						</div>
 						<input type="radio" id="r2" name="optionsRadios" class="optionsRadios" value="link" >
 						<input type="text"  class="input-text form-control" name="link_website" id="link_website" placeholder="http://" value="" maxlength="" style="width: 95%;">
@@ -108,13 +181,16 @@ use yii\helpers\Html;
 						$.ajax
 						({
 							type: "POST",
-							url: "http://tuyendung.tinhvan.com/apply/job/get?id="+id,
+							//url: "http://tuyendung.tinhvan.com/apply/job/get?id="+id,
+				//			url: "http://192.168.53.33:8080/apply/job/get?id="+id,
+							url: "http://192.168.53.68:8080/apply/job/get?id="+id,
 							success: function(msg)
 							{
 								a = JSON.parse(msg);
 								objs = a.fields;
 								var container = '#container2';
 								$.each(objs,function(key,value){
+									console.log("aaaaaa");
 									data = '<div class="form-group"><label>'+value.name+'</label><input type="text" class="form-control required" name="'+value.id+'" value=""></div>';
 									$(container).append(data);
 									if(container === '#container2') container = '#container';
@@ -128,7 +204,9 @@ use yii\helpers\Html;
 						$.ajax
 						({
 							type: "POST",
-							url: "http://tuyendung.tinhvan.com/apply/captcha/create",
+					//		url: "http://tuyendung.tinhvan.com/apply/captcha/create",
+					//		url: "http://192.168.53.33:8080/apply/captcha/create",
+							url: "http://192.168.53.68:8080/apply/captcha/create",
 							success: function(msg)
 							{
 								objs = JSON.parse(msg);
@@ -137,8 +215,8 @@ use yii\helpers\Html;
 							}
 						});
 					}
-					loadCaptCha();
-					setInterval(function(){loadCaptCha()},300000);
+			//		loadCaptCha();
+			//		setInterval(function(){loadCaptCha()},300000);
 					loadForm();
 					var flag = false;
 					function validate(){
@@ -182,8 +260,8 @@ use yii\helpers\Html;
 						var data={};
 						var field = [];
 						var infor = [];
-						data.capid=document.getElementById('captchaid').value;
-						data.cap=document.getElementById('captchavalue').value;
+						//data.capid=document.getElementById('captchaid').value;
+						//data.cap=document.getElementById('captchavalue').value;
 						data.jobid= $('#jobid').val();
 						// var inputs = document.getElementsByTagName('input');
 						data['name'] = $('#account_name').val();
@@ -193,6 +271,15 @@ use yii\helpers\Html;
 						data.gender = $('#gender').val();
 						data.phone = $('#phone').val();
 						data.birth = $('#birth').val();
+						data.address = $('#curent-add').val();
+						data.facebook = $('#facebook-add').val();
+						data.startTime = $("#start-date").val();
+						data.schoolName = $("#university-name").val();
+						data.typeOfTrainning = $("#type-of-trainning").val();
+						data.mayjor = $("#mayjor").val();
+						data.rank = $("#rank").val();
+						data.otherQuality = $("#otherquality").val();
+
 						var cbb = document.getElementById('r1');
 
 						var formData;
@@ -238,7 +325,9 @@ use yii\helpers\Html;
 						data.field = field;
 						data['info'] = infor;
 						console.log(data);
-						var url = "http://tuyendung.tinhvan.com/apply/candidate/create?"+ser(data);
+				//		var url = "http://tuyendung.tinhvan.com/apply/candidate/create?"+ser(data);
+				//		var url = "http://192.168.53.33:8080/apply/candidate/create?"+ser(data);
+						var url = "http://192.168.53.68:8080/apply/candidate/create?"+ser(data);
 						console.log(url);
 						loading_show();
 						$.ajax({
@@ -251,7 +340,7 @@ use yii\helpers\Html;
 							contentType: false,
 							error: function(xhr, status, error) {
 								loading_hide();
-								alert("Có lỗi captcha hoặc địa chỉ email không tồn tại!");
+								alert("Địa chỉ mail không tồn tại!");
 							},
 							xhr:function(){
 								myXhr = $.ajaxSettings.xhr();
@@ -274,8 +363,20 @@ use yii\helpers\Html;
 					});
 					$('#submit').click(function(e){
 						if (validate()) {
-							if(isValidEmailAddress($('#account_mail').val())) submitForm();
-							else alert('Địa chỉ email không hợp lệ');
+							if(isValidEmailAddress($('#account_mail').val())) {
+								if(checkFileExtension()){
+									if(checkFileSize()){
+										submitForm();
+									}else{
+										alert('Kích thước file phải nhỏ hơn 2MB');
+									}
+								}else{
+									alert('Định dạng file đính kèm không đúng');
+								}
+							}
+							else{
+								alert('Địa chỉ email không hợp lệ');
+							}
 						}else{
 							alert('Bạn chưa nhập đầy đủ thông tin');
 						}
@@ -283,6 +384,35 @@ use yii\helpers\Html;
 					$(document).on('click','#refresh_captcha',function(){
 						loadCaptCha();
 					});
+					function checkFileSize() {
+						var oInput = $("#file_cv");
+						var fileSize = oInput[0].files[0].size/1024/1024;
+						alert(oInput[0].files[0].size/1024/1024 + "MB");
+						if(fileSize > 2){
+							return false;
+						}
+						return true;
+					}
+					function checkFileExtension(){
+						var oInput = $("#file_cv");
+						var _validFileExtensions = [".doc", ".docx", ".pdf"];
+						var sFileName = oInput.val();
+						if (sFileName.length > 0) {
+							var blnValid = false;
+							for (var j = 0; j < _validFileExtensions.length; j++) {
+								var sCurExtension = _validFileExtensions[j];
+								if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+									blnValid = true;
+									break;
+								}
+							}
 
+							if (!blnValid) {
+								oInput.val("");
+								return false;
+							}
+						}
+						return true;
+					}
 				});
 			</script>
