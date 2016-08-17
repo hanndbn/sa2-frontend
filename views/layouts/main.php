@@ -45,8 +45,8 @@ AppAsset::register($this);
         $('body').html("<iframe  frameborder='0' width='100%' height='2000px' src='{{constant('URL')}}admin/"+anchor+"'></iframe>");
       };
       $('#position-select').multiselect({
-          buttonWidth: '200px',
-          nonSelectedText: 'Lựa chọn vị trí'
+          buttonWidth: '245px',
+          nonSelectedText: 'Chọn vị trí bạn quan tâm'
       });
 
     });
@@ -71,8 +71,8 @@ AppAsset::register($this);
                         postion += ','+list[i];
                     }
                 }
-               // $.post("http://localhost:8080/HRWeb/apply/subscriber/add",
-                 $.post("http://192.168.53.68:8080/apply/subscriber/add",
+                $.post("http://localhost:8080/HRWeb/apply/subscriber/add",
+     //            $.post("http://192.168.53.68:8080/apply/subscriber/add",
                     {
                         email: $('#txt_email').val(),
                         position: postion
@@ -199,7 +199,7 @@ AppAsset::register($this);
                              <div class="email_form clearfix">
                                <div class="keyword">
                                  <div>
-                                     <input style="border-radius: 0px; width:100%; margin-bottom: 5px;" id="txt_email" type="email" class="col-xs-12 txt_email" placeholder="Địa chỉ email...">
+                                     <input style="border-radius: 0px; width:100%; margin-bottom: 5px;" id="txt_email" type="email" class="col-xs-12 txt_email" placeholder="Địa chỉ email">
                                  </div>
                                    <div>
                                        <select id="position-select"  style="height: 31px; margin-bottom: 5px" multiple="multiple" >
@@ -210,7 +210,9 @@ AppAsset::register($this);
                                                 }
                                            ?>
                                        </select>
-                                       <button style="float:right; margin-right: 20px" id="btn_email"  class="col-xs-2 btn btn_email" onclick="receiveEmail();"><p>Submit</p></button>
+                                   </div>
+                                   <div>
+                                       <button style="margin-top: 5px; margin-left: 175px" id="btn_email"  class="col-xs-2 btn btn_email" onclick="receiveEmail();"><p>Submit</p></button>
                                    </div>
                                </div>
                              </div>
