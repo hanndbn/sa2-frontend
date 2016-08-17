@@ -60,20 +60,6 @@
         </div>
     </div>
     <div class="container fixcontainer" style="margin-top: 10px; margin-bottom: 60px; ">
-        <div class="col-md-12 header-list">
-            <div class="col-md-5">
-                <span>Tên công việc </span>
-            </div>
-            <div class="col-md-2">
-                <span>Số lượng</span>
-            </div>
-            <div class="col-md-3">
-                <span>Công ty</span>
-            </div>
-            <div class="col-md-2">
-                <span>Ngày hết hạn</span>
-            </div>
-        </div>
         <div
             style="border: 1px solid #ccc; border-radius: 4px; overflow: hidden; border-top-right-radius:0;border-top-left-radius:0;">
             <div id="container" class="list-tv">
@@ -91,11 +77,49 @@
             console.log(this.props.users);
             var userdetail = this.props.users.map(function (user) {//
                 return (
-                    <div>{user.id} name: {user.username}</div>
+                    <tr>
+                        <td>{user.username}</td>
+                        <td>{user.fullname}</td>
+                        <td>{user.email}</td>
+                        <td>{user.ctime}</td>
+                        <td>
+                            <span className="label label-success">{user.status ? 'Active' : 'Deactive'}</span>
+                        </td>
+                        <td className="text-center">
+                            <a href="https://demo.vanguardapp.io/user/1/sessions" className="btn btn-info btn-circle" title="">
+                                <i className="fa fa-list"></i>
+                            </a>
+                            <a href="https://demo.vanguardapp.io/user/1/show" className="btn btn-success btn-circle" title="">
+                                <i className="glyphicon glyphicon-eye-open"></i>
+                            </a>
+                            <a href="https://demo.vanguardapp.io/user/1/edit" className="btn btn-primary btn-circle edit" title="">
+                                <i className="glyphicon glyphicon-edit"></i>
+                            </a>
+                            <a href="" className="btn btn-danger btn-circle">
+                                <i className="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
                 )
             });
             return (
-                <div className="user">{userdetail}</div>
+                <div className="table-responsive top-border-table" id="users-table-wrapper">
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>E-Mail</th>
+                            <th>Registration Date</th>
+                            <th>Status</th>
+                            <th className="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {userdetail}
+                        </tbody>
+                    </table>
+                </div>
             )
         }
 
@@ -128,13 +152,14 @@
             var users = this.state.users;
             return (
                 <div className="userList">
-                    {<User users = {this.state.users}/>}
+                    {<User users={this.state.users}/>}
                 </div>
             );
         }
     });
     ReactDOM.render(
-        <UserList url="<?=Url::toRoute('site/ajaxuser') ?>"/>,
+        <UserList url="<?=Url::toRoute('site/ajaxuser') ?>"/>
+        ,
         document.getElementById("container")
     );
 </script>
