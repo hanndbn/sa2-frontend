@@ -73,31 +73,44 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
 <script type="text/babel">
     var User = React.createClass({
+        handleDeleteUser: function (id) {
+            this.props.handleDelete(id);
+        },
+        handleEditUser: function (user,index) {
+            $($(".field1")[index]).html("<input type='text' value='" + $($(".field1")[index]).html() + "'/>");
+            $($(".field2")[index]).html("<input type='text' value='" + $($(".field2")[index]).html() + "'/>");
+            $($(".field3")[index]).html("<input type='text' value='" + $($(".field3")[index]).html() + "'/>");
+            $($(".field4")[index]).html("<input type='text' value='" + $($(".field4")[index]).html() + "'/>");
+            $($(".field5")[index]).html("<input type='text' value='" + $($(".field5")[index]).html() + "'/>");
+
+            //this.props.handleEdit(user);
+        },
         render: function () {
-            console.log(this.props.users);
-            var userdetail = this.props.users.map(function (user) {//
+            var self = this;
+            var userdetail = this.props.users.map(function (user,index) {
                 return (
-                    <tr>
-                        <td>{user.username}</td>
-                        <td>{user.fullname}</td>
-                        <td>{user.email}</td>
-                        <td>{user.ctime}</td>
+                    <tr key={user.id}>
+                        <td className="field1">{index + 1}</td>
+                        <td className="field2">{user.username}</td>
+                        <td className="field3">{user.fullname}</td>
+                        <td className="field4">{user.email}</td>
+                        <td className="field5">{user.ctime}</td>
                         <td>
-                            <span className="label label-success">{user.status ? 'Active' : 'Deactive'}</span>
+                            <span className={user.status=="0" ? "label label-success" : "label label-warning"}>{user.status=="0" ? 'Active' : 'Deactive'}</span>
                         </td>
                         <td className="text-center">
-                            <a href="https://demo.vanguardapp.io/user/1/sessions" className="btn btn-info btn-circle" title="">
+                            <div className="btn btn-info btn-circle" title="" >
                                 <i className="fa fa-list"></i>
-                            </a>
-                            <a href="https://demo.vanguardapp.io/user/1/show" className="btn btn-success btn-circle" title="">
+                            </div>
+                            <div className="btn btn-success btn-circle" title="">
                                 <i className="glyphicon glyphicon-eye-open"></i>
-                            </a>
-                            <a href="https://demo.vanguardapp.io/user/1/edit" className="btn btn-primary btn-circle edit" title="">
+                            </div>
+                            <div className="btn btn-primary btn-circle edit" title="" onClick={self.handleEditUser.bind(null,user,index)}>
                                 <i className="glyphicon glyphicon-edit"></i>
-                            </a>
-                            <a href="" className="btn btn-danger btn-circle">
+                            </div>
+                            <div className="btn btn-danger btn-circle" onClick={self.handleDeleteUser.bind(null,user.id)}>
                                 <i className="glyphicon glyphicon-trash"></i>
-                            </a>
+                            </div>
                         </td>
                     </tr>
                 )
@@ -107,6 +120,7 @@
                     <table className="table">
                         <thead>
                         <tr>
+                            <th>id</th>
                             <th>Username</th>
                             <th>Full Name</th>
                             <th>E-Mail</th>
@@ -131,28 +145,50 @@
             });
         },
         componentWillMount: function () {
-            this.loadUsers();
+            var data = {
+                action:'init'
+            };
+            this.loadUsers(data);
         },
-        loadUsers: function () {
+        loadUsers: function (data) {
+            var self = this;
             $.ajax
             ({
-                type: "GET",
+                type: "POST",
                 url: "<?=Url::toRoute('site/ajaxuser')?>",
-                data: null,
+                data: data,
                 datatype: 'json',
                 success: function (data) {
-                    this.setState({users: JSON.parse(data)});
-                }.bind(this),
+                    self.setState({users: JSON.parse(data)});
+                },
                 error: function (xhr, status, err) {
                     console.error(url, status, err.toString());
-                }.bind(this)
+                }
             });
         },
+        handleDelete: function (id) {
+            var data = {
+                action:'delete',
+                id:id
+            };
+            this.loadUsers(data);
+        },
+        handleEdit: function (user) {
+            var data = {
+                action:'edit',
+                user:user
+            };
+            this.loadUsers(data);
+        },
+
         render: function () {
             var users = this.state.users;
             return (
                 <div className="userList">
-                    {<User users={this.state.users}/>}
+                    {<User users={this.state.users}
+                           handleDelete = {this.handleDelete}
+                           handleEdit = {this.handleEdit}
+                    />}
                 </div>
             );
         }

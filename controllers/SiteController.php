@@ -293,7 +293,23 @@ class SiteController extends Controller
 
     public function actionAjaxuser()
     {
-        $listUsers = User::find()->asArray()->all();
+        if (isset($_POST['action'])) {
+            $action = $_POST['action'];
+        }
+        if ($action == "init"){
+            $listUsers = User::find()->orderBy("username")->asArray()->all();
+        }elseif ($action == "delete"){
+            $id = $_POST['id'];
+            $user = User::find()->where(['id'=>$id])->one();
+            if($user){
+                $user->delete();
+            }
+            $listUsers = User::find()->orderBy("username")->asArray()->all();
+        }elseif ($action == "edit"){
+            $userDetail = $_POST['user'];
+
+            $listUsers = User::find()->orderBy("username")->asArray()->all();
+        }
         return Json::encode($listUsers);
     }
 
