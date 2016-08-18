@@ -85,7 +85,7 @@ use yii\helpers\Html;
 			<div class="tv-overview-content">
 				<div itemprop="description" class="tv-overview col-md-12 col-sm-12">
 					<?php if($job->image_job != null){?>
-						<img src="<?='data:image/jpeg;base64,'.base64_encode($job->image_job) ?>" class="img-responsive" style="height: 200px;margin-top: 10px;"/>
+						<img src="<?='data:image/jpeg;base64,'.base64_encode($job->image_job) ?>" class="img-responsive" style="min-height: 200px;margin-top: 10px;"/>
 					<?php }?>
 					<?php if(strpos($job->description,'<img') === false):?>
 					<div class="des-align">
