@@ -76,40 +76,59 @@
         handleDeleteUser: function (id) {
             this.props.handleDelete(id);
         },
-        handleEditUser: function (user,index) {
+        handleEditUser: function (index) {
             $($(".field1")[index]).html("<input type='text' value='" + $($(".field1")[index]).html() + "'/>");
             $($(".field2")[index]).html("<input type='text' value='" + $($(".field2")[index]).html() + "'/>");
             $($(".field3")[index]).html("<input type='text' value='" + $($(".field3")[index]).html() + "'/>");
             $($(".field4")[index]).html("<input type='text' value='" + $($(".field4")[index]).html() + "'/>");
-            $($(".field5")[index]).html("<input type='text' value='" + $($(".field5")[index]).html() + "'/>");
-
-            //this.props.handleEdit(user);
+            $(".mainAction").css({"display":'none'});
+            $(".chooseAction").css({"display":'block'});
+        },
+        handleChooseAction: function (user,doUpdate,index) {
+            $($(".field1")[index]).html($($(".field1")[index]).find("input").val());
+            $($(".field2")[index]).html($($(".field2")[index]).find("input").val());
+            $($(".field3")[index]).html($($(".field3")[index]).find("input").val());
+            $($(".field4")[index]).html($($(".field4")[index]).find("input").val());
+            $(".mainAction").css({"display":'block'});
+            $(".chooseAction").css({"display":'none'});
+            if(doUpdate == "1"){
+                this.props.handleEdit(user);
+            }
+            console.log(doUpdate);
         },
         render: function () {
             var self = this;
             var userdetail = this.props.users.map(function (user,index) {
                 return (
                     <tr key={user.id}>
-                        <td className="field1">{index + 1}</td>
-                        <td className="field2">{user.username}</td>
-                        <td className="field3">{user.fullname}</td>
-                        <td className="field4">{user.email}</td>
-                        <td className="field5">{user.ctime}</td>
+                        <td>{user.id}</td>
+                        <td className="field1">{user.username}</td>
+                        <td className="field2">{user.fullname}</td>
+                        <td className="field3">{user.email}</td>
+                        <td className="field4">{user.ctime}</td>
                         <td>
                             <span className={user.status=="0" ? "label label-success" : "label label-warning"}>{user.status=="0" ? 'Active' : 'Deactive'}</span>
                         </td>
-                        <td className="text-center">
+                        <td className="text-center mainAction">
                             <div className="btn btn-info btn-circle" title="" >
                                 <i className="fa fa-list"></i>
                             </div>
                             <div className="btn btn-success btn-circle" title="">
                                 <i className="glyphicon glyphicon-eye-open"></i>
                             </div>
-                            <div className="btn btn-primary btn-circle edit" title="" onClick={self.handleEditUser.bind(null,user,index)}>
+                            <div className="btn btn-primary btn-circle edit" title="" onClick={self.handleEditUser.bind(null,index)}>
                                 <i className="glyphicon glyphicon-edit"></i>
                             </div>
                             <div className="btn btn-danger btn-circle" onClick={self.handleDeleteUser.bind(null,user.id)}>
                                 <i className="glyphicon glyphicon-trash"></i>
+                            </div>
+                        </td>
+                        <td className="text-center chooseAction" style={{display:'none'}} >
+                            <div className="btn btn-success btn-circle" title="" onClick={self.handleChooseAction.bind(null,user,1,index)}>
+                                <i className="glyphicon glyphicon-ok"></i>
+                            </div>
+                            <div className="btn btn-danger btn-circle" onClick={self.handleChooseAction.bind(null,user,0,index)}>
+                                <i className="glyphicon glyphicon-remove"></i>
                             </div>
                         </td>
                     </tr>
@@ -180,7 +199,6 @@
             };
             this.loadUsers(data);
         },
-
         render: function () {
             var users = this.state.users;
             return (

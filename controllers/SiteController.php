@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\User;
 use Yii;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\i18n\GettextMessageSource;
@@ -297,18 +298,28 @@ class SiteController extends Controller
             $action = $_POST['action'];
         }
         if ($action == "init"){
-            $listUsers = User::find()->orderBy("username")->asArray()->all();
+            $listUsers = User::find()->orderBy("id")->asArray()->all();
         }elseif ($action == "delete"){
             $id = $_POST['id'];
             $user = User::find()->where(['id'=>$id])->one();
             if($user){
                 $user->delete();
             }
-            $listUsers = User::find()->orderBy("username")->asArray()->all();
+            $listUsers = User::find()->orderBy("id")->asArray()->all();
         }elseif ($action == "edit"){
-            $userDetail = $_POST['user'];
-
-            $listUsers = User::find()->orderBy("username")->asArray()->all();
+            $userEdit = $_POST['user'];
+            $user = User::find()->where(['id'=>$userEdit['id']])->one();
+           $user->setAttributes($userEdit);
+            if($user){
+                $attributeNames =
+                $user->update([
+                    'username'=> $userEdit['username'],
+                    'fullname'=> $userEdit['fullname'],
+                    'email'=> $userEdit['email'],
+                    'ctime'=> $userEdit['ctime']
+                ]);
+            }
+            $listUsers = User::find()->orderBy("id")->asArray()->all();
         }
         return Json::encode($listUsers);
     }
