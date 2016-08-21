@@ -334,3 +334,6 @@ padding: 20%;
 	margin-right: auto;
 	margin-left: 0 !important;
 }
+.page-number {
+	cursor: pointer;
+}

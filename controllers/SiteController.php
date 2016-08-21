@@ -297,30 +297,43 @@ class SiteController extends Controller
         if (isset($_POST['action'])) {
             $action = $_POST['action'];
         }
-        if ($action == "init"){
-            $listUsers = User::find()->orderBy("id")->asArray()->all();
-        }elseif ($action == "delete"){
+        if ($action == "init") {
+        } elseif ($action == "delete") {
             $id = $_POST['id'];
-            $user = User::find()->where(['id'=>$id])->one();
-            if($user){
+            $user = User::find()->where(['id' => $id])->one();
+            if ($user) {
                 $user->delete();
             }
-            $listUsers = User::find()->orderBy("id")->asArray()->all();
-        }elseif ($action == "edit"){
+        } elseif ($action == "edit") {
             $userEdit = $_POST['user'];
-            $user = User::find()->where(['id'=>$userEdit['id']])->one();
-           $user->setAttributes($userEdit);
-            if($user){
-                $attributeNames =
-                $user->update([
-                    'username'=> $userEdit['username'],
-                    'fullname'=> $userEdit['fullname'],
-                    'email'=> $userEdit['email'],
-                    'ctime'=> $userEdit['ctime']
-                ]);
-            }
-            $listUsers = User::find()->orderBy("id")->asArray()->all();
+            $sql = \Yii::$app->db->createCommand(
+                "UPDATE user
+                  SET username = :username, fullname = :fullname, email = :email,ctime = :ctime
+                  WHERE id = :id");
+            $sql->bindValue(':username', $userEdit['username'])
+                ->bindValue(':fullname', $userEdit['fullname'])
+                ->bindValue(':email', $userEdit['email'])
+                ->bindValue(':ctime', $userEdit['ctime'])
+                ->bindValue(':id', $userEdit['id']);
+            $sql->execute();
+        } elseif ($action == "add") {
+            $userAdd = $_POST['user'];
+            $password = '612bfbf3d028c9f3212d275c0f5b6a6db5369957176ac758f9e2fa644b8c7ab5';
+            $initial = 'TPK';
+            $status = '0';
+            $sql = \Yii::$app->db->createCommand(
+                "INSERT INTO user (fullname, ctime, state, email, username, password, lastpwchanged, status, initial, avatar, lmtime) 
+                VALUES (:fullname, now(), '0', :email, :username, :password, now(), :status, :initial, '/ui/avatars/avatar.png', now())");
+            $sql->bindValue(':fullname', $userAdd['fullname'])
+                ->bindValue(':email', $userAdd['email'])
+                ->bindValue(':username', $userAdd['username'])
+                ->bindValue(':password', $password)
+                ->bindValue(':status', $status)
+                ->bindValue(':initial', $initial);
+            $sql->execute();
         }
+
+        $listUsers = User::find()->orderBy(["ctime"=>SORT_DESC])->asArray()->all();
         return Json::encode($listUsers);
     }
 
