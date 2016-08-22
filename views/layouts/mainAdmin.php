@@ -21,10 +21,14 @@ AppAsset::register($this);
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?=Yii::$app->homeUrl?>css/app.min-1da9dc4f65.css" type="text/css"/>
+    <link rel="stylesheet" href="<?=Yii::$app->homeUrl?>css/bootstrap.min.css" type="text/css"/>
+
     <link rel="icon" href="<?= Yii::$app->request->baseUrl ?>/img/logo.ico" type="image/x-icon"/>
     <script src="<?= Yii::$app->homeUrl ?>js/jquery-2.1.3.min.js"></script>
     <script src="<?= Yii::$app->homeUrl ?>js/react.js"></script>
     <script src="<?= Yii::$app->homeUrl ?>js/react-dom.js"></script>
+    <script src="<?= Yii::$app->homeUrl ?>js/app.min-4e93c3e8ba.js"></script>
     <?= Html::csrfMetaTags() ?>
     <?php if (isset($this->title)): ?>
         <title><?= Html::encode($this->title) ?></title>
@@ -327,15 +331,9 @@ AppAsset::register($this);
                 <div>
 
                     <div class="foot_so" style="float:right">
-                        <a target="_blank" href="https://www.facebook.com/TinhvanGroup"><img
-                                src="http://tvo.vn/files/images/default/xico_foot_facebook.png.pagespeed.ic.7JoabXqPob.png"
-                                pagespeed_url_hash="473393423"></a>
-                        <a target="_blank" href="https://twitter.com/tinhvangroup"><img
-                                src="http://tvo.vn/files/images/default/xico_foot_twitter.png.pagespeed.ic.YkIf3sL4Hp.png"
-                                pagespeed_url_hash="1842586480"></a>
-                        <a target="_blank" href="https://www.linkedin.com/company/tinh-van-corp"><img
-                                src="http://tvo.vn/files/images/default/xico_foot_linkedin.png.pagespeed.ic.cxC9_bm4Kc.jpg"
-                                pagespeed_url_hash="2923697231"></a>
+                        <a target="_blank" href="https://www.facebook.com/TinhvanGroup"><img src="./icon/linkedin.png" pagespeed_url_hash="473393423"></a>
+                        <a target="_blank" href="https://twitter.com/tinhvangroup"><img src="./icon/twitter.png" pagespeed_url_hash="1842586480"></a>
+                        <a target="_blank" href="https://www.linkedin.com/company/tinh-van-corp"><img src="./icon/facebook.png" pagespeed_url_hash="2923697231"></a>
                     </div>
                     <div class="foot_find" style="float:right;margin-right: 20px;">
                         <p>

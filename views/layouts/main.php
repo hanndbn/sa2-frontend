@@ -26,7 +26,7 @@ AppAsset::register($this);
   <script src="<?=Yii::$app->homeUrl?>js/jquery-2.1.3.min.js"></script>
     <script src="<?=Yii::$app->homeUrl?>js/react.js"></script>
     <script src="<?=Yii::$app->homeUrl?>js/react-dom.js"></script>
-  <script src="<?=Yii::$app->homeUrl?>js/bootstrap-multiselect.js"></script>
+    <script src="<?=Yii::$app->homeUrl?>js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="<?=Yii::$app->homeUrl?>css/bootstrap-multiselect.css" type="text/css"/>
   <?= Html::csrfMetaTags() ?>
   <?php if(isset($this->title)):?>
@@ -178,13 +178,13 @@ AppAsset::register($this);
                 </div>
 
                 <!--Start of Zopim Live Chat Script-->
-                <script type="text/javascript">
-                  window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-                    d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-                      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
-                      $.src='//v2.zopim.com/?2Z2Mu6WK0sGZTBwCLAYNpogsDfhYWUIQ';z.t=+new Date;$.
-                      type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
-                    </script>
+<!--                <script type="text/javascript">-->
+<!--                  window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=-->
+<!--                    d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.-->
+<!--                      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');-->
+<!--                      $.src='//v2.zopim.com/?2Z2Mu6WK0sGZTBwCLAYNpogsDfhYWUIQ';z.t=+new Date;$.-->
+<!--                      type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');-->
+<!--                    </script>-->
                     <!--End of Zopim Live Chat Script-->
                     <div class="footer">
 
@@ -267,9 +267,9 @@ AppAsset::register($this);
                         <div>
 
                           <div class="foot_so" style="float:right">
-                            <a target="_blank" href="https://www.facebook.com/TinhvanGroup"><img src="http://tvo.vn/files/images/default/xico_foot_facebook.png.pagespeed.ic.7JoabXqPob.png" pagespeed_url_hash="473393423"></a>
-                            <a target="_blank" href="https://twitter.com/tinhvangroup"><img src="http://tvo.vn/files/images/default/xico_foot_twitter.png.pagespeed.ic.YkIf3sL4Hp.png" pagespeed_url_hash="1842586480"></a>
-                            <a target="_blank" href="https://www.linkedin.com/company/tinh-van-corp"><img src="http://tvo.vn/files/images/default/xico_foot_linkedin.png.pagespeed.ic.cxC9_bm4Kc.jpg" pagespeed_url_hash="2923697231"></a>
+                            <a target="_blank" href="https://www.facebook.com/TinhvanGroup"><img src="./icon/linkedin.png" pagespeed_url_hash="473393423"></a>
+                            <a target="_blank" href="https://twitter.com/tinhvangroup"><img src="./icon/twitter.png" pagespeed_url_hash="1842586480"></a>
+                            <a target="_blank" href="https://www.linkedin.com/company/tinh-van-corp"><img src="./icon/facebook.png" pagespeed_url_hash="2923697231"></a>
                           </div>
                           <div class="foot_find" style="float:right;margin-right: 20px;">
                             <p>
@@ -290,7 +290,8 @@ AppAsset::register($this);
                     js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=721254621281061&version=v2.0";
                     fjs.parentNode.insertBefore(js, fjs);
                   }(document, 'script', 'facebook-jssdk'));</script>
-
+<!--                    live chat-->
+                    <div id="fb-root"></div><script>$(document).ready(function() {var raido = $(".wrap").attr("data-toggle");if(raido==1){$(".vnk-tuvan").css("display","none");$(".x").click(function(){$(".wrap").slideToggle();$(".vnk-tuvan").slideToggle();});$(".vnk-tuvan").click(function(){$(".wrap").slideToggle();$(this).slideToggle();}); }else{$(".wrap").css("display","none");$(".x").click(function(){$(".wrap").slideToggle();$(".vnk-tuvan").slideToggle();});$(".vnk-tuvan").click(function(){$(".wrap").slideToggle();$(this).slideToggle();});}}) (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.5&appId=561973880635651";fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script><style>.wrap{position:fixed; width:300px; height: 400px; z-index:9999999; right:0px; bottom:0px;}.x{font-family: arial, helvetica;background: rgba(78,86,101,0.8) none repeat scroll 0 0;font-size:14px;font-weight:bold;color: #fff;display: inline-block;height: 25px;line-height: 25px;position: absolute;right: 0;text-align: center;top: -19px;width: 25px;z-index: 99999999;}.x:hover{cursor: pointer;}.pxem{text-align:left;height:20px;margin-bottom: 0;margin-top: 0;background: #34495E;width:100%;bottom: 0;display: block;left: 0px;position: absolute;z-index: 999999999;border-left: 1px solid #fff;}.pxem a.axem{color: #fff;font-family: arial,helvetica;font-size: 12px;line-height: 23px;padding-left: 5px;text-decoration: none;}.pxem a.axem:hover{text-decoration: underline;}.alogo{position: absolute;bottom: 0;right: 0px;z-index: 999999999999;width: 75px;height: 20px;display: inline-block;background:#34495E;border-left:2px solid #2c3e50;padding-right: 0px;padding-left: 5px}.vnk-tuvan{position:fixed;width: 300px;background:#34495E;z-index:99999999;right:0px;bottom:0px;  border-style: solid solid none;border-width: 1px 1px 0; border-color: #2c3e50}.vnk-tuvan p{color: #fff;font-size: 15px;margin: 0;padding: 0 13px; text-align: left;}.vnk-tuvan p a{color: #fff;font-size: 15px;padding: 5px 0px 7px;margin: 0;display:inline-block;font-family: arial, helvetica;text-decoration: none;}.vnk-tuvan p a:hover{text-decoration: underline;cursor: pointer;}.vnk-tuvan p img {float: right;margin-top: 10px;} </style><div data-toggle="0" class="wrap" style="position:fixed; width:270px; height: 300px; "><span class="x" style="">X</span><div class="fb-page" data-adapt-container-width="true" data-height="300" data-hide-cover="false" data-href="https://www.facebook.com/tuyendung.tinhvan/" data-show-facepile="true" data-show-posts="false" data-small-header="false" data-tabs="messages" data-width="270" style="position:relative; z-index:9999999; right:0px; bottom:21px;border-left: 1px solid #fff;border-top: 1px solid #fff;"></div></div><div class="vnk-tuvan" style="width: 268px;" ><p style=" "><a style="">Chat với chúng tôi</a><img src="http://vnkings.com/wp-content/themes/wordpress-vnkings/images/supprt.png"></p></div>
                   <?php $this->endBody() ?>
                 </body>
                 </html>

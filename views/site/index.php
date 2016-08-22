@@ -14,7 +14,7 @@ header('Content-Type: application/json');
     <div class="item active">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-          <img src="<?=($banner_jobs[0]->picture == null) ? Yii::$app->request->baseUrl.'/img/slide1.png' : $banner_jobs[0]->picture ?>" alt="Apply" class="img-responsive" style="height: 228px;">
+          <img src="<?=($banner_jobs[0]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide1.png' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[0]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -33,7 +33,7 @@ header('Content-Type: application/json');
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-            <img src="<?=($banner_jobs[1]->picture == null) ? Yii::$app->request->baseUrl.'/img/slide2.png' : $banner_jobs[1]->picture ?>" alt="Apply" class="img-responsive" style="height: 228px;">
+            <img src="<?=($banner_jobs[1]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide2.png' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[1]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -52,7 +52,7 @@ header('Content-Type: application/json');
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-            <img src="<?=($banner_jobs[2]->picture == null) ? Yii::$app->request->baseUrl.'/img/slide3.png' : $banner_jobs[1]->picture ?>" alt="Apply" class="img-responsive" style="height: 228px;">
+            <img src="<?=($banner_jobs[2]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide3.png' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[2]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
