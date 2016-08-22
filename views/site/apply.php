@@ -19,19 +19,19 @@ use yii\helpers\Html;
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label>Họ và tên</label><span style="color:red">*</span>
-						<input type="text" class="form-control required" name="name" id="account_name" placeholder="Nguyễn Văn A">
+						<input type="text" class="form-control required" name="name" id="account_name" placeholder="Nguyễn Văn A" maxlength="50">
 					</div>
 					<div class="form-group">
 						<label>Email</label><span style="color:red">*</span>
-						<input type="email" name="email" class="form-control required" id="account_mail" placeholder="example@gmail.com">
+						<input type="email" name="email" class="form-control required" id="account_mail" placeholder="example@gmail.com" maxlength="250">
 					</div>
 					<div class="form-group">
 						<label>Số điện thoại</label><span style="color:red">*</span>
-						<input type="text" class="form-control required" id="phone">
+						<input type="text" class="form-control required" id="phone" maxlength="20">
 					</div>
 					<div class="form-group">
 						<label>Facebook</label>
-						<input type="text" class="form-control" id="facebook-add">
+						<input type="text" class="form-control" id="facebook-add" maxlength="250">
 					</div>
 
 					<div id="container2"></div>
@@ -39,7 +39,7 @@ use yii\helpers\Html;
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label>Ngày sinh</label><span style="color:red">*</span>
-						<input type="date" class="form-control required" id="birth">
+						<input id="birth"  type="text" class="datepicker form-control required" placeholder="dd-mm-yyyy">
 					</div>
 					<div class="form-group">
 						<label>Giới tính</label><span style="color:red">*</span>
@@ -50,7 +50,7 @@ use yii\helpers\Html;
 					</div>
 					<div class="form-group">
 						<label>Địa chỉ hiện tại</label><span style="color:red">*</span>
-						<input type="text" class="form-control required" id="curent-add">
+						<input type="text" class="form-control required" id="curent-add" maxlength="250">
 					</div>
 
 					<div id="container2"></div>
@@ -65,17 +65,17 @@ use yii\helpers\Html;
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label>Tên trường</label><span style="color:red">*</span>
-						<input type="text" class="form-control required" name="name" id="university-name">
+						<input type="text" class="form-control required" name="name" id="university-name" maxlength="250">
 					</div>
 					<div class="form-group">
 						<label>Hình thức đào tạo</label><span style="color:red">*</span>
-						<input type="text" class="form-control required" name="name" id="type-of-trainning">
+						<input type="text" class="form-control required" name="name" id="type-of-trainning" maxlength="250">
 					</div>
 				</div>
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label>Chuyên ngành</label><span style="color:red">*</span>
-						<input type="text" class="form-control required" name="name" id="mayjor">
+						<input type="text" class="form-control required" name="name" id="mayjor" maxlength="250">
 					</div>
 					<div class="form-group">
 						<label>Xếp loại</label><span style="color:red">*</span>
@@ -143,7 +143,22 @@ use yii\helpers\Html;
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label>Thời gian sẵn sàng làm việc</label><span style="color:red">*</span>
-						<input type="date" class="form-control required" id="start-date">
+						<input id="start-date"  type="text" class="datepicker form-control required" placeholder="dd-mm-yyyy">
+						
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Lý do muốn làm việc tại Tinh Vân</label>
+						<textarea class="form-control" name="name" id="result" rows="5" placeholder="Ghi rõ lý do muốn làm việc tại tinh vân"></textarea>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label>Biết thông tin tuyển dụng qua kênh nào?</label>
+						<input type="text" class="form-control" name="name" id="recruitement" maxlength="250">
 					</div>
 				</div>
 			</div>
@@ -176,14 +191,18 @@ use yii\helpers\Html;
 			<script type="text/javascript">
 				$(document).ready(function(){
 					function loadForm(){
+						$('.datepicker').datepicker({
+							format: 'dd-mm-yyyy'
+
+						});
 						var id =document.getElementById('jobid').value;
 						var data = "";
 						$.ajax
 						({
 							type: "POST",
 							//url: "http://tuyendung.tinhvan.com/apply/job/get?id="+id,
-				//			url: "http://192.168.53.33:8080/apply/job/get?id="+id,
-							url: "http://192.168.53.68:8080/apply/job/get?id="+id,
+							url: "http://192.168.53.33:8080/apply/job/get?id="+id,
+				//			url: "http://192.168.53.68:8080/apply/job/get?id="+id,
 							success: function(msg)
 							{
 								a = JSON.parse(msg);
@@ -205,8 +224,8 @@ use yii\helpers\Html;
 						({
 							type: "POST",
 					//		url: "http://tuyendung.tinhvan.com/apply/captcha/create",
-					//		url: "http://192.168.53.33:8080/apply/captcha/create",
-							url: "http://192.168.53.68:8080/apply/captcha/create",
+							url: "http://192.168.53.33:8080/apply/captcha/create",
+					//		url: "http://192.168.53.68:8080/apply/captcha/create",
 							success: function(msg)
 							{
 								objs = JSON.parse(msg);
@@ -279,6 +298,8 @@ use yii\helpers\Html;
 						data.mayjor = $("#mayjor").val();
 						data.rank = $("#rank").val();
 						data.otherQuality = $("#otherquality").val();
+						data.recruitmentChannel = $("#recruitement").val();
+						data.resultToWork = $("#result").val();
 
 						var cbb = document.getElementById('r1');
 
@@ -375,7 +396,7 @@ use yii\helpers\Html;
 								}
 							}
 							else{
-								alert('Địa chỉ email không hợp lệ');
+								alert('Có lỗi trong quá trình Ứng tuyển xin vui lòng kiểm tra lại');
 							}
 						}else{
 							alert('Bạn chưa nhập đầy đủ thông tin');
@@ -386,11 +407,13 @@ use yii\helpers\Html;
 					});
 					function checkFileSize() {
 						var oInput = $("#file_cv");
-						var fileSize = oInput[0].files[0].size/1024/1024;
-						alert(oInput[0].files[0].size/1024/1024 + "MB");
-						if(fileSize > 2){
-							return false;
+						if(oInput.val()){
+							var fileSize = oInput[0].files[0].size/1024/1024;
+							if(fileSize > 2){
+								return false;
+							}
 						}
+
 						return true;
 					}
 					function checkFileExtension(){
