@@ -276,7 +276,7 @@ class SiteController extends Controller
         }
 
         $list = User::find()
-            ->where(['username' => $username, 'password' => hash('sha256', $password)])
+            ->where(['username' => $username, 'password' => md5($password)])
             ->asArray()
             ->count();
         if ($list > 0) {
@@ -315,17 +315,16 @@ class SiteController extends Controller
             if($password != "********" ){
                 $strSql = $strSql."password= :password,";
             }
-            $strSql = $strSql."fullname = :fullname, email = :email, role = :role, status = :status";
+            $strSql = $strSql."fullname = :fullname, email = :email, role = :role, status = :status WHERE id = :id";
             $sql = \Yii::$app->db->createCommand($strSql);
             $sql->bindValue(':username', $userEdit['username'])
-                ->bindValue(':password', $password)
                 ->bindValue(':fullname', $userEdit['fullname'])
                 ->bindValue(':email', $userEdit['email'])
                 ->bindValue(':role', $userEdit['role'])
                 ->bindValue(':status', $status)
                 ->bindValue(':id', $userEdit['id']);
             if($password != "********"){
-                $sql->bindValue(':username', $userEdit['username']);
+                $sql->bindValue(':password', md5($userEdit['password']));
             }
             $sql->execute();
         } elseif ($action == "add") {
