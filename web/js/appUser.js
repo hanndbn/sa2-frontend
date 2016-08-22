@@ -9,6 +9,7 @@ var UserFilter = React.createClass({
         this.props.handleAddUser(isAdd);
     },
     render: function () {
+        var pointerEvent = this.props.isAddUser ? 'none' : '';
         return (
             <div className="tv_filters" style={{backgroundColor: 'transparent'}}>
                 <div className="col-md-12"
@@ -17,7 +18,7 @@ var UserFilter = React.createClass({
                     <hr style={{marginTop: '0', marginBottom: '10px'}}/>
                 </div>
                 <div className="col-md-12" style={{backgroundColor: '#99cce6',}}>
-                    <div className="col-md-2" style={{float: 'left', padding: '10px 0'}}
+                    <div className="col-md-2" style={{float: 'left', padding: '10px 0', pointerEvents: pointerEvent}}
                          onClick={this._handleAddUser.bind(null, true)}>
                         <span className="btn btn-success" id="add-user">
                             <i className="glyphicon glyphicon-plus"/>
@@ -38,7 +39,7 @@ var UserFilter = React.createClass({
                                     <option style={{color: '#C7C7CD'}} value="" disabled="disabled" hidden="hidden">Nhập
                                         status
                                     </option>
-                                    <option value=""></option>
+                                    <option value=""> </option>
                                     <option value="0">Active</option>
                                     <option value="1">Deactive</option>
                                 </select>
@@ -55,48 +56,55 @@ var User = React.createClass({
         this.props.handleDelete(id);
     },
     handleEditUser: function (index) {
-        $(".mainAction").css({"display": 'none'});
-        $(".chooseAction").css({"display": 'block'});
-
+        $(".mainAction").css({"pointer-events": 'none'});
+        $(".chooseAction").css({"pointer-events": 'none'});
+        $($(".mainAction")[index]).css({"display": 'none'});
+        $($(".chooseAction")[index]).css({"display": '', "pointer-events": ''});
         $($(".fieldinput1")[index]).val($($(".labeluser1")[index]).html());
-        $($(".fieldinput2")[index]).val($($(".labeluser2")[index]).html());
+        $($(".fieldinput2")[index]).val($($(".labeluser2")[index]).html())
         $($(".fieldinput3")[index]).val($($(".labeluser3")[index]).html());
         $($(".fieldinput4")[index]).val($($(".labeluser4")[index]).html());
+        $($(".fieldinput5")[index]).val($($(".labeluser5")[index]).html());
+        $($(".fieldinput6")[index]).val($($(".labeluser6")[index]).html());
 
-        this.handleStyle("fieldinput", "block", index);
+        this.handleStyle("fieldinput", "", index);
         this.handleStyle("labeluser", "none", index);
     },
 
+    resetEvent: function (index) {
+        $(".mainAction").css({"pointer-events": ''});
+        $(".chooseAction").css({"pointer-events": ''});
+        $($(".mainAction")[index]).css({"display": '', "pointer-events": ''});
+        $($(".chooseAction")[index]).css({"display": 'none'});
+        this.handleStyle("fieldinput", "none", index);
+        this.handleStyle("labeluser", "", index);
+    },
     handleChooseAction: function (user, doUpdate, index, action) {
-        user['username'] = $($(".fieldinput1")[index]).val();
-        user['fullname'] = $($(".fieldinput2")[index]).val();
-        user['email'] = $($(".fieldinput3")[index]).val();
-        user['ctime'] = $($(".fieldinput4")[index]).val();
+        var username = $($(".fieldinput1")[index]).val();
+        if (doUpdate == "0") {
+            this.resetEvent(index);
 
-        if (user.username != "") {
-            $(".mainAction").css({"display": 'block'});
-            $(".chooseAction").css({"display": 'none'});
-            this.handleStyle("fieldinput", "none", index);
-            this.handleStyle("labeluser", "block", index);
-            if (doUpdate == "1") {
-                if (action == "edit") {
-                    this.props.handleEdit(user);
-                } else if (action == "add") {
-                    this.props.handleAdd(user);
-                }
-            } else {
-                if (action == "add") {
-                    this.props.handleAddUser(false);
-                }
-            }
-        } else {
             if (action == "add") {
                 this.props.handleAddUser(false);
             }
+        } else if (username != "") {
+            this.resetEvent(index);
+            user['username'] = $($(".fieldinput1")[index]).val();
+            user['password'] = $($(".fieldinput2")[index]).val();
+            user['fullname'] = $($(".fieldinput3")[index]).val();
+            user['email'] = $($(".fieldinput4")[index]).val();
+            user['role'] = $($(".fieldinput5")[index]).val();
+            user['status'] = $($(".fieldinput6")[index]).val();
+            if (action == "edit") {
+                this.props.handleEdit(user);
+            } else if (action == "add") {
+                this.props.handleAdd(user);
+            }
         }
+
     },
     handleStyle: function (selector, isDisplay, index) {
-        for (var i = 1; i <= 4; i++) {
+        for (var i = 1; i <= 6; i++) {
             $($('.' + selector + i)[index]).css({"display": isDisplay});
         }
     },
@@ -131,12 +139,13 @@ var User = React.createClass({
         }
         var isAddUser = this.props.isAddUser;
         var userdetail = rows.map(function (user, index) {
-            var displayLabel = "block";
+            var displayLabel = "";
             var displayInput = "none";
             var action = "edit";
             if (isAddUser && user.id == 0) {
+                $(".mainAction").css({"pointer-events": 'none'});
                 displayLabel = "none";
-                displayInput = "block";
+                displayInput = "";
                 action = "add";
             }
             return (
@@ -146,25 +155,35 @@ var User = React.createClass({
                         <div className="labeluser1" style={{display: displayLabel}}>{user.username}</div>
                         <input type="text" className="fieldinput1" style={{display: displayInput}}/></td>
                     <td>
-                        <div className="labeluser2" style={{display: displayLabel}}>{user.fullname}</div>
-                        <input type="text" className="fieldinput2" style={{display: displayInput}}/></td>
+                        <div className="labeluser2" style={{display: displayLabel}}>{user.password}</div>
+                        <input type="password" className="fieldinput2" style={{display: displayInput,maxWidth:'120px', padding:'0'}}/></td>
                     <td>
-                        <div className="labeluser3" style={{display: displayLabel}}>{user.email}</div>
+                        <div className="labeluser3" style={{display: displayLabel}}>{user.fullname}</div>
                         <input type="text" className="fieldinput3" style={{display: displayInput}}/></td>
                     <td>
-                        <div className="labeluser4" style={{display: displayLabel}}>{user.ctime}</div>
+                        <div className="labeluser4" style={{display: displayLabel}}>{user.email}</div>
                         <input type="text" className="fieldinput4" style={{display: displayInput}}/></td>
                     <td>
-                            <span
-                                className={user.status == "0" ? "label label-success" : "label label-warning"}>{user.status == "0" ? 'Active' : 'Deactive'}</span>
+                        <div className="labeluser5" style={{display: displayLabel}}>{user.role}</div>
+                        <select className="fieldinput5" style={{display: displayInput}}>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="MEMBER">MEMBER</option>
+                        </select>
                     </td>
-                    <td className="text-center mainAction" style={{display: displayLabel}}>
-                        <div className="btn btn-info btn-circle" title="">
-                            <i className="fa fa-list"/>
-                        </div>
-                        <div className="btn btn-success btn-circle" title="">
-                            <i className="glyphicon glyphicon-eye-open"/>
-                        </div>
+                    <td style={{textAlign: 'center'}}>
+                            <div className={user.status == "0" ? "label label-success labeluser6" : "label label-warning labeluser6"}>{user.status == "0" ? 'Active' : 'Inactive'}</div>
+                            <select className="fieldinput6" style={{display: displayInput}}>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                    </td>
+                    <td className="text-center mainAction" style={{display: displayLabel,textAlign:'center'}}>
+                        {/*<div className="btn btn-info btn-circle" title="">
+                         <i className="fa fa-list"/>
+                         </div>
+                         <div className="btn btn-success btn-circle" title="">
+                         <i className="glyphicon glyphicon-eye-open"/>
+                         </div>*/}
                         <div className="btn btn-primary btn-circle edit" title=""
                              onClick={self.handleEditUser.bind(null, index)}>
                             <i className="glyphicon glyphicon-edit"/>
@@ -174,7 +193,7 @@ var User = React.createClass({
                             <i className="glyphicon glyphicon-trash"/>
                         </div>
                     </td>
-                    <td className="text-center chooseAction" style={{display: displayInput}}>
+                    <td className="text-center chooseAction" style={{display: displayInput,textAlign:'center'}}>
                         <div className="btn btn-success btn-circle" title=""
                              onClick={self.handleChooseAction.bind(null, user, 1, index, action)}>
                             <i className="glyphicon glyphicon-ok"/>
@@ -191,22 +210,22 @@ var User = React.createClass({
             <div>
                 <div className="table-responsive top-border-table"
                      style={{minHeight: '550px', borderBottom: '1px solid #e7e7e7'}} id="users-table-wrapper">
-                    <table className="table">
+                    <table className="table fixed" style={{tableLayout:'fixed'}}>
                         <thead>
                         <tr>
-                            <th>id</th>
-                            <th>Username</th>
-                            <th>Full Name</th>
-                            <th>E-Mail</th>
-                            <th>Registration Date</th>
-                            <th>Status</th>
-                            <th className="text-center">Action</th>
+                            <th width="10px">STT</th>
+                            <th width="50px">Username</th>
+                            <th width="30px">Password</th>
+                            <th width="50px">FullName</th>
+                            <th width="50px">E-Mail</th>
+                            <th width="25px">Role</th>
+                            <th width="25px" style={{textAlign:'center'}}>Status</th>
+                            <th width="25px" className="text-center"  style={{textAlign:'center'}}>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         {userdetail}
                         </tbody>
-
                     </table>
                 </div>
                 <div style={{display: 'table', margin: '0 auto'}}>
@@ -217,7 +236,6 @@ var User = React.createClass({
                         maxNumberPage={maxNumberPage}
                         handleChangePage={this.props.handleChangePage}
                     />
-
                 </div>
             </div>
         )
@@ -389,7 +407,7 @@ var UserList = React.createClass({
         }
         this.setState({
             users: users,
-            isAddUser: true
+            isAddUser: isAdd
         });
 
     },
@@ -404,6 +422,7 @@ var UserList = React.createClass({
                         keyword={this.state.keyword}
                         status={this.state.status}
                         handleAddUser={this.handleAddUser}
+                        isAddUser={this.state.isAddUser}
                     />
                     {<User users={this.state.users}
                            handleDelete={this.handleDelete}

@@ -306,15 +306,27 @@ class SiteController extends Controller
             }
         } elseif ($action == "edit") {
             $userEdit = $_POST['user'];
-            $sql = \Yii::$app->db->createCommand(
-                "UPDATE user
-                  SET username = :username, fullname = :fullname, email = :email,ctime = :ctime
-                  WHERE id = :id");
+            $password  = $userEdit['password'];
+            if($password != "********"){
+                $password = md5($userEdit['password']);
+            }
+            $status = $userEdit['status'] == "Active" ? '0' : '1';
+            $strSql = "UPDATE user SET username = :username,";
+            if($password != "********" ){
+                $strSql = $strSql."password= :password,";
+            }
+            $strSql = $strSql."fullname = :fullname, email = :email, role = :role, status = :status";
+            $sql = \Yii::$app->db->createCommand($strSql);
             $sql->bindValue(':username', $userEdit['username'])
+                ->bindValue(':password', $password)
                 ->bindValue(':fullname', $userEdit['fullname'])
                 ->bindValue(':email', $userEdit['email'])
-                ->bindValue(':ctime', $userEdit['ctime'])
+                ->bindValue(':role', $userEdit['role'])
+                ->bindValue(':status', $status)
                 ->bindValue(':id', $userEdit['id']);
+            if($password != "********"){
+                $sql->bindValue(':username', $userEdit['username']);
+            }
             $sql->execute();
         } elseif ($action == "add") {
             $userAdd = $_POST['user'];
@@ -332,8 +344,10 @@ class SiteController extends Controller
                 ->bindValue(':initial', $initial);
             $sql->execute();
         }
+        $sqlSelect = "SELECT id,username, '********' as password, fullname, email, status, role FROM user ORDER BY ctime DESC";
+        $listUsers = User::findBySql($sqlSelect)->asArray()->all();
+        //$listUsers = User::find()->select(['username','','email','status','role'])->orderBy(["ctime"=>SORT_DESC])->asArray()->all();
 
-        $listUsers = User::find()->orderBy(["ctime"=>SORT_DESC])->asArray()->all();
         return Json::encode($listUsers);
     }
 
