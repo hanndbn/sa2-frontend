@@ -347,8 +347,8 @@ use yii\helpers\Html;
 						data['info'] = infor;
 						console.log(data);
 				//		var url = "http://tuyendung.tinhvan.com/apply/candidate/create?"+ser(data);
-				//		var url = "http://192.168.53.33:8080/apply/candidate/create?"+ser(data);
-						var url = "http://192.168.53.68:8080/apply/candidate/create?"+ser(data);
+						var url = "http://192.168.53.33:8080/apply/candidate/create?"+ser(data);
+				//		var url = "http://192.168.53.68:8080/apply/candidate/create?"+ser(data);
 						console.log(url);
 						loading_show();
 						$.ajax({
