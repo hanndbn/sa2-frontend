@@ -101,7 +101,7 @@ use yii\helpers\Html;
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label>Các chứng chỉ, bằng cấp khác</label>
-						<textarea class="form-control" name="name" id="otherquality" rows="5" placeholder="Ghi rõ thời gian học, tên chứng chỉ/khóa học, đơn vị đào tạo"></textarea>
+						<textarea class="form-control" name="name" id="otherquality" rows="5" placeholder="Ghi rõ thời gian học, tên chứng chỉ/khóa học, đơn vị đào tạo" maxlength="2000"></textarea>
 					</div>
 				</div>
 			</div>
@@ -137,7 +137,7 @@ use yii\helpers\Html;
 
 					<div class="form-group">
 						<label>Quá trình công tác</label><span style="color:red">*</span>
-						<textarea class="form-control required" name="name" id="exp" rows="5" placeholder="Ghi rõ từ ngày-đến ngày, vị trí, công ty"></textarea>
+						<textarea class="form-control required" name="name" id="exp" rows="5" placeholder="Ghi rõ từ ngày-đến ngày, vị trí, công ty" maxlength="2000"></textarea>
 					</div>
 				</div>
 				<div class="col-xs-6">
@@ -152,7 +152,7 @@ use yii\helpers\Html;
 				<div class="col-xs-6">
 					<div class="form-group">
 						<label>Lý do muốn làm việc tại Tinh Vân</label>
-						<textarea class="form-control" name="name" id="result" rows="5" placeholder="Ghi rõ lý do muốn làm việc tại tinh vân"></textarea>
+						<textarea class="form-control" name="name" id="result" rows="5" placeholder="Ghi rõ lý do muốn làm việc tại tinh vân" maxlength="2000"></textarea>
 					</div>
 				</div>
 				<div class="col-xs-6">
