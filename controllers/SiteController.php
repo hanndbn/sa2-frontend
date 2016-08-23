@@ -300,7 +300,7 @@ class SiteController extends Controller
         }
         if ($action == "init") {
         } elseif ($action == "delete") {
-            $id = $_POST['id'];
+            $id = $_POST['user']['id'];
             $user = User::find()->where(['id' => $id])->one();
             if ($user) {
                 $isdelete = $user->delete();
