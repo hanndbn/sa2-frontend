@@ -294,6 +294,7 @@ class SiteController extends Controller
 
     public function actionAjaxuser()
     {
+        $statusProcess = "1";
         if (isset($_POST['action'])) {
             $action = $_POST['action'];
         }
@@ -302,20 +303,26 @@ class SiteController extends Controller
             $id = $_POST['id'];
             $user = User::find()->where(['id' => $id])->one();
             if ($user) {
-                $user->delete();
+                $isdelete = $user->delete();
+                if ($isdelete > 0) {
+                    $statusProcess = "1";
+                } else {
+                    $statusProcess = "0";
+                }
             }
         } elseif ($action == "edit") {
             $userEdit = $_POST['user'];
-            $password  = $userEdit['password'];
-            if($password != "********"){
+            $password = $userEdit['password'];
+            if ($password != "********") {
                 $password = md5($userEdit['password']);
             }
             $status = $userEdit['status'] == "Active" ? '0' : '1';
             $strSql = "UPDATE user SET username = :username,";
-            if($password != "********" ){
-                $strSql = $strSql."password= :password,";
+            if ($password != "********") {
+                $strSql = $strSql . "password= :password,";
+                $strSql = $strSql . "lastpwchanged= now(),";
             }
-            $strSql = $strSql."fullname = :fullname, email = :email, role = :role, status = :status WHERE id = :id";
+            $strSql = $strSql . "fullname = :fullname, email = :email, role = :role, status = :status WHERE id = :id";
             $sql = \Yii::$app->db->createCommand($strSql);
             $sql->bindValue(':username', $userEdit['username'])
                 ->bindValue(':fullname', $userEdit['fullname'])
@@ -323,30 +330,40 @@ class SiteController extends Controller
                 ->bindValue(':role', $userEdit['role'])
                 ->bindValue(':status', $status)
                 ->bindValue(':id', $userEdit['id']);
-            if($password != "********"){
+            if ($password != "********") {
                 $sql->bindValue(':password', md5($userEdit['password']));
             }
-            $sql->execute();
+            $isEdit = $sql->execute();
+            if ($isEdit > 0) {
+                $statusProcess = "1";
+            } else {
+                $statusProcess = "0";
+            }
         } elseif ($action == "add") {
             $userAdd = $_POST['user'];
-            $password = '612bfbf3d028c9f3212d275c0f5b6a6db5369957176ac758f9e2fa644b8c7ab5';
-            $initial = 'TPK';
-            $status = '0';
+            $password = md5($userAdd['password']);
+            $status = $userAdd['status'] == "Active" ? '0' : '1';
             $sql = \Yii::$app->db->createCommand(
-                "INSERT INTO user (fullname, ctime, state, email, username, password, lastpwchanged, status, initial, avatar, lmtime) 
-                VALUES (:fullname, now(), '0', :email, :username, :password, now(), :status, :initial, '/ui/avatars/avatar.png', now())");
+                "INSERT INTO user (fullname, ctime, state, email, username, password, lastpwchanged, status, initial, role, avatar, lmtime) 
+                VALUES (:fullname, now(), '0', :email, :username, :password, now(), :status, 'TPK', :role,  '/ui/avatars/avatar.png', now())");
             $sql->bindValue(':fullname', $userAdd['fullname'])
                 ->bindValue(':email', $userAdd['email'])
                 ->bindValue(':username', $userAdd['username'])
                 ->bindValue(':password', $password)
                 ->bindValue(':status', $status)
-                ->bindValue(':initial', $initial);
-            $sql->execute();
+                ->bindValue(':role', $userAdd['role']);
+            $isAdd = $sql->execute();
+            if ($isAdd > 0) {
+                $statusProcess = "1";
+            } else {
+                $statusProcess = "0";
+            }
+
         }
         $sqlSelect = "SELECT id,username, '********' as password, fullname, email, status, role FROM user ORDER BY ctime DESC";
         $listUsers = User::findBySql($sqlSelect)->asArray()->all();
-        //$listUsers = User::find()->select(['username','','email','status','role'])->orderBy(["ctime"=>SORT_DESC])->asArray()->all();
-
+        $arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
+        array_unshift($listUsers, $arrayMsg);
         return Json::encode($listUsers);
     }
 

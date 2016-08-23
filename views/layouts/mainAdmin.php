@@ -28,7 +28,7 @@ AppAsset::register($this);
     <script src="<?= Yii::$app->homeUrl ?>js/jquery-2.1.3.min.js"></script>
     <script src="<?= Yii::$app->homeUrl ?>js/react.js"></script>
     <script src="<?= Yii::$app->homeUrl ?>js/react-dom.js"></script>
-    <script src="<?= Yii::$app->homeUrl ?>js/app.min-4e93c3e8ba.js"></script>
+    <script src="../js/react-with-addons.js"></script>
     <?= Html::csrfMetaTags() ?>
     <?php if (isset($this->title)): ?>
         <title><?= Html::encode($this->title) ?></title>

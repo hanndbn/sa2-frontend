@@ -11,14 +11,13 @@ var UserFilter = React.createClass({
     render: function () {
         var pointerEvent = this.props.isAddUser ? 'none' : '';
         return (
-            <div className="tv_filters" style={{backgroundColor: 'transparent'}}>
+            <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px'}}>
                 <div className="col-md-12"
-                     style={{textAlign: 'center', backgroundColor: '#fafafa', marginBottom: '10px'}}>
+                     style={{textAlign: 'center', backgroundColor: '#DEE1EC', marginBottom: '10px'}}>
                     <h2>MANAGER USER</h2>
-                    <hr style={{marginTop: '0', marginBottom: '10px'}}/>
                 </div>
                 <div className="col-md-12" style={{backgroundColor: '#99cce6',}}>
-                    <div className="col-md-2" style={{float: 'left', padding: '10px 0', pointerEvents: pointerEvent}}
+                    <div className="col-md-2 addUser" style={{float: 'left', padding: '10px 0', pointerEvents: pointerEvent}}
                          onClick={this._handleAddUser.bind(null, true)}>
                         <span className="btn btn-success" id="add-user">
                             <i className="glyphicon glyphicon-plus"/>
@@ -56,41 +55,59 @@ var User = React.createClass({
         this.props.handleDelete(id);
     },
     handleEditUser: function (index) {
-        $(".mainAction").css({"pointer-events": 'none'});
-        $(".chooseAction").css({"pointer-events": 'none'});
-        $($(".mainAction")[index]).css({"display": 'none'});
-        $($(".chooseAction")[index]).css({"display": '', "pointer-events": ''});
+        var mainAction = $(".mainAction");
+        var chooseAction = $(".chooseAction");
+        mainAction.css({"pointer-events": 'none'});
+        chooseAction.css({"pointer-events": 'none'});
+        $(mainAction[index]).css({"display": 'none'});
+        $(chooseAction[index]).css({"display": '', "pointer-events": ''});
+        $(".addUser").css("pointer-events", 'none');
         $($(".fieldinput1")[index]).val($($(".labeluser1")[index]).html());
-        $($(".fieldinput2")[index]).val($($(".labeluser2")[index]).html())
+        $($(".fieldinput2")[index]).val("");
         $($(".fieldinput3")[index]).val($($(".labeluser3")[index]).html());
         $($(".fieldinput4")[index]).val($($(".labeluser4")[index]).html());
         $($(".fieldinput5")[index]).val($($(".labeluser5")[index]).html());
         $($(".fieldinput6")[index]).val($($(".labeluser6")[index]).html());
 
-        this.handleStyle("fieldinput", "", index);
+        this.handleStyle("fieldinput", "inline", index);
         this.handleStyle("labeluser", "none", index);
+        $($(".fieldShowPass")[index]).css({"display": 'none'});
+        $($(".divInputPass")[index]).css({"display": 'inline-block',"border":'solid 1px darkgrey',"height": "24px"});
+        $($(".fieldinput2")[index]).keyup(function(event) {
+            if(event.target.value != ""){
+                $($(".fieldShowPass")[index]).css({"display": 'inline'});
+            }else{
+                $($(".fieldShowPass")[index]).css({"display": 'none'});
+            }
+        });
     },
 
     resetEvent: function (index) {
-        $(".mainAction").css({"pointer-events": ''});
-        $(".chooseAction").css({"pointer-events": ''});
-        $($(".mainAction")[index]).css({"display": '', "pointer-events": ''});
-        $($(".chooseAction")[index]).css({"display": 'none'});
+        var mainAction = $(".mainAction");
+        var chooseAction = $(".chooseAction");
+        mainAction .css({"pointer-events": ''});
+        chooseAction.css({"pointer-events": ''});
+        $(mainAction[index]).css({"display": '', "pointer-events": ''});
+        $(chooseAction[index]).css({"display": 'none'});
         this.handleStyle("fieldinput", "none", index);
-        this.handleStyle("labeluser", "", index);
+        this.handleStyle("labeluser", "inline", index);
+        $($(".divInputPass")[index]).css({"display": 'none'});
+        $($(".fieldShowPass")[index]).css({"display": 'none'});
+        $(".addUser").css("pointer-events", '');
     },
     handleChooseAction: function (user, doUpdate, index, action) {
         var username = $($(".fieldinput1")[index]).val();
+        var password = $($(".fieldinput2")[index]).val();
         if (doUpdate == "0") {
             this.resetEvent(index);
 
             if (action == "add") {
                 this.props.handleAddUser(false);
             }
-        } else if (username != "") {
+        } else if ((action == "edit" && username != "") || (action == "add" && password != "" && username != "")) {
             this.resetEvent(index);
-            user['username'] = $($(".fieldinput1")[index]).val();
-            user['password'] = $($(".fieldinput2")[index]).val();
+            user['username'] = username;
+            user['password'] = password;
             user['fullname'] = $($(".fieldinput3")[index]).val();
             user['email'] = $($(".fieldinput4")[index]).val();
             user['role'] = $($(".fieldinput5")[index]).val();
@@ -100,8 +117,28 @@ var User = React.createClass({
             } else if (action == "add") {
                 this.props.handleAdd(user);
             }
+        }else if(action == "edit" && username == ""){
+            var msg = "Please Fill Below Field: <br>" + "- Username";
+            var statusProcess = 0;
+            this.props.handleMsgInfo(msg,statusProcess);
+        }else if(action == "add"){
+            var msg = "Please Fill Below Field: <br>" + (username=="" ? "- Username": "") + (password=="" ? "<br>- Password": "");
+            var statusProcess = 0;
+            this.props.handleMsgInfo(msg,statusProcess);
         }
 
+    },
+    handleShowPass: function (index) {
+
+        var selector = $($(".fieldinput2")[index]);
+        var type = selector.attr("type");
+        if(type =="text"){
+            selector.attr("type","password");
+            $($(".fieldShowPass i")[index]).attr("class","glyphicon glyphicon-eye-open");
+        }else {
+            selector.attr("type","text");
+            $($(".fieldShowPass i")[index]).attr("class","glyphicon glyphicon-eye-close");
+        }
     },
     handleStyle: function (selector, isDisplay, index) {
         for (var i = 1; i <= 6; i++) {
@@ -142,11 +179,13 @@ var User = React.createClass({
             var displayLabel = "";
             var displayInput = "none";
             var action = "edit";
+            var styleDivPass = {display: displayInput};
             if (isAddUser && user.id == 0) {
                 $(".mainAction").css({"pointer-events": 'none'});
                 displayLabel = "none";
                 displayInput = "";
                 action = "add";
+                styleDivPass = {display: "inline-block",border:"solid 1px darkgrey",height: "27px"};
             }
             return (
                 <tr key={user.id}>
@@ -156,7 +195,13 @@ var User = React.createClass({
                         <input type="text" className="fieldinput1" style={{display: displayInput}}/></td>
                     <td>
                         <div className="labeluser2" style={{display: displayLabel}}>{user.password}</div>
-                        <input type="password" className="fieldinput2" style={{display: displayInput,maxWidth:'120px', padding:'0'}}/></td>
+                        <div className="divInputPass" style={styleDivPass}>
+                            <input type="password" className="fieldinput2" style={{display: displayInput, maxWidth:'100px', padding:'0',border:'none',borderRadius:'0'}}/>
+                            <div className="fieldShowPass" onClick={self.handleShowPass.bind(null,index)} style={{display: 'none', padding:'5px'}}>
+                                <i className="glyphicon glyphicon-eye-open"/>
+                            </div>
+                        </div>
+                    </td>
                     <td>
                         <div className="labeluser3" style={{display: displayLabel}}>{user.fullname}</div>
                         <input type="text" className="fieldinput3" style={{display: displayInput}}/></td>
@@ -171,7 +216,7 @@ var User = React.createClass({
                         </select>
                     </td>
                     <td style={{textAlign: 'center'}}>
-                            <div className={user.status == "0" ? "label label-success labeluser6" : "label label-warning labeluser6"}>{user.status == "0" ? 'Active' : 'Inactive'}</div>
+                            <div className={user.status == "0" ? "label label-success labeluser6" : "label label-warning labeluser6"} style={{display: displayLabel}}>{user.status == "0" ? 'Active' : 'Inactive'}</div>
                             <select className="fieldinput6" style={{display: displayInput}}>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -215,7 +260,7 @@ var User = React.createClass({
                         <tr>
                             <th width="10px">STT</th>
                             <th width="50px">Username</th>
-                            <th width="30px">Password</th>
+                            <th width="35px">Password</th>
                             <th width="50px">FullName</th>
                             <th width="50px">E-Mail</th>
                             <th width="25px">Role</th>
@@ -255,7 +300,7 @@ var Pagination = React.createClass({
 
         var style = {
             pointerEvents: currentPage == 1 ? "none" : ""
-        }
+        };
         rows.push(
             <li key="first" style={{pointerEvents: currentPage == 1 ? "none" : ""}}
                 onClick={this._handleChangePage.bind(null, "first")}>
@@ -300,6 +345,18 @@ var Pagination = React.createClass({
         )
     }
 });
+
+var Notification = React.createClass({
+    render: function () {
+        return (
+            <div style={{display: 'none',textAlign:'center', padding: '5px', color:'white'}}
+                 className= {this.props.statusProcess == "1" ? "label-success msgInfo" :"label-warning msgInfo"}
+            >
+            {this.props.msg}
+            </div>
+        )
+    }
+});
 var UserList = React.createClass({
     getInitialState: function () {
         return ({
@@ -309,7 +366,9 @@ var UserList = React.createClass({
             maxNumberPage: 5,
             keyword: '',
             status: '',
-            isAddUser: false
+            isAddUser: false,
+            msg:'',
+            statusProcess:''
         });
     },
     componentWillMount: function () {
@@ -327,10 +386,22 @@ var UserList = React.createClass({
             data: data,
             datatype: 'json',
             success: function (data) {
+                var users = JSON.parse(data);
+                //get info from first element
+                var action = users[0].action;
+                var statusProcess = users[0].statusProcess;
+                var msg = action.charAt(0).toUpperCase() + action.slice(1) + " Record " + (statusProcess ==="1" ? "Success": "Fail") + "!!!";
+                //delete first element
+                users.shift();
                 self.setState({
-                    users: JSON.parse(data),
-                    isAddUser: false
+                    users: users,
+                    isAddUser: false,
+                    msg: msg,
+                    statusProcess: statusProcess
                 });
+                if(action != "init"){
+                    this.handleMsgInfo("","");
+                }
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(url, status, err.toString());
@@ -340,7 +411,7 @@ var UserList = React.createClass({
     handleDelete: function (id) {
         var data = {
             action: 'delete',
-            id: id
+            id: id,
         };
         this.loadUsers(data);
     },
@@ -411,6 +482,21 @@ var UserList = React.createClass({
         });
 
     },
+    handleMsgInfo : function (msg, statusProcess) {
+        var msgInfo = $(".msgInfo");
+        var delayTime = 1000;
+        if(msg !== "" && statusProcess !== ""){
+            delayTime = 3000;
+            if(statusProcess === "1") {
+                msgInfo.attr({class:"label-success msgInfo"})
+            }else{
+                msgInfo.attr({class:"label-warning msgInfo"})
+            }
+            msgInfo.html(msg);
+        }
+        msgInfo.fadeIn();
+        msgInfo.delay(delayTime).fadeOut('slow');
+    },
     render: function () {
         var users = this.state.users;
         return (
@@ -424,7 +510,11 @@ var UserList = React.createClass({
                         handleAddUser={this.handleAddUser}
                         isAddUser={this.state.isAddUser}
                     />
-                    {<User users={this.state.users}
+                    <Notification
+                        msg={this.state.msg}
+                        statusProcess={this.state.statusProcess}
+                    />
+                    <User users={this.state.users}
                            handleDelete={this.handleDelete}
                            handleEdit={this.handleEdit}
                            handleAdd={this.handleAdd}
@@ -436,7 +526,8 @@ var UserList = React.createClass({
                            status={this.state.status}
                            isAddUser={this.state.isAddUser}
                            handleAddUser={this.handleAddUser}
-                    />}
+                           handleMsgInfo = {this.handleMsgInfo}
+                    />
                 </div>
             </div>
         );
