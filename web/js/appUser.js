@@ -5,11 +5,14 @@ var UserFilter = React.createClass({
     _handleStatus: function (event) {
         this.props.handleStatus(event.target.value);
     },
-    _handleAddUser: function (isAdd) {
-        this.props.handleAddUser(isAdd);
+    _handleAddUser: function () {
+        this.props.handleAddUser();
     },
     render: function () {
-        var pointerEvent = this.props.isAddUser ? 'none' : '';
+        var pointerEvent = "";
+        if (this.props.selectAction.action != '') {
+            pointerEvent = 'none';
+        }
         return (
             <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px'}}>
                 <div className="col-md-12"
@@ -18,9 +21,10 @@ var UserFilter = React.createClass({
                 </div>
                 <div className="col-md-12" style={{backgroundColor: '#99cce6',}}>
                     <div className="col-md-2 addUser"
-                         style={{float: 'left', padding: '10px 0', pointerEvents: pointerEvent}}
-                         onClick={this._handleAddUser.bind(null, true)}>
-                        <span className="btn btn-success" id="add-user">
+                         style={{float: 'left', padding: '10px 0'}}>
+                        <span className="btn btn-success" id="add-user" onClick={this._handleAddUser}
+                              style={{pointerEvents: pointerEvent}}
+                        >
                             <i className="glyphicon glyphicon-plus"/>
                             Add User
                         </span>
@@ -52,104 +56,14 @@ var UserFilter = React.createClass({
     }
 });
 var User = React.createClass({
-    handleDeleteUser: function (id) {
-        this.props.handleDelete(id);
-    },
-    handleEditUser: function (index) {
-        var mainAction = $(".mainAction");
-        var chooseAction = $(".chooseAction");
-        mainAction.css({"pointer-events": 'none'});
-        chooseAction.css({"pointer-events": 'none'});
-        $(mainAction[index]).css({"display": 'none'});
-        $(chooseAction[index]).css({"display": '', "pointer-events": ''});
-        $(".addUser").css("pointer-events", 'none');
-        $($(".fieldinput1")[index]).val($($(".labeluser1")[index]).html());
-        $($(".fieldinput2")[index]).val("");
-        $($(".fieldinput3")[index]).val($($(".labeluser3")[index]).html());
-        $($(".fieldinput4")[index]).val($($(".labeluser4")[index]).html());
-        $($(".fieldinput5")[index]).val($($(".labeluser5")[index]).html());
-        $($(".fieldinput6")[index]).val($($(".labeluser6")[index]).html());
-
-        this.handleStyle("fieldinput", "inline", index);
-        this.handleStyle("labeluser", "none", index);
-        $($(".fieldShowPass")[index]).css({"display": 'none'});
-        $($(".divInputPass")[index]).css({"display": 'inline-block', "border": 'solid 1px darkgrey', "height": "24px"});
-        $($(".fieldinput2")[index]).keyup(function (event) {
-            if (event.target.value != "") {
-                $($(".fieldShowPass")[index]).css({"display": 'inline'});
-            } else {
-                $($(".fieldShowPass")[index]).css({"display": 'none'});
-            }
-        });
-    },
-
-    resetEvent: function (index) {
-        var mainAction = $(".mainAction");
-        var chooseAction = $(".chooseAction");
-        mainAction.css({"pointer-events": ''});
-        chooseAction.css({"pointer-events": ''});
-        $(mainAction[index]).css({"display": '', "pointer-events": ''});
-        $(chooseAction[index]).css({"display": 'none'});
-        this.handleStyle("fieldinput", "none", index);
-        this.handleStyle("labeluser", "inline", index);
-        $($(".divInputPass")[index]).css({"display": 'none'});
-        $($(".fieldShowPass")[index]).css({"display": 'none'});
-        $(".addUser").css("pointer-events", '');
-    },
-    handleShowPass: function (index) {
-
-        var selector = $($(".fieldinput2")[index]);
-        var type = selector.attr("type");
-        if (type == "text") {
-            selector.attr("type", "password");
-            $($(".fieldShowPass i")[index]).attr("class", "glyphicon glyphicon-eye-open");
-        } else {
-            selector.attr("type", "text");
-            $($(".fieldShowPass i")[index]).attr("class", "glyphicon glyphicon-eye-close");
-        }
-    },
-    handleStyle: function (selector, isDisplay, index) {
-        for (var i = 1; i <= 6; i++) {
-            $($('.' + selector + i)[index]).css({"display": isDisplay});
-        }
+    _handleShowPass: function () {
+        this.props.handleShowPass();
     },
     _handleMainAction: function (action, index) {
         this.props.handleMainAction(action, index);
     },
     _handleChooseAction: function (user, doAction, action) {
         this.props.handleChooseAction(user, doAction, action);
-
-        // var username = $($(".fieldinput1")[index]).val();
-        // var password = $($(".fieldinput2")[index]).val();
-        // if (doUpdate == "0") {
-        //     this.resetEvent(index);
-        //
-        //     if (action == "add") {
-        //         this.props.handleAddUser(false);
-        //     }
-        // } else if ((action == "edit" && username != "") || (action == "add" && password != "" && username != "")) {
-        //     this.resetEvent(index);
-        //     user['username'] = username;
-        //     user['password'] = password;
-        //     user['fullname'] = $($(".fieldinput3")[index]).val();
-        //     user['email'] = $($(".fieldinput4")[index]).val();
-        //     user['role'] = $($(".fieldinput5")[index]).val();
-        //     user['status'] = $($(".fieldinput6")[index]).val();
-        //     if (action == "edit") {
-        //         this.props.handleEdit(user);
-        //     } else if (action == "add") {
-        //         this.props.handleAdd(user);
-        //     }
-        // }else if(action == "edit" && username == ""){
-        //     var msg = "Please Fill Below Field: <br>" + "- Username";
-        //     var statusProcess = 0;
-        //     this.props.handleMsgInfo(msg,statusProcess);
-        // }else if(action == "add"){
-        //     var msg = "Please Fill Below Field: <br>" + (username=="" ? "- Username": "") + (password=="" ? "<br>- Password": "");
-        //     var statusProcess = 0;
-        //     this.props.handleMsgInfo(msg,statusProcess);
-        // }
-
     },
     _handleUsername: function (index, event) {
         this.props.handleField("username", event.target.value, index);
@@ -182,6 +96,8 @@ var User = React.createClass({
         //controller action add edit delete
         var action = this.props.selectAction.action;
         var indexSelected = this.props.selectAction.indexSelected;
+        var isShow = this.props.selectAction.isShow;
+        var isDisplayShow = this.props.selectAction.isDisplayShow;
         this.props.users.map(function (user, index) {
             if (
                 (keyword != "" && user.username.indexOf(keyword) === -1) ||
@@ -200,33 +116,56 @@ var User = React.createClass({
         if (userCount >= pageSize && userCount % pageSize == 0) {
             totalPage = totalPage - 1;
         }
-        var isAddUser = this.props.isAddUser;
-        var action = this.props.selectAction.action;
-        var indexSelected = this.props.selectAction.indexSelected;
-        console.log(action, indexSelected);
         var userdetail = rows.map(function (user, index) {
-            var displayLabel;
-            var displayInput;
-            var displayMainController;
-            var displayChooseController;
+            var displayLabel = "";
+            var displayInput = "none";
+            var displayMainController = "";
+            var displayChooseController = "none";
+            var displayDivInputPass = "none";
+            var poiterEventMainController = "";
+            var poiterChooseController = "";
 
-            if (action !== "" && indexSelected == index) {
-                if (action == "delete") {
+            //custom display admin
+            var displayDeleteAdmin = '';
+            var displayStatusAdminInput = 'none';
+            var displayStatusAdminLabel = '';
+
+            if (action !== "") {
+                if (indexSelected == index) {
+                    if (action == "delete") {
+                        displayLabel = "";
+                        displayInput = "none";
+                        displayStatusAdminLabel = "";
+                        displayStatusAdminInput = "none"
+                    } else if (action == "add" || action == "edit") {
+                        displayLabel = "none";
+                        displayInput = "";
+                        displayStatusAdminLabel = "none";
+                        displayStatusAdminInput = "";
+                        displayDivInputPass = "inline-block";
+                    }
+                    displayMainController = "none";
+                    displayChooseController = "";
+                    poiterEventMainController = "";
+                    poiterChooseController = "";
+                } else {
                     displayLabel = "";
                     displayInput = "none";
-                } else if (action == "add" || action == "edit") {
-                    displayLabel = "none";
-                    displayInput = "";
+                    displayStatusAdminLabel = ""
+                    displayStatusAdminInput = "none";
+                    displayMainController = "";
+                    displayChooseController = "none";
+                    poiterEventMainController = "none";
+                    poiterChooseController = "none";
                 }
-                displayMainController = "none";
-                displayChooseController = "";
-            } else {
-                displayLabel = "";
-                displayInput = "none";
-                displayMainController = "";
-                displayChooseController = "none";
             }
-            var styleDivPass = {display: displayInput};
+
+            if (user.role == "ADMIN") {
+                displayDeleteAdmin = "hidden";
+                displayStatusAdminInput = 'none';
+                displayStatusAdminLabel = '';
+            }
+
             return (
                 <tr key={user.id}>
                     <td>{index + 1}</td>
@@ -241,8 +180,9 @@ var User = React.createClass({
                     </td>
                     <td>
                         <div className="labeluser2" style={{display: displayLabel}}>{user.password}</div>
-                        <div className="divInputPass" style={styleDivPass}>
-                            <input type="password"
+                        <div className="divInputPass"
+                             style={{display: displayDivInputPass, border: 'solid 1px darkgrey', height: "25px"}}>
+                            <input type={isShow ? "text" : "password"}
                                    className="fieldinput2"
                                    style={{
                                        display: displayInput,
@@ -255,9 +195,9 @@ var User = React.createClass({
                                    onChange={self._handlePassword.bind(null, index)}
                             />
                             <div className="fieldShowPass"
-                                 onClick={self.handleShowPass.bind(null, index)}
-                                 style={{display: 'none', padding: '5px'}}>
-                                <i className="glyphicon glyphicon-eye-open"/>
+                                 onClick={self._handleShowPass}
+                                 style={{display: isDisplayShow, padding: '5px'}}>
+                                <i className={isShow ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open" }/>
                             </div>
                         </div>
                     </td>
@@ -280,43 +220,44 @@ var User = React.createClass({
                         />
                     </td>
                     <td>
-                        <div className="labeluser5" style={{display: displayLabel}}>{user.role}</div>
+                        <div className="labeluser5" style={{display: ''}}>{user.role}</div>
                         <select className="fieldinput5"
-                                style={{display: displayInput}}
+                                style={{display: 'none'}}
                                 value={user.roleTmp}
                                 onChange={self._handleRole.bind(null, index)}
                         >
                             <option value="ADMIN">ADMIN</option>
-                            <option value="MEMBER">MEMBER</option>
+                            <option value="HR">HR</option>
                         </select>
                     </td>
                     <td style={{textAlign: 'center'}}>
                         <div
                             className={user.status == "0" ? "label label-success labeluser6" : "label label-warning labeluser6"}
-                            style={{display: displayLabel}}>{user.status == "0" ? 'Active' : 'Inactive'}
+                            style={{display: displayStatusAdminLabel}}>{user.status == "0" ? 'Active' : 'Inactive'}
                         </div>
                         <select className="fieldinput6"
-                                style={{display: displayInput}}
+                                style={{display: displayStatusAdminInput}}
                                 value={user.statusTmp}
                                 onChange={self._handleStatus.bind(null, index)}
                         >
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                            <option value="0">Active</option>
+                            <option value="1">Inactive</option>
                         </select>
                     </td>
                     <td className="text-center mainAction"
                         style={{
                             display: displayMainController,
                             textAlign: 'center',
-                            pointerEvents: displayMainController
+                            pointerEvents: poiterEventMainController
                         }}
                     >
                         <div className="btn btn-primary btn-circle edit" title=""
-                             onClick={self._handleMainAction.bind(null, "edit", index)}>
+                             onClick={self._handleMainAction.bind(null, "edit", index, isShow)}>
                             <i className="glyphicon glyphicon-edit"/>
                         </div>
                         <div className="btn btn-danger btn-circle"
-                             onClick={self._handleMainAction.bind(null, "delete", index)}>
+                             style={{visibility: displayDeleteAdmin}}
+                             onClick={self._handleMainAction.bind(null, "delete", index, isShow)}>
                             <i className="glyphicon glyphicon-trash"/>
                         </div>
                     </td>
@@ -324,7 +265,7 @@ var User = React.createClass({
                         style={{
                             display: displayChooseController,
                             textAlign: 'center',
-                            pointerEvents: displayChooseController
+                            pointerEvents: poiterChooseController
                         }}>
                         <div className="btn btn-success btn-circle" title=""
                              onClick={self._handleChooseAction.bind(null, user, 1, action)}>
@@ -384,11 +325,9 @@ var UserList = React.createClass({
             status: '',
             selectAction: {
                 action: '',
-                indexSelected: -1
-            },
-            messengerInfo: {
-                msg:'',
-                statusProcess: 1
+                indexSelected: -1,
+                isShow: false,
+                isDisplayShow: 'none'
             }
         });
     },
@@ -412,7 +351,7 @@ var UserList = React.createClass({
                 var users = [];
                 userTmp.forEach(function (user) {
                     user.usernameTmp = user.username;
-                    user.passwordTmp = user.password;
+                    user.passwordTmp = "";
                     user.fullnameTmp = user.fullname;
                     user.emailTmp = user.email;
                     user.roleTmp = user.role;
@@ -422,29 +361,22 @@ var UserList = React.createClass({
                 //get info from first element
                 var action = users[0].action;
                 var statusProcess = users[0].statusProcess;
-                console.log("statusProcess", statusProcess);
-                console.log("action", action);
                 var msg;
-                if (action == "init") {
-                    msg = "";
-                }
-                else{
+                if (action != "init") {
                     msg = action.charAt(0).toUpperCase() + action.slice(1) + " Record " + (statusProcess === "1" ? "Success" : "Fail") + "!!!";
+                    this.handleMsgInfo(msg, statusProcess);
                 }
-                console.log(msg);
                 //delete first element
                 users.shift();
                 self.setState({
                     users: users,
                     selectAction: {
                         action: '',
-                        indexSelected: -1
+                        indexSelected: -1,
+                        isShow: false,
+                        isDisplayShow: 'none'
                     }
-
                 });
-                if (action != "init") {
-                    this.handleMsgInfo(msg, statusProcess,true);
-                }
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(url, status, err.toString());
@@ -475,7 +407,7 @@ var UserList = React.createClass({
         }
         this.setState({
             currentPage: currentPage
-        })
+        });
     },
     handleKeyWord: function (keyword) {
         this.setState({keyword: keyword});
@@ -483,36 +415,39 @@ var UserList = React.createClass({
     handleStatus: function (status) {
         this.setState({status: status});
     },
-    handleAddUser: function (isAdd) {
+    handleAddUser: function () {
         var users = this.state.users;
-        if (isAdd) {
-            var newUser = {
-                id: 0,
-                username: '',
-                fullname: '',
-                email: '',
-                ctime: ''
-            };
-            users.unshift(newUser);
-        } else {
-            users.shift();
-        }
+        var newUser = {
+            id: 0,
+            username: '',
+            password: '',
+            fullname: '',
+            email: '',
+            role: 'HR',
+            status: '0',
+            usernameTmp: '',
+            passwordTmp: '',
+            fullnameTmp: '',
+            emailTmp: '',
+            roleTmp: 'HR',
+            statusTmp: '0',
+        };
+        users.unshift(newUser);
         this.setState({
             users: users,
-            isAddUser: isAdd
+            selectAction: {
+                action: 'add',
+                indexSelected: 0,
+                isShow: false,
+                isDisplayShow: 'none'
+            }
         });
-
     },
-    handleMsgInfo: function (msg, statusProcess,isSetState) {
-        if(isSetState) {
-            this.setState({
-                messengerInfo: {
-                    msg: msg,
-                    statusProcess: statusProcess
-                }
-            });
-        }
+    handleMsgInfo: function (msg, statusProcess) {
         var msgInfo = $(".msgInfo");
+        var className = statusProcess == "1" ? "label-success msgInfo" : "label-warning msgInfo";
+        msgInfo.html(msg);
+        msgInfo.attr("class", className);
         var delayTime = 1000;
         if (msg !== "" && statusProcess !== "") {
             delayTime = 3000;
@@ -520,41 +455,61 @@ var UserList = React.createClass({
         msgInfo.fadeIn();
         msgInfo.delay(delayTime).fadeOut('slow');
     },
-    handleMainAction: function (action, index) {
+    handleMainAction: function (action, index, isShow) {
         this.setState({
             selectAction: {
                 action: action,
-                indexSelected: index
+                indexSelected: index,
+                isShow: isShow,
+                isDisplayShow: 'none'
             }
         });
     },
     handleChooseAction: function (user, doAction, action) {
         var selectAction = {
             action: '',
-            indexSelected: -1
+            indexSelected: -1,
+            isShow: false,
+            isDisplayShow: 'none'
         };
-
         if (doAction === 0) {
-            this.setState({selectAction: selectAction});
+            if (action == "add") {
+                var users = this.state.users;
+                users.shift();
+                this.setState({
+                    users: users,
+                    selectAction: selectAction
+                });
+            } else {
+                this.setState({selectAction: selectAction});
+            }
         } else if (action == "add") {
+            console.log(action);
             var msg = '';
             var data = {};
             var statusProcess = 1;
             if (user.usernameTmp !== "" && user.passwordTmp !== "") {
+                user.username = user.usernameTmp;
+                user.password = user.passwordTmp;
+                user.fullname = user.fullnameTmp;
+                user.email = user.emailTmp;
+                user.role = user.roleTmp;
+                user.status = user.statusTmp;
                 data = {
                     action: 'add',
                     user: user,
                 };
                 this.loadUsers(data);
             } else {
-                msg = "Please Fill Fields: " + (user.usernameTmp == "" ? "Username" : "") + (user.passwordTmp == "" ? "<, Password" : "");
+                msg = "Please Fill Fields: " + (user.usernameTmp == "" ? "Username" : "") + (user.passwordTmp == "" ? ", Password" : "");
                 statusProcess = 0;
-                this.handleMsgInfo(msg, statusProcess)
+                this.handleMsgInfo(msg, statusProcess);
             }
         } else if (action == "edit") {
             if (user.usernameTmp !== "") {
                 if (
                     user.username == user.usernameTmp &&
+                    user.passwordTmp == "" &&
                     user.fullname == user.fullnameTmp &&
                     user.email == user.emailTmp &&
                     user.role == user.roleTmp &&
@@ -563,7 +518,7 @@ var UserList = React.createClass({
                     this.setState({selectAction: selectAction});
                     statusProcess = 1;
                     this.handleMsgInfo(msg, statusProcess);
-                }else {
+                } else {
                     user.username = user.usernameTmp;
                     user.password = user.passwordTmp;
                     user.fullname = user.fullnameTmp;
@@ -593,10 +548,16 @@ var UserList = React.createClass({
     },
     handleField: function (field, value, index) {
         var users = this.state.users;
+        var selectAction = this.state.selectAction;
         if (field == "username") {
             users[index].usernameTmp = value;
         } else if (field == "password") {
             users[index].passwordTmp = value;
+            if (value.length > 0) {
+                selectAction.isDisplayShow = 'inline';
+            } else {
+                selectAction.isDisplayShow = 'none';
+            }
         } else if (field == "fullname") {
             users[index].fullnameTmp = value;
         } else if (field == "email") {
@@ -607,42 +568,68 @@ var UserList = React.createClass({
             users[index].statusTmp = value;
         }
         this.setState({
-            users: users
+            users: users,
+            selectAction: selectAction
         })
+    },
+    handleShowPass: function () {
+        var selectAction = this.state.selectAction;
+        selectAction.isShow = !selectAction.isShow;
+        this.setState({
+            selectAction: selectAction
+        });
     },
     render: function () {
         var users = this.state.users;
         return (
-            <div>
-                <div className="userList">
-                    <UserFilter
-                        handleKeyWord={this.handleKeyWord}
-                        handleStatus={this.handleStatus}
-                        keyword={this.state.keyword}
-                        status={this.state.status}
-                        handleAddUser={this.handleAddUser}
-                    />
-                    <Notification
-                        msg={this.state.messengerInfo.msg}
-                        statusProcess={this.state.messengerInfo.statusProcess}
-                    />
-                    <User users={this.state.users}
-                          pageSize={this.state.pageSize}
-                          currentPage={this.state.currentPage}
-                          maxNumberPage={this.state.maxNumberPage}
-                          handleChangePage={this.handleChangePage}
-                          keyword={this.state.keyword}
-                          status={this.state.status}
-                          handleAddUser={this.handleAddUser}
-                          handleMsgInfo={this.handleMsgInfo}
+            <div className="col-md-9" style={{paddingLeft: '5px'}}>
+                <div className="container fixcontainer" style={{marginTop: '10px', marginBottom: '60px'}}>
+                    <div
+                        style={{
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                            overflow: 'hidden',
+                            borderTopRightRadius: '0',
+                            borderTopLeftRadius: '0'
+                        }}>
+                        <div className="list-tv">
 
-                          selectAction={this.state.selectAction}
-                          handleMainAction={this.handleMainAction}
-                          handleChooseAction={this.handleChooseAction}
-                          handleField={this.handleField}
-                    />
+
+                            <div className="userList">
+                                <UserFilter
+                                    handleKeyWord={this.handleKeyWord}
+                                    handleStatus={this.handleStatus}
+                                    keyword={this.state.keyword}
+                                    status={this.state.status}
+                                    handleAddUser={this.handleAddUser}
+                                    selectAction={this.state.selectAction}
+                                />
+                                <div style={{display: 'none', textAlign: 'center', padding: '5px', color: 'white'}}
+                                     className="label-success msgInfo">
+                                </div>
+                                <User users={this.state.users}
+                                      pageSize={this.state.pageSize}
+                                      currentPage={this.state.currentPage}
+                                      maxNumberPage={this.state.maxNumberPage}
+                                      handleChangePage={this.handleChangePage}
+                                      keyword={this.state.keyword}
+                                      status={this.state.status}
+                                      handleAddUser={this.handleAddUser}
+
+                                      selectAction={this.state.selectAction}
+                                      handleMainAction={this.handleMainAction}
+                                      handleChooseAction={this.handleChooseAction}
+                                      handleField={this.handleField}
+                                      handleShowPass={this.handleShowPass}
+                                />
+                            </div>
+                        </div>
+                        <div id="loading" style={{textAlign: "center"}}></div>
+
+                    </div>
                 </div>
             </div>
+
         );
     }
 });
@@ -706,32 +693,64 @@ var Pagination = React.createClass({
     }
 });
 
-var Notification = React.createClass({
+var Menu = React.createClass({
     render: function () {
-        var self= this;
-        var msg = self.props.msg;
-        var statusProcess = self.props.statusProcess;
-        var display;
-        if(msg == ""){
-            var display = "none"
-        }else{
-            display = "";
+        return (
+            <div className="col-md-2">
+                <div className="navbar-default sidebar" style={{border: 'none'}} role="navigation">
+                    <div className="sidebar-nav navbar-collapse"
+                         style={{marginTop: '-4px', borderTop: '1px solid #DCB7B7'}}>
+                        <ul className="nav" id="side-menu">
+                            <li className="sidebar-avatar" style={{borderBottom: '1px solid #DCB7B7'}}>
+                                <div className="dropdown">
+                                    <div>
+                                        <img alt="image" className="img-circle" width="100%"
+                                             src="../img/logoAdmin.png"/>
+                                    </div>
+                                </div>
+                            </li>
+                            <li className="">
+                                <a href="#" className="">
+                                    <i className="fa fa-dashboard fa-fw"></i> Main
+                                </a>
+                            </li>
+                            <li className="active open">
+                                <a href="#" className="active">
+                                    <i className="fa fa-users fa-fw"></i> Users Manager
+                                </a>
+                            </li>
+
+                            <li className="">
+                                <a href="#" className="">
+                                    <i className="fa fa-list-alt fa-fw"></i> Unit Manager
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+var Page = React.createClass({
+    render: function () {
+        var component = [];
+        component.push(<Menu/>);
+        if (1) {
+            component.push(<UserList
+                url="../web/ajaxuser"
+            />)
         }
         return (
-            <div style={{display: display, textAlign: 'center', padding: '5px', color: 'white'}}
-                 className={statusProcess == "1" ? "label-success msgInfo" : "label-warning msgInfo"}
-            >
-                {msg}
+            <div>
+                {component}
             </div>
         )
     }
 });
+
 ReactDOM.render(
-    <UserList
-        url="../web/ajaxuser"
-        initialPageLength={5}
-        pageLengthOptions={[5, 20, 50]}
-    />
+    <Page/>
     ,
     document.getElementById("container")
 );

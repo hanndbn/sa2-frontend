@@ -313,12 +313,12 @@ class SiteController extends Controller
         } elseif ($action == "edit") {
             $userEdit = $_POST['user'];
             $password = $userEdit['password'];
-            if ($password != "********") {
+            if ($password != "") {
                 $password = md5($userEdit['password']);
             }
-            $status = $userEdit['status'] == "Active" ? '0' : '1';
+            $status = $userEdit['status'];
             $strSql = "UPDATE user SET username = :username,";
-            if ($password != "********") {
+            if ($password != "") {
                 $strSql = $strSql . "password= :password,";
                 $strSql = $strSql . "lastpwchanged= now(),";
             }
@@ -330,7 +330,7 @@ class SiteController extends Controller
                 ->bindValue(':role', $userEdit['role'])
                 ->bindValue(':status', $status)
                 ->bindValue(':id', $userEdit['id']);
-            if ($password != "********") {
+            if ($password != "") {
                 $sql->bindValue(':password', md5($userEdit['password']));
             }
             $isEdit = $sql->execute();
@@ -342,7 +342,7 @@ class SiteController extends Controller
         } elseif ($action == "add") {
             $userAdd = $_POST['user'];
             $password = md5($userAdd['password']);
-            $status = $userAdd['status'] == "Active" ? '0' : '1';
+            $status = $userAdd['status'];
             $sql = \Yii::$app->db->createCommand(
                 "INSERT INTO user (fullname, ctime, state, email, username, password, lastpwchanged, status, initial, role, avatar, lmtime) 
                 VALUES (:fullname, now(), '0', :email, :username, :password, now(), :status, 'TPK', :role,  '/ui/avatars/avatar.png', now())");
@@ -360,7 +360,7 @@ class SiteController extends Controller
             }
 
         }
-        $sqlSelect = "SELECT id,username, '********' as password, fullname, email, status, role FROM user ORDER BY ctime DESC";
+        $sqlSelect = "SELECT id,username, '********' as password, fullname, email, status, role FROM user ORDER BY role ASC,ctime DESC";
         $listUsers = User::findBySql($sqlSelect)->asArray()->all();
         $arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
         array_unshift($listUsers, $arrayMsg);
