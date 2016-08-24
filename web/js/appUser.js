@@ -14,9 +14,15 @@ var UserFilter = React.createClass({
             pointerEvent = 'none';
         }
         return (
-            <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px'}}>
+            <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px', marginTop: '7px'}}>
                 <div className="col-md-12"
-                     style={{textAlign: 'center', backgroundColor: '#DEE1EC', marginBottom: '10px'}}>
+                     style={{
+                         color: '#39428C',
+                         backgroundColor: 'rgb(245, 247, 253)',
+                         marginBottom: '10px',
+                         marginTop: '0px',
+                         height: '75px'
+                     }}>
                     <h2>MANAGER USER</h2>
                 </div>
                 <div className="col-md-12" style={{backgroundColor: '#99cce6',}}>
@@ -82,6 +88,27 @@ var User = React.createClass({
     },
     _handleStatus: function (index, event) {
         this.props.handleField("status", event.target.value, index);
+    },
+    //handle sort
+    _handleSortField: function (field, value) {
+        if (field == "username") {
+            this.props.handleSortField("username", value);
+        } else if (field == "fullname") {
+            this.props.handleSortField("fullname", value);
+        } else if (field == "email") {
+            this.props.handleSortField("email", value);
+        }
+    },
+    _processSortClass: function (value) {
+        var className = '';
+        if (value === 1) {
+            className = "fa fa-sort-asc fa-fw";
+        } else if (value === -1) {
+            className = "fa fa-sort-desc fa-fw";
+        } else {
+            className = "fa fa-sort fa-fw";
+        }
+        return className;
     },
     render: function () {
         var self = this;
@@ -282,15 +309,33 @@ var User = React.createClass({
         return (
             <div>
                 <div className="table-responsive top-border-table"
-                     style={{minHeight: '550px', borderBottom: '1px solid #e7e7e7'}} id="users-table-wrapper">
+                     style={{borderBottom: '1px solid #e7e7e7'}} id="users-table-wrapper">
                     <table className="table fixed" style={{tableLayout: 'fixed'}}>
                         <thead>
                         <tr>
-                            <th width="10px">STT</th>
-                            <th width="50px">Username</th>
+                            <th width="10px">
+                                STT
+                            </th>
+                            <th width="50px">
+                                Username
+                                <span
+                                    onClick={this._handleSortField.bind(null, "username", self.props.sortAction.sortUsername)}>
+                                    <i className={this._processSortClass(self.props.sortAction.sortUsername)}></i>
+                                </span>
+                            </th>
                             <th width="35px">Password</th>
-                            <th width="50px">FullName</th>
-                            <th width="50px">E-Mail</th>
+                            <th width="50px">FullName
+                                <span
+                                    onClick={this._handleSortField.bind(null, "fullname", self.props.sortAction.sortFullname)}>
+                                    <i className={this._processSortClass(self.props.sortAction.sortFullname)}></i>
+                                </span>
+                            </th>
+                            <th width="50px">E-Mail
+                                <span
+                                    onClick={this._handleSortField.bind(null, "email", self.props.sortAction.sortFullname)}>
+                                    <i className={this._processSortClass(self.props.sortAction.sortEmail)}></i>
+                                </span>
+                            </th>
                             <th width="25px">Role</th>
                             <th width="25px" style={{textAlign: 'center'}}>Status</th>
                             <th width="25px" className="text-center" style={{textAlign: 'center'}}>Action</th>
@@ -328,6 +373,11 @@ var UserList = React.createClass({
                 indexSelected: -1,
                 isShow: false,
                 isDisplayShow: 'none'
+            },
+            sortAction: {
+                sortUsername: 0,
+                sortFullname: 0,
+                sortEmail: 0
             }
         });
     },
@@ -579,6 +629,59 @@ var UserList = React.createClass({
             selectAction: selectAction
         });
     },
+    handleSortField: function (field, value) {
+        var users = this.state.users;
+        var sortAction = {
+            sortUsername: 0,
+            sortFullname: 0,
+            sortEmail: 0
+        };
+        var val = 0;
+        var orderBy;
+        var sortType;
+        if (value == 0) {
+            val = -1;
+            sortType = "desc";
+        } else if (value == -1) {
+            val = 1;
+            sortType = "asc";
+        } else {
+            val = 0;
+            sortType = "";
+        }
+        console.log(field, val);
+        if (field == "username") {
+            sortAction.sortUsername = val;
+        } else if (field == "fullname") {
+            sortAction.sortFullname = val;
+        } else if (field == "email") {
+            sortAction.sortEmail = val;
+        }
+
+        if (val != 0) {
+            users = users.sort(this.sort_by(field,));
+        }
+        this.setState({
+            sortAction: sortAction,
+            users: users
+        })
+    },
+    sort_by: function (field, reverse, primer) {
+
+        var key = primer ?
+            function (x) {
+                return primer(x[field])
+            } :
+            function (x) {
+                return x[field]
+            };
+
+        reverse = !reverse ? 1 : -1;
+
+        return function (a, b) {
+            return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+        }
+    },
     render: function () {
         var users = this.state.users;
         return (
@@ -621,6 +724,8 @@ var UserList = React.createClass({
                                       handleChooseAction={this.handleChooseAction}
                                       handleField={this.handleField}
                                       handleShowPass={this.handleShowPass}
+                                      handleSortField={this.handleSortField}
+                                      sortAction={this.state.sortAction}
                                 />
                             </div>
                         </div>
@@ -704,7 +809,7 @@ var Menu = React.createClass({
                             <li className="sidebar-avatar" style={{borderBottom: '1px solid #DCB7B7'}}>
                                 <div className="dropdown">
                                     <div>
-                                        <img alt="image" className="img-circle" width="100%"
+                                        <img alt="image" className="img-circle" width="100%" style={{maxWidth: "200px"}}
                                              src="../img/logoAdmin.png"/>
                                     </div>
                                 </div>
@@ -722,7 +827,7 @@ var Menu = React.createClass({
 
                             <li className="">
                                 <a href="#" className="">
-                                    <i className="fa fa-list-alt fa-fw"></i> Unit Manager
+                                    <i className="fa fa-list-alt fa-fw"></i> Devision Manager
                                 </a>
                             </li>
                         </ul>
