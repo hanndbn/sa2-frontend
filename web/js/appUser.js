@@ -1080,20 +1080,20 @@ var Division = React.createClass({
                             <th width="10px">
                                 STT
                             </th>
-                            <th width="20px">
+                            <th width="18px">
                                 Name
                                 <span
                                     onClick={this._handleSortField.bind(null, "username", self.props.sortAction.sortUsername)}>
                                     <i className={this._processSortClass(self.props.sortAction.sortUsername)}></i>
                                 </span>
                             </th>
-                            <th width="80px">Description
+                            <th width="70px">Description
                                 <span
                                     onClick={this._handleSortField.bind(null, "fullname", self.props.sortAction.sortFullname)}>
                                     <i className={this._processSortClass(self.props.sortAction.sortFullname)}></i>
                                 </span>
                             </th>
-                            <th width="40px">Link
+                            <th width="30px">Link
                                 <span
                                     onClick={this._handleSortField.bind(null, "email", self.props.sortAction.sortEmail)}>
                                     <i className={this._processSortClass(self.props.sortAction.sortEmail)}></i>
