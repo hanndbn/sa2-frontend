@@ -332,7 +332,7 @@ var User = React.createClass({
                             </th>
                             <th width="50px">E-Mail
                                 <span
-                                    onClick={this._handleSortField.bind(null, "email", self.props.sortAction.sortFullname)}>
+                                    onClick={this._handleSortField.bind(null, "email", self.props.sortAction.sortEmail)}>
                                     <i className={this._processSortClass(self.props.sortAction.sortEmail)}></i>
                                 </span>
                             </th>
@@ -637,17 +637,14 @@ var UserList = React.createClass({
             sortEmail: 0
         };
         var val = 0;
-        var orderBy;
-        var sortType;
+        var orderBy = "";
+        var sortType = 0;
         if (value == 0) {
             val = -1;
             sortType = "desc";
         } else if (value == -1) {
             val = 1;
             sortType = "asc";
-        } else {
-            val = 0;
-            sortType = "";
         }
         console.log(field, val);
         if (field == "username") {
@@ -659,28 +656,71 @@ var UserList = React.createClass({
         }
 
         if (val != 0) {
-            users = users.sort(this.sort_by(field,));
+            users = users.sort(function (a, b) {
+                var fieldA = "";
+                var fieldB = "";
+
+                if (field == "username") {
+                    fieldA = a.username.toLowerCase();
+                    fieldB = b.username.toLowerCase();
+                    sortAction.username = val;
+                } else if (field == "fullname") {
+                    fieldA = a.fullname.toLowerCase();
+                    fieldB = b.fullname.toLowerCase();
+                    sortAction.sortFullname = val;
+                } else if (field == "email") {
+                    fieldA = a.email.toLowerCase();
+                    fieldB = b.email.toLowerCase();
+                    sortAction.sortEmail = val;
+                }
+                if (sortType == "asc") {
+                    if (fieldA < fieldB)
+                        return -1;
+                    if (fieldA > fieldB)
+                        return 1;
+                } else if (sortType == "desc") {
+                    if (fieldA < fieldB)
+                        return 1;
+                    if (fieldA > fieldB)
+                        return -1;
+                }
+                return 0;
+            });
         }
         this.setState({
             sortAction: sortAction,
             users: users
         })
     },
-    sort_by: function (field, reverse, primer) {
+    sort_by: function (a, b, field, sortType) {
+        var fieldA = "";
+        var fieldB = "";
 
-        var key = primer ?
-            function (x) {
-                return primer(x[field])
-            } :
-            function (x) {
-                return x[field]
-            };
-
-        reverse = !reverse ? 1 : -1;
-
-        return function (a, b) {
-            return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+        if (field == "username") {
+            fieldA = a.username.toLowerCase();
+            fieldB = b.username.toLowerCase();
+            sortAction.username = val;
+        } else if (field == "fullname") {
+            fieldA = a.fullname.toLowerCase();
+            fieldB = b.fullname.toLowerCase();
+            sortAction.sortFullname = val;
+        } else if (field == "email") {
+            fieldA = a.email.toLowerCase();
+            fieldB = b.email.toLowerCase();
+            sortAction.sortEmail = val;
         }
+        if (sortType == "asc") {
+            if (fieldA < fieldB)
+                return -1;
+            if (fieldA > fieldB)
+                return 1;
+        } else if (sortType == "desc") {
+            if (fieldA < fieldB)
+                return 1;
+            if (fieldA > fieldB)
+                return -1;
+        }
+        return 0;
     },
     render: function () {
         var users = this.state.users;
@@ -799,7 +839,35 @@ var Pagination = React.createClass({
 });
 
 var Menu = React.createClass({
+    _handleMenuSelected(selected){
+        "use strict";
+        this.props.handleMenuSelected(selected);
+    },
     render: function () {
+        var self = this;
+        var menuPage = [];
+        this.props.pageMenu.map(function (menu, index) {
+            var className = "";
+            var classSelect = "";
+            if (index == 0) {
+                className = "fa fa-dashboard fa-fw";
+            } else if (index == 1) {
+                className = "fa fa-users fa-fw";
+            } else if (index == 2) {
+                className = "fa fa-list-alt fa-fw";
+            }
+            console.log(self.props.selected);
+            if (index === self.props.selected) {
+                classSelect = "active open";
+            }
+            menuPage.push(
+                <li className={classSelect} key={index} onClick={self._handleMenuSelected.bind(null, index)}>
+                    <a href="#" className="">
+                        <i className={className}/>{menu}
+                    </a>
+                </li>
+            );
+        });
         return (
             <div className="col-md-2">
                 <div className="navbar-default sidebar" style={{border: 'none'}} role="navigation">
@@ -814,22 +882,7 @@ var Menu = React.createClass({
                                     </div>
                                 </div>
                             </li>
-                            <li className="">
-                                <a href="#" className="">
-                                    <i className="fa fa-dashboard fa-fw"></i> Main
-                                </a>
-                            </li>
-                            <li className="active open">
-                                <a href="#" className="active">
-                                    <i className="fa fa-users fa-fw"></i> Users Manager
-                                </a>
-                            </li>
-
-                            <li className="">
-                                <a href="#" className="">
-                                    <i className="fa fa-list-alt fa-fw"></i> Devision Manager
-                                </a>
-                            </li>
+                            {menuPage}
                         </ul>
                     </div>
                 </div>
@@ -837,12 +890,30 @@ var Menu = React.createClass({
         );
     }
 });
+
+var PAGEMENU = ["Main", "Users Manager", "Devision Manager"];
 var Page = React.createClass({
+    getInitialState: function () {
+        return ({
+            selected: 0
+        });
+    },
+    handleMenuSelected: function (selected) {
+        this.setState({
+            selected: selected
+        });
+    },
     render: function () {
         var component = [];
-        component.push(<Menu/>);
-        if (1) {
+        component.push(<Menu
+            key="0"
+            pageMenu={PAGEMENU}
+            selected={this.state.selected}
+            handleMenuSelected={this.handleMenuSelected}
+        />);
+        if (this.state.selected === 1) {
             component.push(<UserList
+                key = "1"
                 url="../web/ajaxuser"
             />)
         }
@@ -855,7 +926,8 @@ var Page = React.createClass({
 });
 
 ReactDOM.render(
-    <Page/>
+    <Page
+    />
     ,
     document.getElementById("container")
 );
