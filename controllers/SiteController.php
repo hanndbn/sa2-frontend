@@ -437,8 +437,8 @@ class SiteController extends Controller
         }
         $sqlSelect = "SELECT * FROM org ORDER BY name DESC";
         $listUsers = User::findBySql($sqlSelect)->asArray()->all();
-        //$arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
-        //array_unshift($listUsers, $arrayMsg);
+        ;$arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
+        ;array_unshift($listUsers, $arrayMsg);
         return Json::encode($listUsers);
     }
 

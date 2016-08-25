@@ -14,7 +14,7 @@ var UserFilter = React.createClass({
             pointerEvent = 'none';
         }
         return (
-            <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px', marginTop: '7px'}}>
+            <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px', marginTop: '7px',paddingBottom: '0px'}}>
                 <div className="col-md-12"
                      style={{
                          color: '#39428C',
@@ -25,7 +25,7 @@ var UserFilter = React.createClass({
                      }}>
                     <h2>MANAGER USER</h2>
                 </div>
-                <div className="col-md-12" style={{backgroundColor: '#99cce6',}}>
+                <div className="col-md-12" style={{backgroundColor: 'rgb(153, 186, 204)'}}>
                     <div className="col-md-2 addUser"
                          style={{float: 'left', padding: '10px 0'}}>
                         <span className="btn btn-success" id="add-user" onClick={this._handleAddUser}
@@ -692,38 +692,7 @@ var UserList = React.createClass({
             users: users
         })
     },
-    sort_by: function (a, b, field, sortType) {
-        var fieldA = "";
-        var fieldB = "";
-
-        if (field == "username") {
-            fieldA = a.username.toLowerCase();
-            fieldB = b.username.toLowerCase();
-            sortAction.username = val;
-        } else if (field == "fullname") {
-            fieldA = a.fullname.toLowerCase();
-            fieldB = b.fullname.toLowerCase();
-            sortAction.sortFullname = val;
-        } else if (field == "email") {
-            fieldA = a.email.toLowerCase();
-            fieldB = b.email.toLowerCase();
-            sortAction.sortEmail = val;
-        }
-        if (sortType == "asc") {
-            if (fieldA < fieldB)
-                return -1;
-            if (fieldA > fieldB)
-                return 1;
-        } else if (sortType == "desc") {
-            if (fieldA < fieldB)
-                return 1;
-            if (fieldA > fieldB)
-                return -1;
-        }
-        return 0;
-    },
     render: function () {
-        var users = this.state.users;
         return (
             <div className="col-md-9" style={{paddingLeft: '5px'}}>
                 <div className="container fixcontainer" style={{marginTop: '10px', marginBottom: '60px'}}>
@@ -856,7 +825,7 @@ var DivisionFilter = React.createClass({
             pointerEvent = 'none';
         }
         return (
-            <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px', marginTop: '7px'}}>
+            <div className="tv_filters" style={{backgroundColor: 'transparent', paddingTop: '0px', marginTop: '7px',paddingBottom: '0px'}}>
                 <div className="col-md-12"
                      style={{
                          color: '#39428C',
@@ -865,16 +834,16 @@ var DivisionFilter = React.createClass({
                          marginTop: '0px',
                          height: '75px'
                      }}>
-                    <h2>MANAGER USER</h2>
+                    <h2>MANAGER DIVISION</h2>
                 </div>
-                <div className="col-md-12" style={{backgroundColor: '#99cce6',}}>
+                <div className="col-md-12" style={{backgroundColor: 'rgb(153, 186, 204)'}}>
                     <div className="col-md-2 addUser"
                          style={{float: 'left', padding: '10px 0'}}>
                         <span className="btn btn-success" id="add-user" onClick={this._handleAddUser}
                               style={{pointerEvents: pointerEvent}}
                         >
                             <i className="glyphicon glyphicon-plus"/>
-                            Add User
+                            Add Division
                         </span>
                     </div>
                     <div className="col-md-4" style={{float: 'right', padding: '10px 0'}}>
@@ -967,51 +936,42 @@ var Division = React.createClass({
         var indexSelected = this.props.selectAction.indexSelected;
         var isShow = this.props.selectAction.isShow;
         var isDisplayShow = this.props.selectAction.isDisplayShow;
-        this.props.users.map(function (user, index) {
+        this.props.divisions.map(function (division, index) {
             if (
-                (keyword != "" && user.username.indexOf(keyword) === -1) ||
-                (status != "" && user.status != status)) {
+                (keyword != "" && division.name.indexOf(keyword) === -1) ||
+                (status != "" && division.status != status)) {
             } else {
-                rowFilter.push(user);
+                rowFilter.push(division);
             }
         });
-        rowFilter.map(function (user, index) {
+        rowFilter.map(function (division, index) {
             if (((currentPage - 1) * pageSize <= index) && (index < (currentPage * pageSize))) {
-                rows.push(user);
+                rows.push(division);
             }
         });
-        var userCount = rowFilter.length;
-        var totalPage = parseInt((userCount / pageSize)) + 1;
-        if (userCount >= pageSize && userCount % pageSize == 0) {
+        var divisionCount = rowFilter.length;
+        var totalPage = parseInt((divisionCount / pageSize)) + 1;
+        if (divisionCount >= pageSize && divisionCount % pageSize == 0) {
             totalPage = totalPage - 1;
         }
-        var userdetail = rows.map(function (user, index) {
+        var divisiondetail = rows.map(function (division, index) {
             var displayLabel = "";
             var displayInput = "none";
             var displayMainController = "";
             var displayChooseController = "none";
-            var displayDivInputPass = "none";
             var poiterEventMainController = "";
             var poiterChooseController = "";
 
             //custom display admin
-            var displayDeleteAdmin = '';
-            var displayStatusAdminInput = 'none';
-            var displayStatusAdminLabel = '';
 
             if (action !== "") {
                 if (indexSelected == index) {
                     if (action == "delete") {
                         displayLabel = "";
                         displayInput = "none";
-                        displayStatusAdminLabel = "";
-                        displayStatusAdminInput = "none"
                     } else if (action == "add" || action == "edit") {
                         displayLabel = "none";
                         displayInput = "";
-                        displayStatusAdminLabel = "none";
-                        displayStatusAdminInput = "";
-                        displayDivInputPass = "inline-block";
                     }
                     displayMainController = "none";
                     displayChooseController = "";
@@ -1020,8 +980,6 @@ var Division = React.createClass({
                 } else {
                     displayLabel = "";
                     displayInput = "none";
-                    displayStatusAdminLabel = ""
-                    displayStatusAdminInput = "none";
                     displayMainController = "";
                     displayChooseController = "none";
                     poiterEventMainController = "none";
@@ -1029,91 +987,56 @@ var Division = React.createClass({
                 }
             }
 
-            if (user.role == "ADMIN") {
-                displayDeleteAdmin = "hidden";
-                displayStatusAdminInput = 'none';
-                displayStatusAdminLabel = '';
-            }
-
             return (
-                <tr key={user.id}>
+                <tr key={division.id}>
                     <td>{index + 1}</td>
                     <td>
-                        <div className="labeluser1" style={{display: displayLabel}}>{user.username}</div>
+                        <div style={{display: displayLabel}}>{division.name}</div>
                         <input type="text"
-                               className="fieldinput1"
                                style={{display: displayInput}}
-                               value={user.usernameTmp}
+                               value={division.nameTmp}
                                onChange={self._handleUsername.bind(null, index)}
                         />
                     </td>
                     <td>
-                        <div className="labeluser2" style={{display: displayLabel}}>{user.password}</div>
-                        <div className="divInputPass"
-                             style={{display: displayDivInputPass, border: 'solid 1px darkgrey', height: "25px"}}>
-                            <input type={isShow ? "text" : "password"}
-                                   className="fieldinput2"
-                                   style={{
-                                       display: displayInput,
-                                       maxWidth: '100px',
-                                       padding: '0',
-                                       border: 'none',
-                                       borderRadius: '0'
-                                   }}
-                                   value={user.passwordTmp}
-                                   onChange={self._handlePassword.bind(null, index)}
-                            />
-                            <div className="fieldShowPass"
-                                 onClick={self._handleShowPass}
-                                 style={{display: isDisplayShow, padding: '5px'}}>
-                                <i className={isShow ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open" }/>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div className="labeluser3" style={{display: displayLabel}}>{user.fullname}</div>
+                        <div style={{display: displayLabel}}>{division.description}</div>
                         <input type="text"
-                               className="fieldinput3"
                                style={{display: displayInput}}
-                               value={user.fullnameTmp}
+                               value={division.descriptionTmp}
                                onChange={self._handleFullName.bind(null, index)}
                         />
                     </td>
                     <td>
-                        <div className="labeluser4" style={{display: displayLabel}}>{user.email}</div>
+                        <div style={{display: displayLabel}}>{division.linkSite}</div>
                         <input type="text"
-                               className="fieldinput4"
                                style={{display: displayInput}}
-                               value={user.emailTmp}
+                               value={division.linkSiteTmp}
                                onChange={self._handleEmail.bind(null, index)}
                         />
                     </td>
                     <td>
-                        <div className="labeluser5" style={{display: ''}}>{user.role}</div>
-                        <select className="fieldinput5"
-                                style={{display: 'none'}}
-                                value={user.roleTmp}
-                                onChange={self._handleRole.bind(null, index)}
-                        >
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="HR">HR</option>
-                        </select>
+                        <div style={{display: displayLabel}}>{division.logo}</div>
+                        <input type="text"
+                               style={{display: displayInput}}
+                               value={division.logoTmp}
+                               onChange={self._handleEmail.bind(null, index)}
+                        />
                     </td>
                     <td style={{textAlign: 'center'}}>
                         <div
-                            className={user.status == "0" ? "label label-success labeluser6" : "label label-warning labeluser6"}
-                            style={{display: displayStatusAdminLabel}}>{user.status == "0" ? 'Active' : 'Inactive'}
+                            className={division.status == "0" ? "label label-success labeluser6" : "label label-warning labeluser6"}
+                            style={{display: displayLabel}}>{division.status == "0" ? 'Active' : 'Inactive'}
                         </div>
-                        <select className="fieldinput6"
-                                style={{display: displayStatusAdminInput}}
-                                value={user.statusTmp}
+                        <select
+                                style={{display: displayInput}}
+                                value={division.statusTmp}
                                 onChange={self._handleStatus.bind(null, index)}
                         >
                             <option value="0">Active</option>
                             <option value="1">Inactive</option>
                         </select>
                     </td>
-                    <td className="text-center mainAction"
+                    <td className="text-center"
                         style={{
                             display: displayMainController,
                             textAlign: 'center',
@@ -1125,23 +1048,22 @@ var Division = React.createClass({
                             <i className="glyphicon glyphicon-edit"/>
                         </div>
                         <div className="btn btn-danger btn-circle"
-                             style={{visibility: displayDeleteAdmin}}
                              onClick={self._handleMainAction.bind(null, "delete", index, isShow)}>
                             <i className="glyphicon glyphicon-trash"/>
                         </div>
                     </td>
-                    <td className="text-center chooseAction"
+                    <td className="text-center"
                         style={{
                             display: displayChooseController,
                             textAlign: 'center',
                             pointerEvents: poiterChooseController
                         }}>
                         <div className="btn btn-success btn-circle" title=""
-                             onClick={self._handleChooseAction.bind(null, user, 1, action)}>
+                             onClick={self._handleChooseAction.bind(null, division, 1, action)}>
                             <i className="glyphicon glyphicon-ok"/>
                         </div>
                         <div className="btn btn-danger btn-circle"
-                             onClick={self._handleChooseAction.bind(null, user, 0, action)}>
+                             onClick={self._handleChooseAction.bind(null, division, 0, action)}>
                             <i className="glyphicon glyphicon-remove"/>
                         </div>
                     </td>
@@ -1158,33 +1080,32 @@ var Division = React.createClass({
                             <th width="10px">
                                 STT
                             </th>
-                            <th width="50px">
-                                Username
+                            <th width="20px">
+                                Name
                                 <span
                                     onClick={this._handleSortField.bind(null, "username", self.props.sortAction.sortUsername)}>
                                     <i className={this._processSortClass(self.props.sortAction.sortUsername)}></i>
                                 </span>
                             </th>
-                            <th width="35px">Password</th>
-                            <th width="50px">FullName
+                            <th width="80px">Description
                                 <span
                                     onClick={this._handleSortField.bind(null, "fullname", self.props.sortAction.sortFullname)}>
                                     <i className={this._processSortClass(self.props.sortAction.sortFullname)}></i>
                                 </span>
                             </th>
-                            <th width="50px">E-Mail
+                            <th width="40px">Link
                                 <span
                                     onClick={this._handleSortField.bind(null, "email", self.props.sortAction.sortEmail)}>
                                     <i className={this._processSortClass(self.props.sortAction.sortEmail)}></i>
                                 </span>
                             </th>
-                            <th width="25px">Role</th>
-                            <th width="25px" style={{textAlign: 'center'}}>Status</th>
+                            <th width="50px">Logo</th>
+                            <th width="15px" style={{textAlign: 'center'}}>Status</th>
                             <th width="25px" className="text-center" style={{textAlign: 'center'}}>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {userdetail}
+                        {divisiondetail}
                         </tbody>
                     </table>
                 </div>
@@ -1204,7 +1125,7 @@ var Division = React.createClass({
 var DivisionList = React.createClass({
     getInitialState: function () {
         return ({
-            users: [],
+            divisions: [],
             pageSize: 10,
             currentPage: 1,
             maxNumberPage: 5,
@@ -1227,9 +1148,9 @@ var DivisionList = React.createClass({
         var data = {
             action: 'init'
         };
-        this.loadUsers(data);
+        this.loadDivisions(data);
     },
-    loadUsers: function (data) {
+    loadDivisions: function (data) {
         var self = this;
         $.ajax
         ({
@@ -1238,30 +1159,29 @@ var DivisionList = React.createClass({
             data: data,
             datatype: 'json',
             success: function (data) {
-                var userTmp = JSON.parse(data);
+                var divisionTmp = JSON.parse(data);
                 //add default value for input field
-                var users = [];
-                userTmp.forEach(function (user) {
-                    user.usernameTmp = user.username;
-                    user.passwordTmp = "";
-                    user.fullnameTmp = user.fullname;
-                    user.emailTmp = user.email;
-                    user.roleTmp = user.role;
-                    user.statusTmp = user.status;
-                    users.push(user);
+                var divisions = [];
+                divisionTmp.forEach(function (division) {
+                    division.nameTmp = division.name;
+                    division.descriptionTmp = division.description;
+                    division.linkSiteTmp = division.linkSite;
+                    division.logo = division.logo;
+                    division.statusTmp = division.status;
+                    divisions.push(division);
                 });
                 //get info from first element
-                var action = users[0].action;
-                var statusProcess = users[0].statusProcess;
+                var action = divisions[0].action;
+                var statusProcess = divisions[0].statusProcess;
                 var msg;
                 if (action != "init") {
                     msg = action.charAt(0).toUpperCase() + action.slice(1) + " Record " + (statusProcess === "1" ? "Success" : "Fail") + "!!!";
                     this.handleMsgInfo(msg, statusProcess);
                 }
                 //delete first element
-                users.shift();
+                divisions.shift();
                 self.setState({
-                    users: users,
+                    divisions: divisions,
                     selectAction: {
                         action: '',
                         indexSelected: -1,
@@ -1391,7 +1311,7 @@ var DivisionList = React.createClass({
                     action: 'add',
                     user: user,
                 };
-                this.loadUsers(data);
+                this.loadDivisions(data);
             } else {
                 msg = "Please Fill Fields: " + (user.usernameTmp == "" ? "Username" : "") + (user.passwordTmp == "" ? ", Password" : "");
                 statusProcess = 0;
@@ -1421,7 +1341,7 @@ var DivisionList = React.createClass({
                         action: 'edit',
                         user: user,
                     };
-                    this.loadUsers(data);
+                    this.loadDivisions(data);
                 }
             }
             else {
@@ -1434,7 +1354,7 @@ var DivisionList = React.createClass({
                 action: 'delete',
                 user: user,
             };
-            this.loadUsers(data);
+            this.loadDivisions(data);
         }
 
     },
@@ -1534,36 +1454,6 @@ var DivisionList = React.createClass({
             users: users
         })
     },
-    sort_by: function (a, b, field, sortType) {
-        var fieldA = "";
-        var fieldB = "";
-
-        if (field == "username") {
-            fieldA = a.username.toLowerCase();
-            fieldB = b.username.toLowerCase();
-            sortAction.username = val;
-        } else if (field == "fullname") {
-            fieldA = a.fullname.toLowerCase();
-            fieldB = b.fullname.toLowerCase();
-            sortAction.sortFullname = val;
-        } else if (field == "email") {
-            fieldA = a.email.toLowerCase();
-            fieldB = b.email.toLowerCase();
-            sortAction.sortEmail = val;
-        }
-        if (sortType == "asc") {
-            if (fieldA < fieldB)
-                return -1;
-            if (fieldA > fieldB)
-                return 1;
-        } else if (sortType == "desc") {
-            if (fieldA < fieldB)
-                return 1;
-            if (fieldA > fieldB)
-                return -1;
-        }
-        return 0;
-    },
     render: function () {
         var users = this.state.users;
         return (
@@ -1581,7 +1471,7 @@ var DivisionList = React.createClass({
 
 
                             <div className="userList">
-                                <UserFilter
+                                <DivisionFilter
                                     handleKeyWord={this.handleKeyWord}
                                     handleStatus={this.handleStatus}
                                     keyword={this.state.keyword}
@@ -1592,7 +1482,7 @@ var DivisionList = React.createClass({
                                 <div style={{display: 'none', textAlign: 'center', padding: '5px', color: 'white'}}
                                      className="label-success msgInfo">
                                 </div>
-                                <User users={this.state.users}
+                                <Division divisions={this.state.divisions}
                                       pageSize={this.state.pageSize}
                                       currentPage={this.state.currentPage}
                                       maxNumberPage={this.state.maxNumberPage}
@@ -1679,7 +1569,7 @@ var PAGEMENU = ["Main", "Users Manager", "Division Manager"];
 var Page = React.createClass({
     getInitialState: function () {
         return ({
-            selected: 0
+            selected: 2
         });
     },
     handleMenuSelected: function (selected) {
@@ -1697,13 +1587,13 @@ var Page = React.createClass({
         />);
         if (this.state.selected === 1) {
             component.push(<UserList
-                key = "1"
+                key="1"
                 url="../web/ajaxuser"
             />)
-        }else if(this.state.selected === 2){
+        } else if (this.state.selected === 2) {
             component.push(<DivisionList
-                key = "2"
-                url="../web/ajaxuser"
+                key="2"
+                url="../web/ajaxdivision"
             />)
         }
         return (

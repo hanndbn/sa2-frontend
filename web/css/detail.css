@@ -337,3 +337,15 @@ padding: 20%;
 .page-number {
 	cursor: pointer;
 }
+
+table th{
+	background: #4f81bd;
+	color: white;
+}
+
+table tr:nth-child(odd) td{
+	background: #e1ebf6;
+}
+table tr:nth-child(even) td{
+	background: #ffffff;
+}
