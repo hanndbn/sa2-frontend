@@ -367,6 +367,81 @@ class SiteController extends Controller
         return Json::encode($listUsers);
     }
 
+    public function actionAjaxdivision()
+    {
+        $statusProcess = "1";
+        if (isset($_POST['action'])) {
+            $action = $_POST['action'];
+        }
+        if ($action == "init") {
+        } elseif ($action == "delete") {
+            $id = $_POST['user']['id'];
+            $user = User::find()->where(['id' => $id])->one();
+            if ($user) {
+                $isdelete = $user->delete();
+                if ($isdelete > 0) {
+                    $statusProcess = "1";
+                } else {
+                    $statusProcess = "0";
+                }
+            }
+        } elseif ($action == "edit") {
+            $userEdit = $_POST['user'];
+            $password = $userEdit['password'];
+            if ($password != "") {
+                $password = md5($userEdit['password']);
+            }
+            $status = $userEdit['status'];
+            $strSql = "UPDATE user SET username = :username,";
+            if ($password != "") {
+                $strSql = $strSql . "password= :password,";
+                $strSql = $strSql . "lastpwchanged= now(),";
+            }
+            $strSql = $strSql . "fullname = :fullname, email = :email, role = :role, status = :status WHERE id = :id";
+            $sql = \Yii::$app->db->createCommand($strSql);
+            $sql->bindValue(':username', $userEdit['username'])
+                ->bindValue(':fullname', $userEdit['fullname'])
+                ->bindValue(':email', $userEdit['email'])
+                ->bindValue(':role', $userEdit['role'])
+                ->bindValue(':status', $status)
+                ->bindValue(':id', $userEdit['id']);
+            if ($password != "") {
+                $sql->bindValue(':password', md5($userEdit['password']));
+            }
+            $isEdit = $sql->execute();
+            if ($isEdit > 0) {
+                $statusProcess = "1";
+            } else {
+                $statusProcess = "0";
+            }
+        } elseif ($action == "add") {
+            $userAdd = $_POST['user'];
+            $password = md5($userAdd['password']);
+            $status = $userAdd['status'];
+            $sql = \Yii::$app->db->createCommand(
+                "INSERT INTO user (fullname, ctime, state, email, username, password, lastpwchanged, status, initial, role, avatar, lmtime) 
+                VALUES (:fullname, now(), '0', :email, :username, :password, now(), :status, 'TPK', :role,  '/ui/avatars/avatar.png', now())");
+            $sql->bindValue(':fullname', $userAdd['fullname'])
+                ->bindValue(':email', $userAdd['email'])
+                ->bindValue(':username', $userAdd['username'])
+                ->bindValue(':password', $password)
+                ->bindValue(':status', $status)
+                ->bindValue(':role', $userAdd['role']);
+            $isAdd = $sql->execute();
+            if ($isAdd > 0) {
+                $statusProcess = "1";
+            } else {
+                $statusProcess = "0";
+            }
+
+        }
+        $sqlSelect = "SELECT * FROM org ORDER BY name DESC";
+        $listUsers = User::findBySql($sqlSelect)->asArray()->all();
+        //$arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
+        //array_unshift($listUsers, $arrayMsg);
+        return Json::encode($listUsers);
+    }
+
     /**Get source data from site my.tinhvan.com
      * @return string
      */
