@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Org;
 use app\models\User;
-use app\models\Org;
 use Yii;
 use yii\db\Query;
 use yii\filters\AccessControl;
