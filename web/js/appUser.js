@@ -695,7 +695,6 @@ var UserList = React.createClass({
 });
 
 //Division
-//Division
 var Division = React.createClass({
     _handleShowPass: function () {
         this.props.handleShowPass();
@@ -1120,7 +1119,7 @@ var DivisionList = React.createClass({
                 this.handleMsgInfo(msg, statusProcess);
             }
         } else if (action == "edit") {
-            if (division.usernameTmp !== "") {
+            if (division.nameTmp !== "") {
                 if (
                     division.name == division.nameTmp &&
                     division.description == division.descriptionTmp &&
