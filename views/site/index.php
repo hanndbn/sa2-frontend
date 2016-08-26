@@ -14,7 +14,7 @@ header('Content-Type: application/json');
     <div class="item active">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-          <img src="<?=($banner_jobs[0]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide1.png' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[0]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
+          <img src="<?=($banner_jobs[0]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide1.jpg' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[0]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -33,7 +33,7 @@ header('Content-Type: application/json');
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-            <img src="<?=($banner_jobs[1]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide2.png' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[1]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
+            <img src="<?=($banner_jobs[1]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide2.jpg' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[1]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -52,7 +52,7 @@ header('Content-Type: application/json');
     <div class="item">
       <div class="carousel-thumb col-xs-12 col-md-12">
         <a href="#">
-            <img src="<?=($banner_jobs[2]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide3.png' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[2]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
+            <img src="<?=($banner_jobs[2]->image_job == null) ? Yii::$app->request->baseUrl.'/img/banner/slide3.jpg' : 'data:image/jpeg;base64,'.base64_encode($banner_jobs[2]->image_job) ?>" alt="Apply" class="img-responsive" style="height: 228px;">
         </a>
       </div>
       <div class="carousel-des col-xs-12 col-md-12">
@@ -228,6 +228,13 @@ header('Content-Type: application/json');
             <img src='<?=Yii::$app->request->baseUrl?>/img/ajax-loader.gif'/>
         </div>
     </li>
+
+     <li style="min-height: 200px;">
+         <h3 style=''><span>Tiện Ích</span></h3>
+         <a target="_blank" class="right-col" href="http://my.tinhvan.com/category/hanh_trinh_tuoi_20/su_ky_tinhvan/"><img src="img/suky.jpg" alt=""></a>
+         <a target="_blank" class="right-col" href="http://lamtho.vn"><img src="img/thomay.jpg" alt=""></a>
+
+     </li>
 
   </ul>
 </div>
