@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\User;
+use app\models\Org;
 use Yii;
 use yii\db\Query;
 use yii\filters\AccessControl;
@@ -295,6 +296,7 @@ class SiteController extends Controller
     public function actionAjaxuser()
     {
         $statusProcess = "1";
+        $action = '';
         if (isset($_POST['action'])) {
             $action = $_POST['action'];
         }
@@ -360,7 +362,7 @@ class SiteController extends Controller
             }
 
         }
-        $sqlSelect = "SELECT id,username, '********' as password, fullname, email, status, role FROM user ORDER BY ctime DESC,role ASC";
+        $sqlSelect = "SELECT id,username, '********' as password, fullname, email, status, role FROM user ORDER BY role ASC,ctime DESC";
         $listUsers = User::findBySql($sqlSelect)->asArray()->all();
         $arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
         array_unshift($listUsers, $arrayMsg);
@@ -370,15 +372,16 @@ class SiteController extends Controller
     public function actionAjaxdivision()
     {
         $statusProcess = "1";
+        $action = '';
         if (isset($_POST['action'])) {
             $action = $_POST['action'];
         }
         if ($action == "init") {
         } elseif ($action == "delete") {
-            $id = $_POST['user']['id'];
-            $user = User::find()->where(['id' => $id])->one();
-            if ($user) {
-                $isdelete = $user->delete();
+            $id = $_POST['division']['id'];
+            $division = Org::find()->where(['id' => $id])->one();
+            if ($division) {
+                $isdelete = $division->delete();
                 if ($isdelete > 0) {
                     $statusProcess = "1";
                 } else {
@@ -386,28 +389,15 @@ class SiteController extends Controller
                 }
             }
         } elseif ($action == "edit") {
-            $userEdit = $_POST['user'];
-            $password = $userEdit['password'];
-            if ($password != "") {
-                $password = md5($userEdit['password']);
-            }
-            $status = $userEdit['status'];
-            $strSql = "UPDATE user SET username = :username,";
-            if ($password != "") {
-                $strSql = $strSql . "password= :password,";
-                $strSql = $strSql . "lastpwchanged= now(),";
-            }
-            $strSql = $strSql . "fullname = :fullname, email = :email, role = :role, status = :status WHERE id = :id";
+            $divisionEdit = $_POST['division'];
+            $strSql = "UPDATE org SET name = :name,description = :description, linkSite = :linkSite, status = :status WHERE id = :id";
             $sql = \Yii::$app->db->createCommand($strSql);
-            $sql->bindValue(':username', $userEdit['username'])
-                ->bindValue(':fullname', $userEdit['fullname'])
-                ->bindValue(':email', $userEdit['email'])
-                ->bindValue(':role', $userEdit['role'])
-                ->bindValue(':status', $status)
-                ->bindValue(':id', $userEdit['id']);
-            if ($password != "") {
-                $sql->bindValue(':password', md5($userEdit['password']));
-            }
+            $sql->bindValue(':name', $divisionEdit['name'])
+                ->bindValue(':description', $divisionEdit['description'])
+                ->bindValue(':linkSite', $divisionEdit['linkSite'])
+                //->bindValue(':logo', $divisionEdit['logo'])
+                ->bindValue(':status', $divisionEdit['status'])
+                ->bindValue(':id', $divisionEdit['id']);
             $isEdit = $sql->execute();
             if ($isEdit > 0) {
                 $statusProcess = "1";
@@ -415,18 +405,15 @@ class SiteController extends Controller
                 $statusProcess = "0";
             }
         } elseif ($action == "add") {
-            $userAdd = $_POST['user'];
-            $password = md5($userAdd['password']);
-            $status = $userAdd['status'];
+            $divisionAdd = $_POST['division'];
             $sql = \Yii::$app->db->createCommand(
-                "INSERT INTO user (fullname, ctime, state, email, username, password, lastpwchanged, status, initial, role, avatar, lmtime) 
-                VALUES (:fullname, now(), '0', :email, :username, :password, now(), :status, 'TPK', :role,  '/ui/avatars/avatar.png', now())");
-            $sql->bindValue(':fullname', $userAdd['fullname'])
-                ->bindValue(':email', $userAdd['email'])
-                ->bindValue(':username', $userAdd['username'])
-                ->bindValue(':password', $password)
-                ->bindValue(':status', $status)
-                ->bindValue(':role', $userAdd['role']);
+                "INSERT INTO org (name, ctime, state, picture, description, linkSite, status, logo, lmtime) 
+                VALUES (:name, now(), '0', '', :description, :linkSite, :status, null, now())");
+            $sql->bindValue(':name', $divisionAdd['name'])
+                ->bindValue(':description', $divisionAdd['description'])
+                ->bindValue(':linkSite', $divisionAdd['linkSite'])
+                ->bindValue(':role', $divisionAdd['role'])
+                ->bindValue(':status', $divisionAdd['status']);
             $isAdd = $sql->execute();
             if ($isAdd > 0) {
                 $statusProcess = "1";
@@ -435,11 +422,15 @@ class SiteController extends Controller
             }
 
         }
-        $sqlSelect = "SELECT * FROM org ORDER BY name DESC";
-        $listUsers = User::findBySql($sqlSelect)->asArray()->all();
-        ;$arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
-        ;array_unshift($listUsers, $arrayMsg);
-        return Json::encode($listUsers);
+        $sqlSelect = "SELECT id,name,description,linkSite, logo,status FROM org ORDER BY id DESC";
+        $listDivisions = Org::findBySql($sqlSelect)->asArray()->all();
+        foreach ($listDivisions as &$division){
+            $division['logo'] = chunk_split(base64_encode($division['logo']));
+        }
+
+        $arrayMsg = array('action' => $action, 'statusProcess' => $statusProcess);
+        array_unshift($listDivisions, $arrayMsg);
+        return Json::encode($listDivisions);
     }
 
     /**Get source data from site my.tinhvan.com
