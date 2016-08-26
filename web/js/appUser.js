@@ -62,7 +62,7 @@ var User = React.createClass({
         var indexSelected = this.props.selectAction.indexSelected;
         var isShow = this.props.selectAction.isShow;
         var isDisplayShow = this.props.selectAction.isDisplayShow;
-        this.props.divisions.map(function (user, index) {
+        this.props.users.map(function (user, index) {
             if (
                 (keyword != "" && user.username.indexOf(keyword) === -1) ||
                 (status != "" && user.status != status)) {
@@ -343,20 +343,20 @@ var UserList = React.createClass({
                     user.emailTmp = user.email;
                     user.roleTmp = user.role;
                     user.statusTmp = user.status;
-                    divisions.push(user);
+                    users.push(user);
                 });
                 //get info from first element
-                var action = divisions[0].action;
-                var statusProcess = divisions[0].statusProcess;
+                var action = users[0].action;
+                var statusProcess = users[0].statusProcess;
                 var msg;
                 if (action != "init") {
                     msg = action.charAt(0).toUpperCase() + action.slice(1) + " Record " + (statusProcess === "1" ? "Success" : "Fail") + "!!!";
                     this.handleMsgInfo(msg, statusProcess);
                 }
                 //delete first element
-                divisions.shift();
+                users.shift();
                 self.setState({
-                    users: divisions,
+                    users: users,
                     selectAction: {
                         action: '',
                         indexSelected: -1,
@@ -403,7 +403,7 @@ var UserList = React.createClass({
         this.setState({status: status});
     },
     handleAdd: function () {
-        var users = this.state.divisions;
+        var users = this.state.users;
         var newUser = {
             id: 0,
             username: '',
@@ -419,9 +419,9 @@ var UserList = React.createClass({
             roleTmp: 'HR',
             statusTmp: '0',
         };
-        divisions.unshift(newUser);
+        users.unshift(newUser);
         this.setState({
-            users: divisions,
+            users: users,
             selectAction: {
                 action: 'add',
                 indexSelected: 0,
@@ -461,10 +461,10 @@ var UserList = React.createClass({
         };
         if (doAction === 0) {
             if (action == "add") {
-                var users = this.state.divisions;
-                divisions.shift();
+                var users = this.state.users;
+                users.shift();
                 this.setState({
-                    users: divisions,
+                    users: users,
                     selectAction: selectAction
                 });
             } else {
@@ -533,28 +533,28 @@ var UserList = React.createClass({
 
     },
     handleField: function (field, value, index) {
-        var users = this.state.divisions;
+        var users = this.state.users;
         var selectAction = this.state.selectAction;
         if (field == "username") {
-            divisions[index].usernameTmp = value;
+            users[index].usernameTmp = value;
         } else if (field == "password") {
-            divisions[index].passwordTmp = value;
+            users[index].passwordTmp = value;
             if (value.length > 0) {
                 selectAction.isDisplayShow = 'inline';
             } else {
                 selectAction.isDisplayShow = 'none';
             }
         } else if (field == "fullname") {
-            divisions[index].fullnameTmp = value;
+            users[index].fullnameTmp = value;
         } else if (field == "email") {
-            divisions[index].emailTmp = value;
+            users[index].emailTmp = value;
         } else if (field == "role") {
-            divisions[index].roleTmp = value;
+            users[index].roleTmp = value;
         } else if (field == "status") {
-            divisions[index].statusTmp = value;
+            users[index].statusTmp = value;
         }
         this.setState({
-            users: divisions,
+            users: users,
             selectAction: selectAction
         })
     },
@@ -566,7 +566,7 @@ var UserList = React.createClass({
         });
     },
     handleSortField: function (field, value) {
-        var users = this.state.divisions;
+        var users = this.state.users;
         var sortAction = {
             sortUsername: 0,
             sortFullname: 0,
@@ -591,7 +591,7 @@ var UserList = React.createClass({
         }
 
         if (val != 0) {
-            divisions = divisions.sort(function (a, b) {
+            users = users.sort(function (a, b) {
                 var fieldA = "";
                 var fieldB = "";
 
@@ -622,7 +622,7 @@ var UserList = React.createClass({
                 return 0;
             });
         } else {
-            divisions = divisions.sort(function (a, b) {
+            users = users.sort(function (a, b) {
                 var fieldA = a.role.toLowerCase();
                 var fieldB = b.role.toLowerCase();
                 if (fieldA < fieldB)
@@ -634,7 +634,7 @@ var UserList = React.createClass({
         }
         this.setState({
             sortAction: sortAction,
-            users: divisions
+            users: users
         })
     },
     render: function () {
@@ -665,7 +665,7 @@ var UserList = React.createClass({
                                 <div style={{display: 'none', textAlign: 'center', padding: '5px', color: 'white'}}
                                      className="label-success msgInfo">
                                 </div>
-                                <User users={this.state.divisions}
+                                <User users={this.state.users}
                                       pageSize={this.state.pageSize}
                                       currentPage={this.state.currentPage}
                                       maxNumberPage={this.state.maxNumberPage}
