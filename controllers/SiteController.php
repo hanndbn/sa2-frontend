@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Org;
 use app\models\User;
 use Yii;
 use yii\db\Query;
@@ -58,7 +59,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 17';
+        $sql = 'SELECT * FROM job j join org o on j.orgid = o.id WHERE j.id NOT IN (0,1,2,3,4) AND j.state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 17';
         $jobs = Job::findBySql($sql)->all();
         $sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 3';
         $banner_jobs = Job::findBySql($sql)->all();
@@ -111,9 +112,11 @@ class SiteController extends Controller
         $job = Job::findOne($id);
         $job->nview++;
         $job->save();
+        $sql_org= 'select * from org where id = 1';
+        $org = Org::findOne($job->orgid);
         $sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4,' . $id . ') AND state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 3';
         $other_jobs = Job::findBySql($sql)->all();
-        return $this->render('detail', ['job' => $job, 'other_jobs' => $other_jobs]);
+        return $this->render('detail', ['job' => $job, 'other_jobs' => $other_jobs , 'org' => $org]);
     }
 
     public function actionSearch()

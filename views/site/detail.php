@@ -56,12 +56,8 @@ use yii\helpers\Html;
 			<div class="tv-meta-top">
 
 				<div class="col-md-4 col-sm-6 col-xs-12">
-					<a href="#" target="_blank">
-						<?php if($job->picture == null):?>
-							<img class="company_logo" src="<?=Yii::$app->request->baseUrl?>/img/tvi.png" alt="TVi">
-						<?php else:?>
-							<img style="max-width:130px" class="company_logo" src="<?=Yii::$app->request->baseUrl.$job->picture?>" alt="TVi">
-						<?php endif;?>
+					<a href="<?=$org->linkSite?>" target="_blank">
+						<img class="company_logo" src="<?='data:image/jpeg;base64,'.base64_encode($org->logo) ?>" alt="<?=$org->name?>" style="height: 65px;width: 150px;">
 					</a>
 				</div>
 				<div class="col-md-4 col-sm-6 col-xs-12">
