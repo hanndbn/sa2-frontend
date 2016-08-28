@@ -1,4 +1,4 @@
-
+<?php session_start();?>
 <!DOCTYPE html>
 <html>
 <head data-gwd-animation-mode="quickMode">

@@ -64,7 +64,7 @@ var User = React.createClass({
         var isDisplayShow = this.props.selectAction.isDisplayShow;
         this.props.users.map(function (user, index) {
             if (
-                (keyword != "" && user.username.indexOf(keyword) === -1) ||
+                (keyword != "" && user.username.toLowerCase().indexOf(keyword.toLowerCase()) === -1) ||
                 (status != "" && user.status != status)) {
             } else {
                 rowFilter.push(user);
@@ -115,7 +115,7 @@ var User = React.createClass({
                 } else {
                     displayLabel = "";
                     displayInput = "none";
-                    displayStatusAdminLabel = ""
+                    displayStatusAdminLabel = "";
                     displayStatusAdminInput = "none";
                     displayMainController = "";
                     displayChooseController = "none";
@@ -654,7 +654,7 @@ var UserList = React.createClass({
 
                             <div className="userList">
                                 <Filter
-                                    headerFilter = {this.props.headerFilter}
+                                    headerFilter={this.props.headerFilter}
                                     handleKeyWord={this.handleKeyWord}
                                     handleStatus={this.handleStatus}
                                     keyword={this.state.keyword}
@@ -693,7 +693,7 @@ var UserList = React.createClass({
         );
     }
 });
-
+window.Pagination;
 //Division
 var Division = React.createClass({
     _handleShowPass: function () {
@@ -714,8 +714,17 @@ var Division = React.createClass({
     _handleLink: function (index, event) {
         this.props.handleField("link", event.target.value, index);
     },
-    _handleLogo: function (index, event) {
-        //this.props.handleField("role", event.target.value, index);
+    _handleLogo: function (action, index, event) {
+        var reader = new FileReader();
+        var self = this;
+        reader.onload = function () {
+            self.props.handleField("logo", reader.result, index);
+        };
+        if (action == "add") {
+            reader.readAsDataURL(event.target.files[0]);
+        } else if (action == "delete") {
+            self.props.handleField("logo", '', index);
+        }
     },
     _handleStatus: function (index, event) {
         this.props.handleField("status", event.target.value, index);
@@ -756,7 +765,7 @@ var Division = React.createClass({
         var indexSelected = this.props.selectAction.indexSelected;
         this.props.divisions.map(function (division, index) {
             if (
-                (keyword != "" && division.name.indexOf(keyword) === -1) ||
+                (keyword != "" && division.name.toLowerCase().indexOf(keyword.toLowerCase()) === -1) ||
                 (status != "" && division.status != status)) {
             } else {
                 rowFilter.push(division);
@@ -802,13 +811,14 @@ var Division = React.createClass({
                     poiterChooseController = "none";
                 }
             }
+            var displayImg = (division.logoTmp == 'data:image/jpeg;base64,\r\n') ? "none" : "";
             return (
                 <tr key={division.id}>
                     <td style={{textAlign: 'center'}}>{index + 1}</td>
                     <td>
                         <div style={{display: displayLabel, textAlign: 'center'}}>{division.name}</div>
                         <input type="text"
-                               style={{display: displayInput, width:'60px'}}
+                               style={{display: displayInput, width: '60px'}}
                                value={division.nameTmp}
                                onChange={self._handleName.bind(null, index)}
                         />
@@ -816,26 +826,39 @@ var Division = React.createClass({
                     <td>
                         <div style={{display: displayLabel}}>{division.description}</div>
                         <input type="text"
-                               style={{display: displayInput, width:'130px'}}
+                               style={{display: displayInput, width: '130px'}}
                                value={division.descriptionTmp}
                                onChange={self._handleDescription.bind(null, index)}
                         />
                     </td>
                     <td>
-                        <div style={{display: displayLabel,textAlign:'left'}}><a href={division.linkSite} alt="#">{division.linkSite}</a></div>
+                        <div style={{display: displayLabel, textAlign: 'left'}}><a href={division.linkSite}
+                                                                                   alt="#">{division.linkSite}</a></div>
                         <input type="text"
-                               style={{display: displayInput, width:'330px'}}
+                               style={{display: displayInput, width: '330px'}}
                                value={division.linkSiteTmp}
                                onChange={self._handleLink.bind(null, index)}
                         />
                     </td>
-                    <td style={{textAlign:'center', padding: '10px 0px'}}>
-                        <div style={{display: displayLabel}}><img style={{width:'200px', height : '75px'}} src={"data:image/png;base64," + division.logo} alt="TVi"/></div>
-                        <input type="file"
-                               style={{display: displayInput, marginTop:'20px'}}
-                               value={division.logoTmp}
-                               onChange={self._handleLogo.bind(null, index)}
+                    <td style={{textAlign: 'center', padding: '10px 0px'}}>
+                        <div style={{display: (division.logo == '\r\n') ? "none" : ""}}>
+                            <div style={{display: displayLabel}}><img style={{width: '200px', height: '75px'}}
+                                                                      src={"data:image/jpeg;base64," + division.logo}
+                                                                      alt="TVi"/></div>
+                        </div>
+                        <input type="file" accept="image/*"
+                               style={{display: displayInput, marginTop: '0px'}}
+                               onChange={self._handleLogo.bind(null, "add", index)}
                         />
+                        <div style={{display: (division.logoTmp == 'data:image/jpeg;base64,\r\n') ? "none" : ""}}>
+                            <img id="output" src={division.logoTmp}
+                                 style={{display: displayInput, width: '200px', height: '75px'}}/>
+                            <span
+                                style={{display: displayInput}}
+                                onClick={self._handleLogo.bind(null, "delete", index)}
+                            ><i className="glyphicon glyphicon-remove"/></span>
+                        </div>
+
                     </td>
                     <td style={{textAlign: 'center'}}>
                         <div
@@ -910,8 +933,8 @@ var Division = React.createClass({
                             </th>
                             <th width="70px">Link
                                 <span
-                                    onClick={this._handleSortField.bind(null, "email", self.props.sortAction.sortLink)}>
-                                    <i className={this._processSortClass(self.props.sortAction.sortLink)}></i>
+                                    onClick={this._handleSortField.bind(null, "link", self.props.sortAction.sortLink)}>
+                                    <i className={this._processSortClass(self.props.sortAction.sortLink)}/>
                                 </span>
                             </th>
                             <th width="70px" style={{textAlign: 'center'}}>Logo</th>
@@ -938,199 +961,186 @@ var Division = React.createClass({
     }
 });
 var DivisionList = React.createClass({
-    getInitialState: function () {
-        return ({
-            divisions: [],
-            pageSize: 10,
-            currentPage: 1,
-            maxNumberPage: 5,
-            keyword: '',
-            status: '',
-            selectAction: {
+        getInitialState: function () {
+            return ({
+                divisions: [],
+                pageSize: 10,
+                currentPage: 1,
+                maxNumberPage: 5,
+                keyword: '',
+                status: '',
+                selectAction: {
+                    action: '',
+                    indexSelected: -1,
+                },
+                sortAction: {
+                    sortName: 0,
+                    sortDescription: 0,
+                    sortLink: 0
+                }
+            });
+        },
+        componentWillMount: function () {
+            var data = {action: 'init'};
+            this.loadDivisions(data);
+        },
+        loadDivisions: function (data) {
+            var self = this;
+            $.ajax
+            ({
+                type: "POST",
+                url: self.props.url,
+                data: data,
+                datatype: 'json',
+                success: function (data) {
+                    var divisionTmp = JSON.parse(data);
+                    //add default value for input field
+                    var divisions = [];
+                    divisionTmp.forEach(function (division) {
+                        division.nameTmp = division.name;
+                        division.descriptionTmp = division.description;
+                        division.linkSiteTmp = division.linkSite;
+                        division.logoTmp = "data:image/jpeg;base64," + division.logo;
+                        division.statusTmp = division.status;
+                        divisions.push(division);
+                    });
+                    //get info from first element
+                    var action = divisions[0].action;
+                    var statusProcess = divisions[0].statusProcess;
+                    var msg;
+                    if (action != "init") {
+                        msg = action.charAt(0).toUpperCase() + action.slice(1) + " Record " + (statusProcess === "1" ? "Success" : "Fail") + "!!!";
+                        this.handleMsgInfo(msg, statusProcess);
+                    }
+                    //delete first element
+                    divisions.shift();
+                    self.setState({
+                        divisions: divisions,
+                        selectAction: {
+                            action: '',
+                            indexSelected: -1
+                        }
+                    });
+                }.bind(this),
+                error: function (xhr, status, err) {
+                    console.error(xhr, status, err.toString());
+                }.bind(this)
+            });
+        },
+        handleChangePage: function (key, totalPage) {
+            var currentPage = this.state.currentPage;
+            if (key == "next") {
+                if (currentPage == totalPage) {
+                    currentPage = totalPage
+                } else {
+                    currentPage = currentPage + 1;
+                }
+            } else if (key == "prev") {
+                if (currentPage == 1) {
+                    currentPage = 1;
+                } else {
+                    currentPage = currentPage - 1;
+                }
+            }
+            else if (key == "first") {
+                currentPage = 1;
+            } else if (key == "last") {
+                currentPage = totalPage;
+            } else {
+                currentPage = key;
+            }
+            this.setState({
+                currentPage: currentPage
+            });
+        },
+        handleKeyWord: function (keyword) {
+            this.setState({keyword: keyword});
+        },
+        handleStatus: function (status) {
+            this.setState({status: status});
+        },
+        handleAdd: function () {
+            var divisions = this.state.divisions;
+            var newDivision = {
+                id: 0,
+                name: '',
+                description: '',
+                linkSite: '',
+                logo: '',
+                status: '0',
+                nameTmp: '',
+                descriptionTmp: '',
+                linkSiteTmp: '',
+                logoTmp: '',
+                statusTmp: '0',
+            };
+            divisions.unshift(newDivision);
+            this.setState({
+                divisions: divisions,
+                selectAction: {
+                    action: 'add',
+                    indexSelected: 0,
+                }
+            });
+        },
+        handleMsgInfo: function (msg, statusProcess) {
+            var msgInfo = $(".msgInfo");
+            var className = statusProcess == "1" ? "label-success msgInfo" : "label-warning msgInfo";
+            msgInfo.html(msg);
+            msgInfo.attr("class", className);
+            var delayTime = 1000;
+            if (msg !== "" && statusProcess !== "") {
+                delayTime = 3000;
+            }
+            msgInfo.fadeIn();
+            msgInfo.delay(delayTime).fadeOut('slow');
+        },
+        handleMainAction: function (action, index) {
+            this.setState({
+                selectAction: {
+                    action: action,
+                    indexSelected: index,
+                }
+            });
+        },
+        handleChooseAction: function (division, doAction, action) {
+            var selectAction = {
                 action: '',
                 indexSelected: -1,
-            },
-            sortAction: {
-                sortName: 0,
-                sortDescription: 0,
-                sortLink: 0
-            }
-        });
-    },
-    componentWillMount: function () {
-        var data = {
-            action: 'init'
-        };
-        this.loadDivisions(data);
-    },
-    loadDivisions: function (data) {
-        var self = this;
-        $.ajax
-        ({
-            type: "POST",
-            url: self.props.url,
-            data: data,
-            datatype: 'json',
-            success: function (data) {
-                var divisionTmp = JSON.parse(data);
-                //add default value for input field
-                var divisions = [];
-                divisionTmp.forEach(function (division) {
-                    division.nameTmp = division.name;
-                    division.descriptionTmp = division.description;
-                    division.linkSiteTmp = division.linkSite;
-                    division.logoTMp = division.logo;
-                    division.statusTmp = division.status;
-                    divisions.push(division);
-                });
-                //get info from first element
-                var action = divisions[0].action;
-                var statusProcess = divisions[0].statusProcess;
-                var msg;
-                if (action != "init") {
-                    msg = action.charAt(0).toUpperCase() + action.slice(1) + " Record " + (statusProcess === "1" ? "Success" : "Fail") + "!!!";
+            };
+            var data = {};
+            if (doAction === 0) {
+                if (action == "add") {
+                    var divisions = this.state.divisions;
+                    divisions.shift();
+                    this.setState({
+                        divisions: divisions,
+                        selectAction: selectAction
+                    });
+                } else {
+                    this.setState({selectAction: selectAction});
+                }
+            } else if (action == "add") {
+                var msg = '';
+                var statusProcess = 1;
+                if (division.nameTmp !== "") {
+                    division.name = division.nameTmp;
+                    division.description = division.descriptionTmp;
+                    division.linkSite = division.linkSiteTmp;
+                    division.logo = division.logoTmp;
+                    division.status = division.statusTmp;
+                    data = {
+                        action: 'add',
+                        division: division
+                    };
+                    this.loadDivisions(data);
+                } else {
+                    msg = "Please Fill Fields: " + (division.nameTmp == "" ? "Name Division" : "");
+                    statusProcess = 0;
                     this.handleMsgInfo(msg, statusProcess);
                 }
-                //delete first element
-                divisions.shift();
-                self.setState({
-                    divisions: divisions,
-                    selectAction: {
-                        action: '',
-                        indexSelected: -1
-                    }
-                });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err.toString());
-            }.bind(this)
-        });
-    },
-    handleChangePage: function (key, totalPage) {
-        var currentPage = this.state.currentPage;
-        if (key == "next") {
-            if (currentPage == totalPage) {
-                currentPage = totalPage
-            } else {
-                currentPage = currentPage + 1;
-            }
-        } else if (key == "prev") {
-            if (currentPage == 1) {
-                currentPage = 1;
-            } else {
-                currentPage = currentPage - 1;
-            }
-        }
-        else if (key == "first") {
-            currentPage = 1;
-        } else if (key == "last") {
-            currentPage = totalPage;
-        } else {
-            currentPage = key;
-        }
-        this.setState({
-            currentPage: currentPage
-        });
-    },
-    handleKeyWord: function (keyword) {
-        this.setState({keyword: keyword});
-    },
-    handleStatus: function (status) {
-        this.setState({status: status});
-    },
-    handleAdd: function () {
-        var divisions = this.state.divisions;
-        var newDivision = {
-            id: 0,
-            name: '',
-            description: '',
-            linkSite: '',
-            logo: '',
-            status: '0',
-            nameTmp: '',
-            descriptionTmp: '',
-            linkSiteTmp: '',
-            logoTmp: '',
-            statusTmp: '0',
-        };
-        divisions.unshift(newDivision);
-        this.setState({
-            divisions: divisions,
-            selectAction: {
-                action: 'add',
-                indexSelected: 0,
-            }
-        });
-    },
-    handleMsgInfo: function (msg, statusProcess) {
-        var msgInfo = $(".msgInfo");
-        var className = statusProcess == "1" ? "label-success msgInfo" : "label-warning msgInfo";
-        msgInfo.html(msg);
-        msgInfo.attr("class", className);
-        var delayTime = 1000;
-        if (msg !== "" && statusProcess !== "") {
-            delayTime = 3000;
-        }
-        msgInfo.fadeIn();
-        msgInfo.delay(delayTime).fadeOut('slow');
-    },
-    handleMainAction: function (action, index) {
-        this.setState({
-            selectAction: {
-                action: action,
-                indexSelected: index,
-            }
-        });
-    },
-    handleChooseAction: function (division, doAction, action) {
-        var selectAction = {
-            action: '',
-            indexSelected: -1,
-        };
-        if (doAction === 0) {
-            if (action == "add") {
-                var divisions = this.state.divisions;
-                divisions.shift();
-                this.setState({
-                    divisions: divisions,
-                    selectAction: selectAction
-                });
-            } else {
-                this.setState({selectAction: selectAction});
-            }
-        } else if (action == "add") {
-            var msg = '';
-            var data = {};
-            var statusProcess = 1;
-            if (division.nameTmp !== "") {
-                division.name = division.nameTmp;
-                division.description = division.descriptionTmp;
-                division.linkSite = division.linkSiteTmp;
-                division.logo = division.logoTmp;
-                division.status = division.statusTmp;
-                data = {
-                    action: 'add',
-                    division: division,
-                };
-                this.loadDivisions(data);
-            } else {
-                msg = "Please Fill Fields: " + (division.nameTmp == "" ? "Name Division" : "");
-                statusProcess = 0;
-                this.handleMsgInfo(msg, statusProcess);
-            }
-        } else if (action == "edit") {
-            if (division.nameTmp !== "") {
-                if (
-                    division.name == division.nameTmp &&
-                    division.description == division.descriptionTmp &&
-                    division.linkSite == division.linkSiteTmp &&
-                    division.logo == division.logoTmp &&
-                    division.status == division.statusTmp) {
-                    msg = "No Thing To Change !!!";
-                    this.setState({selectAction: selectAction});
-                    statusProcess = 1;
-                    this.handleMsgInfo(msg, statusProcess);
-                } else {
+            } else if (action == "edit") {
+                if (division.nameTmp !== "") {
                     division.name = division.nameTmp;
                     division.description = division.descriptionTmp;
                     division.linkSite = division.linkSiteTmp;
@@ -1138,168 +1148,276 @@ var DivisionList = React.createClass({
                     division.status = division.statusTmp;
                     data = {
                         action: 'edit',
-                        division: division,
+                        division: division
                     };
                     this.loadDivisions(data);
                 }
+                else {
+                    msg = "Please Fill Fields: " + (division.nameTmp == "" ? "Name Division" : "");
+                    statusProcess = 0;
+                    this.handleMsgInfo(msg, statusProcess)
+                }
+            } else if (action == "delete") {
+                data = {
+                    action: 'delete',
+                    division: division
+                };
+                this.loadDivisions(data);
             }
-            else {
-                msg = "Please Fill Fields: " + (division.nameTmp == "" ? "Name Division" : "");
-                statusProcess = 0;
-                this.handleMsgInfo(msg, statusProcess)
+
+        },
+        handleField: function (field, value, index) {
+            var divisions = this.state.divisions;
+            if (field == "name") {
+                divisions[index].nameTmp = value;
+            } else if (field == "description") {
+                divisions[index].descriptionTmp = value;
+            } else if (field == "logo") {
+                divisions[index].logoTmp = value;
+            } else if (field == "link") {
+                divisions[index].linkSiteTmp = value;
+            } else if (field == "status") {
+                divisions[index].statusTmp = value;
             }
-        } else if (action == "delete") {
-            data = {
-                action: 'delete',
-                division: division,
+            this.setState({
+                divisions: divisions,
+            })
+        }
+        ,
+        handleSortField: function (field, value) {
+            var divisions = this.state.divisions;
+            var sortAction = {
+                sortName: 0,
+                sortDescription: 0,
+                sortLink: 0
             };
-            this.loadDivisions(data);
-        }
+            var val = 0;
+            var sortType = '';
+            if (value == 0) {
+                val = -1;
+                sortType = "desc";
+            } else if (value == -1) {
+                val = 1;
+                sortType = "asc";
+            }
+            if (field == "name") {
+                sortAction.sortName = val;
+            } else if (field == "description") {
+                sortAction.sortDescription = val;
+            } else if (field == "link") {
+                sortAction.sortLink = val;
+            }
 
-    },
-    handleField: function (field, value, index) {
-        var divisions = this.state.divisions;
-        if (field == "name") {
-            divisions[index].nameTmp = value;
-        } else if (field == "description") {
-            divisions[index].descriptionTmp = value;
-        } else if (field == "link") {
-            divisions[index].linkSiteTmp = value;
-        } else if (field == "status") {
-            divisions[index].statusTmp = value;
+            if (val != 0) {
+                divisions = divisions.sort(function (a, b) {
+                    var fieldA = "";
+                    var fieldB = "";
+
+                    if (field == "name") {
+                        fieldA = a.name.toLowerCase();
+                        fieldB = b.name.toLowerCase();
+                        sortAction.sortName = val;
+                    } else if (field == "description") {
+                        fieldA = a.description.toLowerCase();
+                        fieldB = b.description.toLowerCase();
+                        sortAction.sortDescription = val;
+                    } else if (field == "link") {
+                        fieldA = a.linkSite.toLowerCase();
+                        fieldB = b.linkSite.toLowerCase();
+                        sortAction.sortLink = val;
+                    }
+                    if (sortType == "asc") {
+                        if (fieldA < fieldB)
+                            return -1;
+                        if (fieldA > fieldB)
+                            return 1;
+                    } else if (sortType == "desc") {
+                        if (fieldA < fieldB)
+                            return 1;
+                        if (fieldA > fieldB)
+                            return -1;
+                    }
+                    return 0;
+                });
+            } else {
+                divisions = divisions.sort(function (a, b) {
+                    var fieldA = a.id;
+                    var fieldB = b.id;
+                    if (fieldA < fieldB)
+                        return -1;
+                    if (fieldA > fieldB)
+                        return 1;
+                    return 0;
+                });
+            }
+            this.setState({
+                sortAction: sortAction,
+                divisions: divisions
+            })
         }
-        this.setState({
-            divisions: divisions,
-        })
+        ,
+        render: function () {
+            return (
+                <div className="col-md-9" style={{paddingLeft: '5px'}}>
+                    <div className="container fixcontainer" style={{marginTop: '10px', marginBottom: '60px'}}>
+                        <div
+                            style={{
+                                border: '1px solid #ccc',
+                                borderRadius: '4px',
+                                overflow: 'hidden',
+                                borderTopRightRadius: '0',
+                                borderTopLeftRadius: '0'
+                            }}>
+                            <div className="list-tv">
+
+
+                                <div className="userList">
+                                    <Filter
+                                        headerFilter={this.props.headerFilter}
+                                        handleKeyWord={this.handleKeyWord}
+                                        handleStatus={this.handleStatus}
+                                        keyword={this.state.keyword}
+                                        status={this.state.status}
+                                        handleAdd={this.handleAdd}
+                                        selectAction={this.state.selectAction}
+                                    />
+                                    <div style={{display: 'none', textAlign: 'center', padding: '5px', color: 'white'}}
+                                         className="label-success msgInfo">
+                                    </div>
+                                    <Division divisions={this.state.divisions}
+                                              pageSize={this.state.pageSize}
+                                              currentPage={this.state.currentPage}
+                                              maxNumberPage={this.state.maxNumberPage}
+                                              handleChangePage={this.handleChangePage}
+                                              keyword={this.state.keyword}
+                                              status={this.state.status}
+                                              handleAdd={this.handleAdd}
+
+                                              selectAction={this.state.selectAction}
+                                              handleMainAction={this.handleMainAction}
+                                              handleChooseAction={this.handleChooseAction}
+                                              handleField={this.handleField}
+                                              handleSortField={this.handleSortField}
+                                              sortAction={this.state.sortAction}
+                                    />
+                                </div>
+                            </div>
+                            <div id="loading" style={{textAlign: "center"}}></div>
+
+                        </div>
+                    </div>
+                </div>
+
+            );
+        }
+    })
+    ;
+//Division end
+
+//login start
+var Login = React.createClass({
+    getInitialState: function () {
+        return ({
+            username: '',
+            password: '',
+            msg: ''
+        });
     },
-    handleSortField: function (field, value) {
-        var divisions = this.state.divisions;
-        var sortAction = {
-            sortName: 0,
-            sortDescription: 0,
-            sortLink: 0
+    _handleUsername: function (event) {
+        this.setState({username: event.target.value})
+    },
+    _handlePassword: function (event) {
+        this.setState({password: event.target.value})
+    },
+    _handleCookie: function (isLogin, role) {
+        if (isLogin) {
+            var username = this.state.username;
+            this.props.handleCookie(isLogin, username, role);
+        } else {
+            $(".info").delay(3000).fadeOut('slow');
+            this.setState({msg: "Invalid Username or Password"})
+        }
+    },
+    handleLogin: function (event) {
+        event.preventDefault();
+        var username = this.state.username;
+        var password = this.state.password;
+        console.log(username, password);
+        var data = {
+            username: username,
+            password: password
         };
-        var val = 0;
-        var sortType = '';
-        if (value == 0) {
-            val = -1;
-            sortType = "desc";
-        } else if (value == -1) {
-            val = 1;
-            sortType = "asc";
-        }
-        if (field == "name") {
-            sortAction.sortName = val;
-        } else if (field == "description") {
-            sortAction.sortDescription = val;
-        } else if (field == "link") {
-            sortAction.sortLink = val;
-        }
-
-        if (val != 0) {
-            divisions = divisions.sort(function (a, b) {
-                var fieldA = "";
-                var fieldB = "";
-
-                if (field == "name") {
-                    fieldA = a.name.toLowerCase();
-                    fieldB = b.name.toLowerCase();
-                    sortAction.sortName = val;
-                } else if (field == "description") {
-                    fieldA = a.description.toLowerCase();
-                    fieldB = b.description.toLowerCase();
-                    sortAction.sortDescription = val;
-                } else if (field == "link") {
-                    fieldA = a.linkSite.toLowerCase();
-                    fieldB = b.linkSite.toLowerCase();
-                    sortAction.sortLink = val;
+        var self = this;
+        $.ajax
+        ({
+            type: "POST",
+            url: self.props.url,
+            data: data,
+            datatype: 'json',
+            success: function (role) {
+                if (role != "") {
+                    this._handleCookie(true, role);
+                } else {
+                    this._handleCookie(false, role);
                 }
-                if (sortType == "asc") {
-                    if (fieldA < fieldB)
-                        return -1;
-                    if (fieldA > fieldB)
-                        return 1;
-                } else if (sortType == "desc") {
-                    if (fieldA < fieldB)
-                        return 1;
-                    if (fieldA > fieldB)
-                        return -1;
-                }
-                return 0;
-            });
-        }else {
-            divisions = divisions.sort(function (a, b) {
-                var fieldA = a.id;
-                var fieldB = b.id;
-                if (fieldA < fieldB)
-                    return -1;
-                if (fieldA > fieldB)
-                    return 1;
-                return 0;
-            });
-        }
-        this.setState({
-            sortAction: sortAction,
-            divisions: divisions
-        })
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(url, status, err.toString());
+            }.bind(this)
+        });
     },
     render: function () {
+        var self = this;
+        var displayMsg = "";
+        if (this.props.isLogin) {
+            displayMsg = 'none';
+        }
         return (
-            <div className="col-md-9" style={{paddingLeft: '5px'}}>
-                <div className="container fixcontainer" style={{marginTop: '10px', marginBottom: '60px'}}>
-                    <div
-                        style={{
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            overflow: 'hidden',
-                            borderTopRightRadius: '0',
-                            borderTopLeftRadius: '0'
-                        }}>
-                        <div className="list-tv">
-
-
-                            <div className="userList">
-                                <Filter
-                                    headerFilter={this.props.headerFilter}
-                                    handleKeyWord={this.handleKeyWord}
-                                    handleStatus={this.handleStatus}
-                                    keyword={this.state.keyword}
-                                    status={this.state.status}
-                                    handleAdd={this.handleAdd}
-                                    selectAction={this.state.selectAction}
-                                />
-                                <div style={{display: 'none', textAlign: 'center', padding: '5px', color: 'white'}}
-                                     className="label-success msgInfo">
+            <div className="col-md-12 top-margin">
+                <div className="container" style={{width: '400px'}}>
+                    <div className="row">
+                        <div className="col-md-12 center-block-e">
+                            <div className="login-page-header">
+                                Login Adminisrator
+                            </div>
+                            <div className="btn-warning info"
+                                 style={{display: displayMsg, textAlign: 'center'}}>{self.state.msg}
+                            </div>
+                            <div className="login-page">
+                                <div className="input-group">
+                                        <span className="input-group-addon white-form-bg"><span><i
+                                            className="glyphicon glyphicon-user"/></span></span>
+                                    <input type="text" className="form-control" value={self.state.username}
+                                           onChange={this._handleUsername}
+                                           placeholder="Username"/>
                                 </div>
-                                <Division divisions={this.state.divisions}
-                                          pageSize={this.state.pageSize}
-                                          currentPage={this.state.currentPage}
-                                          maxNumberPage={this.state.maxNumberPage}
-                                          handleChangePage={this.handleChangePage}
-                                          keyword={this.state.keyword}
-                                          status={this.state.status}
-                                          handleAdd={this.handleAdd}
+                                <br/>
 
-                                          selectAction={this.state.selectAction}
-                                          handleMainAction={this.handleMainAction}
-                                          handleChooseAction={this.handleChooseAction}
-                                          handleField={this.handleField}
-                                          handleSortField={this.handleSortField}
-                                          sortAction={this.state.sortAction}
-                                />
+                                <div className="input-group">
+                                        <span className="input-group-addon white-form-bg"><span><i
+                                            className="glyphicon glyphicon-lock"/></span></span>
+                                    <input type="password" name="pass" className="form-control"
+                                           value={self.state.password}
+                                           onChange={this._handlePassword}
+                                           placeholder="Password"/>
+                                </div>
+                                <p className="decent-margin">
+                                    <button className="btn btn-primary form-control" onClick={this.handleLogin}>
+                                        Login
+                                    </button>
+                                </p>
                             </div>
                         </div>
-                        <div id="loading" style={{textAlign: "center"}}></div>
-
                     </div>
                 </div>
             </div>
-
-        );
+        )
     }
 });
 
-//Division end
+
+//login end
+
 var Menu = React.createClass({
     _handleMenuSelected(selected){
         "use strict";
@@ -1308,26 +1426,29 @@ var Menu = React.createClass({
     render: function () {
         var self = this;
         var menuPage = [];
+        var role = this.props.role;
         this.props.pageMenu.map(function (menu, index) {
             var className = "";
             var classSelect = "";
-            if (index == 0) {
+            if (menu == "Main") {
                 className = "fa fa-dashboard fa-fw";
-            } else if (index == 1) {
+            } else if (menu == "Users Manager" && role == "ADMIN") {
                 className = "fa fa-users fa-fw";
-            } else if (index == 2) {
+            } else if (menu == "Division Manager") {
                 className = "fa fa-list-alt fa-fw";
             }
             if (index === self.props.selected) {
                 classSelect = "active open";
             }
-            menuPage.push(
-                <li className={classSelect} key={index} onClick={self._handleMenuSelected.bind(null, index)}>
-                    <a href="#" className="">
-                        <i className={className}/>{menu}
-                    </a>
-                </li>
-            );
+            if (menu != "Users Manager" || (menu == "Users Manager" && role == "ADMIN")) {
+                menuPage.push(
+                    <li className={classSelect} key={index} onClick={self._handleMenuSelected.bind(null, index)}>
+                        <a href="#" className="">
+                            <i className={className}/>{menu}
+                        </a>
+                    </li>
+                );
+            }
         });
         return (
             <div className="col-md-2">
@@ -1352,38 +1473,97 @@ var Menu = React.createClass({
     }
 });
 
-var PAGEMENU = ["Main", "Users Manager", "Division Manager"];
+var PAGEMENU = ["Users Manager", "Division Manager"];
 var Page = React.createClass({
     getInitialState: function () {
         return ({
-            selected: 2
+            selected: 0,
+            isLogin: false,
+            role: ''
         });
+    },
+    componentWillMount: function () {
+        var isLogin = false;
+        var username = this.getCookie("username");
+        var role = this.getCookie("role");
+        if (username != "") {
+            this.setCookie("username", username, 5);
+            isLogin = true;
+        }
+        this.setState({isLogin: isLogin, role: role});
     },
     handleMenuSelected: function (selected) {
         this.setState({
-            selected: selected
+            selected: selected,
         });
+    },
+    handleCookie: function (isLogin, username, role) {
+        var selected = this.state.selected;
+        if(role == "HR"){
+            selected++;
+        }
+        if (isLogin) {
+            this.setState({
+                isLogin: isLogin,
+                role: role,
+                selected:selected
+            });
+            this.setCookie("username", username, 5);
+            this.setCookie("role", role, 5);
+        }
+    },
+    setCookie: function (cname, cvalue, exminutes) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exminutes * 1 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    },
+    getCookie: function (cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
     },
     render: function () {
         var component = [];
-        component.push(<Menu
-            key="0"
-            pageMenu={PAGEMENU}
-            selected={this.state.selected}
-            handleMenuSelected={this.handleMenuSelected}
-        />);
-        if (this.state.selected === 1) {
-            component.push(<UserList
-                key="1"
-                url="../web/ajaxuser"
-                headerFilter = "user"
-            />)
-        } else if (this.state.selected === 2) {
-            component.push(<DivisionList
-                key="2"
-                url="../web/ajaxdivision"
-                headerFilter = "division"
-            />)
+        if (!this.state.isLogin) {
+            $("body").css("background", "url(img/bg2.jpg) #0F1F2D no-repeat center center fixed");
+            component.push(<Login
+                key="-1"
+                url="../web/authenlogin"
+                handleCookie={this.handleCookie}
+                isLogin={this.state.isLogin}
+            />);
+        } else {
+            $("body").css("background", "none");
+            component.push(<Menu
+                key="0"
+                pageMenu={PAGEMENU}
+                selected={this.state.selected}
+                handleMenuSelected={this.handleMenuSelected}
+                role={this.state.role}
+            />);
+            if (this.state.selected === 0) {
+                component.push(<UserList
+                    key="1"
+                    url="../web/ajaxuser"
+                    headerFilter="user"
+                />)
+            } else if (this.state.selected === 1) {
+                component.push(<DivisionList
+                    key="2"
+                    url="../web/ajaxdivision"
+                    headerFilter="division"
+                />)
+            }
         }
         return (
             <div>
@@ -1409,9 +1589,9 @@ var Filter = React.createClass({
             pointerEvent = 'none';
         }
         var filterName = '';
-        if(this.props.headerFilter == "user"){
+        if (this.props.headerFilter == "user") {
             filterName = 'username';
-        }else if(this.props.headerFilter == "division"){
+        } else if (this.props.headerFilter == "division") {
             filterName = 'division';
         }
         return (
@@ -1463,67 +1643,6 @@ var Filter = React.createClass({
         );
     }
 });
-
-var Pagination = React.createClass({
-    _handleChangePage: function (key) {
-        var totalPage = this.props.totalPage;
-        this.props.handleChangePage(key, totalPage)
-    },
-    render: function () {
-        var self = this;
-        var currentPage = this.props.currentPage;
-        var totalPage = this.props.totalPage;
-        var maxNumberPage = this.props.maxNumberPage;
-        var rows = [];
-
-        var style = {
-            pointerEvents: currentPage == 1 ? "none" : ""
-        };
-        rows.push(
-            <li key="first" style={{pointerEvents: currentPage == 1 ? "none" : ""}}
-                onClick={this._handleChangePage.bind(null, "first")}>
-                <span className=" disabled page-number">&laquo;</span>
-            </li>);
-        rows.push(
-            <li key="prev" style={{pointerEvents: currentPage == 1 ? "none" : ""}}
-                onClick={this._handleChangePage.bind(null, "prev")}>
-                <span className="page-number">&lsaquo;</span>
-            </li>);
-
-        // process phan trang
-        var diff = Math.floor(maxNumberPage / 2);
-        var start = Math.max(currentPage - diff, 1);
-        var end = 0;
-        if (start == 1) {
-            end = Math.min(totalPage, maxNumberPage);
-        } else {
-            end = Math.min(totalPage, start + maxNumberPage - 1);
-        }
-        for (var i = start; i <= end; i++) {
-            rows.push(
-                <li key={i} className={i == currentPage ? "active" : ""}
-                    onClick={this._handleChangePage.bind(null, i)}>
-                    <span className="page-number">{i}</span>
-                </li>);
-        }
-        rows.push(
-            <li key="next" style={{pointerEvents: currentPage == totalPage ? "none" : ""}}
-                onClick={this._handleChangePage.bind(null, "next")}>
-                <span className="page-number">&rsaquo;</span>
-            </li>);
-        rows.push(
-            <li key="last" style={{pointerEvents: currentPage == totalPage ? "none" : ""}}
-                onClick={this._handleChangePage.bind(null, "last")}>
-                <span className="page-number">&raquo;</span>
-            </li>);
-        return (
-            <ul className="pagination">
-                {rows}
-            </ul>
-        )
-    }
-});
-
 ReactDOM.render(
     <Page
     />

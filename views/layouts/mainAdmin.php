@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 /* @var $this \yii\web\View */
 /* @var $content string */
 
@@ -38,32 +38,6 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body>
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        if (location.hash) {
-            var anchor = location.hash;
-            $('body').html("<iframe  frameborder='0' width='100%' height='2000px' src='{{constant('URL')}}admin/" + anchor + "'></iframe>");
-        }
-        ;
-    });
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-56630009-1', 'auto');
-    ga('send', 'pageview');
-
-
-</script>
 <?php $this->beginBody() ?>
 <div class="navbar navbar-default" role="navigation"
      style="border-radius: 0; border-bottom: 1px solid #ccc;  background: rgba(0,0,0,0.6); background: #fff; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">
@@ -81,16 +55,6 @@ AppAsset::register($this);
             </button>
             <a href="/"><img src="<?= Yii::$app->request->baseUrl ?>/img/logo.png"
                              style="margin-left: 15px;"></a>
-        </div>
-        <div class="navbar-collapse collapse">
-
-            <?php
-            $data2 = json_decode(file_get_contents(Yii::$app->basePath . '/data.json'), true);
-            $r = rand(1, 20);
-            $quot = $data2[$r]['description'];
-            $author = $data2[$r]['author'];
-            ?>
-            <div class="tv-quot navbar-right">“<?= $quot ?>” - <b><?= $author ?></b></div>
         </div>
     </div>
 </div>
@@ -117,27 +81,6 @@ AppAsset::register($this);
 <div class="test">
     <?= $content ?>
 </div>
-
-<!--Start of Zopim Live Chat Script-->
-<script type="text/javascript">
-    window.$zopim || (function (d, s) {
-        var z = $zopim = function (c) {
-            z._.push(c)
-        }, $ = z.s =
-            d.createElement(s), e = d.getElementsByTagName(s)[0];
-        z.set = function (o) {
-            z.set._.push(o)
-        };
-        z._ = [];
-        z.set._ = [];
-        $.async = !0;
-        $.setAttribute('charset', 'utf-8');
-        $.src = '//v2.zopim.com/?2Z2Mu6WK0sGZTBwCLAYNpogsDfhYWUIQ';
-        z.t = +new Date;
-        $.type = 'text/javascript';
-        e.parentNode.insertBefore($, e)
-    })(document, 'script');
-</script>
 <!--End of Zopim Live Chat Script-->
 
 <?php $this->endBody() ?>

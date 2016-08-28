@@ -263,12 +263,6 @@ class SiteController extends Controller
         }
     }
 
-    public function actionLoginphp()
-    {
-        $this->layout = 'login';
-        return $this->render('loginphp');
-    }
-
     public function actionAuthenlogin()
     {
         if (isset($_POST['username'])) {
@@ -278,14 +272,13 @@ class SiteController extends Controller
             $password = $_POST['password'];
         }
 
-        $list = User::find()
-            ->where(['username' => $username, 'password' => md5($password)])
-            ->asArray()
-            ->count();
-        if ($list > 0) {
-            return "success";
+        $user = User::find()
+            ->where(['username' => $username, 'password' => md5($password),'status'=>'0'])
+            ->asArray();
+        if ($user->count() > 0) {
+            return $user->one()['role'];
         } else {
-            return "fail";
+            return "";
         }
     }
 
@@ -392,16 +385,16 @@ class SiteController extends Controller
             }
         } elseif ($action == "edit") {
             $divisionEdit = $_POST['division'];
-            $strSql = "UPDATE org SET name = :name,description = :description, linkSite = :linkSite, status = :status WHERE id = :id";
+            $strSql = "UPDATE org SET name = :name,description = :description, linkSite = :linkSite, logo = :logo,status = :status WHERE id = :id";
             $sql = \Yii::$app->db->createCommand($strSql);
             $sql->bindValue(':name', $divisionEdit['name'])
                 ->bindValue(':description', $divisionEdit['description'])
                 ->bindValue(':linkSite', $divisionEdit['linkSite'])
-                //->bindValue(':logo', $divisionEdit['logo'])
+                ->bindValue(':logo', base64_decode(str_replace("data:image/jpeg;base64,","",$divisionEdit['logo'])))
                 ->bindValue(':status', $divisionEdit['status'])
                 ->bindValue(':id', $divisionEdit['id']);
             $isEdit = $sql->execute();
-            if ($isEdit > 0) {
+            if ($isEdit >= 0) {
                 $statusProcess = "1";
             } else {
                 $statusProcess = "0";
@@ -409,12 +402,12 @@ class SiteController extends Controller
         } elseif ($action == "add") {
             $divisionAdd = $_POST['division'];
             $sql = \Yii::$app->db->createCommand(
-                "INSERT INTO org (name, ctime, state, picture, description, linkSite, status, logo, lmtime) 
-                VALUES (:name, now(), '0', '', :description, :linkSite, :status, null, now())");
+                "INSERT INTO org (name, ctime, state, picture, description, linkSite, logo, status, lmtime) 
+                VALUES (:name, now(), '0', '', :description, :linkSite, :logo,:status, now())");
             $sql->bindValue(':name', $divisionAdd['name'])
                 ->bindValue(':description', $divisionAdd['description'])
                 ->bindValue(':linkSite', $divisionAdd['linkSite'])
-                ->bindValue(':role', $divisionAdd['role'])
+                ->bindValue(':logo', base64_decode(str_replace("data:image/jpeg;base64,","",$divisionAdd['logo'])))
                 ->bindValue(':status', $divisionAdd['status']);
             $isAdd = $sql->execute();
             if ($isAdd > 0) {

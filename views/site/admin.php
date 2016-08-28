@@ -3,3 +3,4 @@
 </div>
 <script src="../js/browser.min.js"></script>
 <script type="text/babel" src="../js/appUser.js">
+<script type="text/babel" src="../js/pagination.js">
