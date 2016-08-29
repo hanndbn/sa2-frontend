@@ -151,7 +151,7 @@ class SiteController extends Controller
             }
             if ($position != null && $position != '') {
                 $sql .= ' AND j.position = "' . $position . '"';
-                $sql_count .= ' j.AND position = "' . $position . '"';
+                $sql_count .= ' AND j.position = "' . $position . '"';
             }
             if ($org != 0) {
                 $sql .= ' AND j.orgid = ' . $org;
