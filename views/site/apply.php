@@ -327,9 +327,7 @@ use yii\helpers\Html;
 								a = JSON.parse(msg);
 								objs = a.fields;
 								var container = '#container2';
-								$
-									.each(
-										objs,
+								$.each(objs,
 										function(key, value) {
 											data = '<div class="form-group"><label>'
 												+ value.name
