@@ -39,14 +39,9 @@
 				<div class="search_categories col-lg-2">
 					<div class="select"><select name="company" id="company" class="search_region" style="border: 0px;">
 						<option value="0">Công ty</option>
-						<option class="level-0" value="1">Tinhvan Group</option>
-						<option class="level-0" value="2">Tinhvan Outsourcing</option>
-						<option class="level-0" value="3">Tinhvan Consulting</option>
-						<option class="level-0" value="4">Tinhvan eBooks</option>
-						<option class="level-0" value="5">Tinhvan Incubator</option>
-						<option class="level-0" value="6">Tinhvan Solutions</option>
-						<option class="level-0" value="7">MC Corp</option>
-						<option class="level-0" value="8">Tinhvan Telecom</option>
+							<?php foreach ($org as $org) :?>
+								<option class="level-0" value="<?=$org['id']?>"><?=$org['description']?></option>
+							<?php endforeach;?>
 					</select></div>
 				</div>
 

@@ -146,41 +146,25 @@ header('Content-Type: application/json');
       </div>
     </div>
     <div style="border: 1px solid #ccc; border-radius: 4px; overflow: hidden; border-top-right-radius:0;border-top-left-radius:0;">
-      <?php if(!empty($jobs)):?>
+          <?php if(!empty($jobs)):?>
        <?php foreach ($jobs as $job) :?>
          <div class="tv-item">
           <div class="content col-lg-5">
-            <?=Html::a('<h4>'.$job->title.'</h4>', ['/site/vitri','id'=>$job->id])?>
-            <?php if($job->star):?>
+            <?=Html::a('<h4>'.$job['title'].'</h4>', ['/site/vitri','id'=>$job['id']])?>
+            <?php if($job['star']):?>
              <span style="float: left;width: 10%;"><img style="width: 24px;margin-bottom: 1px;" src="<?=Yii::$app->request->baseUrl?>/img/hot.png" alt=""></span>
            <?php endif;?>
          </a>
        </div>
 
        <div class="thumb col-lg-2">
-         <span class="tv-salary tt" data-placement="left" ><?=$job->quantity?></span>
+         <span class="tv-salary tt" data-placement="left" ><?=$job['quantity']?></span>
        </div>
        <div class="thumb col-lg-3">
-         <?php if($job->orgid == 8):?>
-           <a target="_blank" href="http://tinhvan.com/">Tinhvan Telecom</a>
-         <?php elseif($job->orgid==2): ?>
-           <a target="_blank" href="http://tvo.vn/">Tinhvan Outsourcing</a>
-         <?php elseif($job->orgid==3) :?>
-           <a target="_blank" href="http://tinhvanconsulting.com/">Tinhvan Consulting</a>
-         <?php elseif($job->orgid==4) :?>
-           <a target="_blank" href="http://tinhvan.com/">Tinhvan eBooks</a>
-         <?php elseif($job->orgid==5) :?>
-           <a target="_blank" href="http://vuonuomtinhvan.com/">Tinhvan Incubator</a>
-         <?php elseif($job->orgid==6) :?>
-           <a target="_blank" href="http://tinhvan.com/">Tinhvan Solutions</a>
-         <?php elseif($job->orgid==7) :?>
-           <a target="_blank" href="http://mc-corp.vn/">Minh Chau Corp</a>
-         <?php else: ?>
-           <a target="_blank" href="http://tinhvan.com/">Tinhvan Group</a>
-         <?php endif?>
+           <a target="_blank" href="<?=$job['linkSite'] ?>"><?=$job['description']?></a>
        </div>
        <div class="thumb col-lg-2" style="font-size: 13px;">
-         <?=date('d-m-Y',strtotime($job->endtime))?>
+         <?=date('d-m-Y',strtotime($job['endtime']))?>
        </div>
      </div>
    <?php endforeach;?>

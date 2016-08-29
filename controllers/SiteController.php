@@ -59,21 +59,11 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $sql = 'SELECT * FROM job j join org o on j.orgid = o.id WHERE j.id NOT IN (0,1,2,3,4) AND j.state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 17';
-        $jobs = Job::findBySql($sql)->all();
+        $sql = \Yii::$app->db->createCommand('SELECT j.id , j.title , j.star , j.quantity , o.linkSite , o.description , j.endtime  FROM job j join org o on j.orgid = o.id WHERE j.id NOT IN (0,1,2,3,4) AND j.state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 17');
+        $obj=$sql->queryAll();
         $sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) ORDER BY star DESC, opentime DESC LIMIT 3';
         $banner_jobs = Job::findBySql($sql)->all();
-
-//        s
-//        $doc = new DOMDocument();
-//        @$doc->loadHTML($html);
-//        $tags = $doc->getElementsByTagName('article')->item(0);
-
-//        foreach ($tags as $tag) {
-//            echo $tag->getAttribute('src');
-//        }
-
-        return $this->render('index', ['jobs' => $jobs, 'banner_jobs' => $banner_jobs]);
+        return $this->render('index', ['jobs' => $obj, 'banner_jobs' => $banner_jobs]);
     }
 
     public function actionLogin()
@@ -94,7 +84,9 @@ class SiteController extends Controller
         $sqlSelect = 'SELECT * FROM jobposition';
         $count = Yii::$app->db->createCommand($sql)->queryScalar();
         $lstPosition = JobPosition::findBySql($sqlSelect)->all();
-        return $this->render('list', ['count' => $count, 'lstPosition' => $lstPosition]);
+        $sqlOrg = \Yii::$app->db->createCommand('SELECT id , description FROM org');
+        $obj=$sqlOrg->queryAll();
+        return $this->render('list', ['count' => $count, 'lstPosition' => $lstPosition ,'org'=>$obj]);
     }
 
     public function actionGioithieu()
@@ -151,64 +143,46 @@ class SiteController extends Controller
             $position = strip_tags($_POST['position']);
             $key = '%' . $key . '%';
             $add = '%' . $add . '%';
-            $sql = 'SELECT * FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) AND ( title LIKE "' . $key . '" OR description LIKE "' . $key . '") AND (contact LIKE "' . $add . '")';
-            $sql_count = 'SELECT COUNT(*) FROM job WHERE id NOT IN (0,1,2,3,4) AND state NOT IN(-1) AND jobstatus IN(2,4) AND ( title LIKE "' . $key . '" OR description LIKE "' . $key . '") AND (contact LIKE "' . $add . '")';
+            $sql = 'SELECT j.title , j.id , j.quantity ,o.description ,o.linkSite , j.endtime FROM job j left join org o on j.orgid = o.id WHERE j.id NOT IN (0,1,2,3,4) AND j.state NOT IN(-1) AND j.jobstatus IN(2,4) AND ( j.title LIKE "' . $key . '" OR j.description LIKE "' . $key . '") AND (j.contact LIKE "' . $add . '")';
+            $sql_count = 'SELECT COUNT(*) FROM job j left join org o on j.orgid = o.id WHERE j.id NOT IN (0,1,2,3,4) AND j.state NOT IN(-1) AND j.jobstatus IN(2,4) AND ( j.title LIKE "' . $key . '" OR j.description LIKE "' . $key . '") AND (j.contact LIKE "' . $add . '")';
             if ($sal != '' && $sal != NULL) {
-                $sql .= ' AND salary = "' . $sal . '"';
-                $sql_count .= ' AND salary = "' . $sal . '"';
+                $sql .= ' AND j.salary = "' . $sal . '"';
+                $sql_count .= ' AND j.salary = "' . $sal . '"';
             }
             if ($position != null && $position != '') {
-                $sql .= ' AND position = "' . $position . '"';
-                $sql_count .= ' AND position = "' . $position . '"';
+                $sql .= ' AND j.position = "' . $position . '"';
+                $sql_count .= ' j.AND position = "' . $position . '"';
             }
             if ($org != 0) {
-                $sql .= ' AND orgid = ' . $org;
-                $sql_count .= ' AND orgid = ' . $org;
+                $sql .= ' AND j.orgid = ' . $org;
+                $sql_count .= ' AND j.orgid = ' . $org;
             }
             $sql .= ' ORDER BY star DESC, opentime DESC LIMIT ' . $start . ',' . $end;
-            $jobs = Job::findBySql($sql)->all();
+            $sqlJob = \Yii::$app->db->createCommand($sql);
+            $jobs=$sqlJob->queryAll();
+
+            //$jobs = Job::findBySql($sql)->all();
             $msg = "<div style='border-bottom: 1px #ccc solid;'>";
             if (!empty($jobs)) {
                 foreach ($jobs as $job) {
                     $msg .= '
                     <div class="tv-item">
                        <div class="content col-xs-12 col-sm-10 col-md-7 col-lg-5">'
-                        . Html::a('<h4>' . $job->title . '</h4>', ['/site/vitri', 'id' => $job->id]) . '
+                        . Html::a('<h4>' . $job['title'] . '</h4>', ['/site/vitri', 'id' => $job['id']]) . '
                     </div>
 
                     <div class="thumb col-xs-12 col-md-3 col-lg-2">
-                        <span class="tv-salary tt" data-placement="left">' . $job->quantity . '</span>
+                        <span class="tv-salary tt" data-placement="left">' . $job['quantity'] . '</span>
                     </div>
                     <div class="thumb col-sm-2 col-md-3 col-lg-3">';
-                    switch ($job->orgid) {
-                        case 2:
-                            $msg .= "<a target='_blank' href='http://tvo.vn/'>Tinhvan Outsourcing</a>";
-                            break;
-                        case 3:
-                            $msg .= "<a target='_blank' href='http://tinhvanconsulting.com/'>Tinhvan Consulting</a>";
-                            break;
-                        case 4:
-                            $msg .= "<a target='_blank' href='http://tinhvan.com/'>Tinhvan eBooks</a>";
-                            break;
-                        case 5:
-                            $msg .= "<a target='_blank' href='http://vuonuomtinhvan.com/'>Tinhvan Incubator</a>";
-                            break;
-                        case 6:
-                            $msg .= "<a target='_blank' href='http://tinhvan.com/'>Tinhvan Solutions</a>";
-                            break;
-                        case 7:
-                            $msg .= "<a target='_blank' href='http://mc-corp.vn/'>Minh Chau Corp</a>";
-                            break;
-                        case 8:
-                            $msg .= "<a target='_blank' href='http://tinhvan.com/'>Tinhvan Telecom</a>";
-                            break;
-
-                        default:
-                            $msg .= "<a target='_blank' href='http://tinhvan.com/'>Tinhvan Group</a>";
-                            break;
+                    if($job['description'] != null) {
+                        $msg .= "<a target='_blank' href='" . $job['linkSite'] . "'>" . $job['description'] . "</a>";
+                    }
+                    else {
+                        $msg .= "<a target='_blank' href='http://tinhvan.com/'>Tinhvan Group</a>";
                     }
                     $msg .= "</div><div class='thumb col-lg-2'>";
-                    $msg .= "<span class='tv-deadline tt' data-placement='top'>" . date('d-m-Y', strtotime($job->endtime)) . "</span></div></div>";
+                    $msg .= "<span class='tv-deadline tt' data-placement='top'>" . date('d-m-Y', strtotime($job['endtime'])) . "</span></div></div>";
                 }
                 $count = Yii::$app->db->createCommand($sql_count)->queryScalar();
                 $numberpage = ceil($count / $end);
