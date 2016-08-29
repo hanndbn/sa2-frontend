@@ -320,9 +320,9 @@ use yii\helpers\Html;
 						.ajax({
 							type : "POST",
 							//url: "http://tuyendung.tinhvan.com/apply/job/get?id="+id,
-							url : "http://192.168.53.33:8080/apply/job/get?id="
-							+ id,
-							//url: "http://192.168.53.68:8080/apply/job/get?id="+id,
+							//url : "http://192.168.53.33:8080/apply/job/get?id="
+							//+ id,
+							url: "http://192.168.53.68:8080/apply/job/get?id="+id,
 							success : function(msg) {
 								a = JSON.parse(msg);
 								objs = a.fields;
