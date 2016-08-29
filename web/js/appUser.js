@@ -1334,7 +1334,9 @@ var Login = React.createClass({
             var username = this.state.username;
             this.props.handleCookie(isLogin, username, role);
         } else {
-            $(".info").delay(3000).fadeOut('slow');
+            var info = $(".info");
+            info.fadeIn();
+            info.delay(2000).fadeOut('slow');
             this.setState({msg: "Invalid Username or Password"})
         }
     },
@@ -1342,7 +1344,6 @@ var Login = React.createClass({
         event.preventDefault();
         var username = this.state.username;
         var password = this.state.password;
-        console.log(username, password);
         var data = {
             username: username,
             password: password
@@ -1368,10 +1369,6 @@ var Login = React.createClass({
     },
     render: function () {
         var self = this;
-        var displayMsg = "";
-        if (this.props.isLogin) {
-            displayMsg = 'none';
-        }
         return (
             <div className="col-md-12 top-margin">
                 <div className="container" style={{width: '400px'}}>
@@ -1381,7 +1378,7 @@ var Login = React.createClass({
                                 Login Adminisrator
                             </div>
                             <div className="btn-warning info"
-                                 style={{display: displayMsg, textAlign: 'center'}}>{self.state.msg}
+                                 style={{display: 'none', textAlign: 'center'}}>{self.state.msg}
                             </div>
                             <div className="login-page">
                                 <div className="input-group">
@@ -1419,14 +1416,18 @@ var Login = React.createClass({
 //login end
 
 var Menu = React.createClass({
-    _handleMenuSelected(selected){
+    _handleMenuSelected: function (selected) {
         "use strict";
         this.props.handleMenuSelected(selected);
+    },
+    _handleLogout: function () {
+        this.props.handleLogout();
     },
     render: function () {
         var self = this;
         var menuPage = [];
         var role = this.props.role;
+        var username = this.props.username;
         this.props.pageMenu.map(function (menu, index) {
             var className = "";
             var classSelect = "";
@@ -1464,6 +1465,9 @@ var Menu = React.createClass({
                                     </div>
                                 </div>
                             </li>
+                            <li style={{textAlign: 'center'}}>
+                                {"Hi "}<b>{username}</b>{" !"}<label onClick={this._handleLogout} style={{float:'right',color:'red',marginRight:'5px'}}><a style={{color:'red'}}>Logout</a></label>
+                            </li>
                             {menuPage}
                         </ul>
                     </div>
@@ -1479,34 +1483,49 @@ var Page = React.createClass({
         return ({
             selected: 0,
             isLogin: false,
-            role: ''
+            role: '',
+            username : ''
         });
     },
     componentWillMount: function () {
         var isLogin = false;
         var username = this.getCookie("username");
         var role = this.getCookie("role");
+        var selected = 0;
         if (username != "") {
+            if (role == "HR") {
+                selected = 1;
+            }
             this.setCookie("username", username, 5);
+            this.setCookie("role", role, 5);
             isLogin = true;
         }
-        this.setState({isLogin: isLogin, role: role});
+        this.setState({isLogin: isLogin, role: role, selected: selected,username:username});
     },
     handleMenuSelected: function (selected) {
-        this.setState({
-            selected: selected,
-        });
+        var username = this.getCookie("username");
+        var role = this.getCookie("role");
+        if (username == "") {
+            this.setState({isLogin: false});
+        } else {
+            this.setCookie("username", username, 5);
+            this.setCookie("role", role, 5);
+            this.setState({
+                selected: selected,
+            });
+        }
     },
     handleCookie: function (isLogin, username, role) {
-        var selected = this.state.selected;
-        if(role == "HR"){
-            selected++;
-        }
         if (isLogin) {
+            var selected = 0;
+            if (role == "HR") {
+                selected = 1;
+            }
             this.setState({
                 isLogin: isLogin,
                 role: role,
-                selected:selected
+                selected: selected,
+                username:username
             });
             this.setCookie("username", username, 5);
             this.setCookie("role", role, 5);
@@ -1514,7 +1533,7 @@ var Page = React.createClass({
     },
     setCookie: function (cname, cvalue, exminutes) {
         var d = new Date();
-        d.setTime(d.getTime() + (exminutes * 1 * 1000));
+        d.setTime(d.getTime() + (exminutes * 60 * 1000));
         var expires = "expires=" + d.toUTCString();
         document.cookie = cname + "=" + cvalue + "; " + expires;
     },
@@ -1532,6 +1551,18 @@ var Page = React.createClass({
         }
         return "";
     },
+    handleLogout: function () {
+        var username = this.getCookie("username");
+        var role = this.getCookie("role");
+        if (username != "") {
+            this.setCookie("username", username, -5);
+            this.setCookie("role", role, -5);
+        }
+        this.setState({
+            isLogin:false,
+            username:''
+        });
+    },
     render: function () {
         var component = [];
         if (!this.state.isLogin) {
@@ -1540,7 +1571,6 @@ var Page = React.createClass({
                 key="-1"
                 url="../web/authenlogin"
                 handleCookie={this.handleCookie}
-                isLogin={this.state.isLogin}
             />);
         } else {
             $("body").css("background", "none");
@@ -1550,6 +1580,8 @@ var Page = React.createClass({
                 selected={this.state.selected}
                 handleMenuSelected={this.handleMenuSelected}
                 role={this.state.role}
+                handleLogout={this.handleLogout}
+                username ={this.state.username}
             />);
             if (this.state.selected === 0) {
                 component.push(<UserList
@@ -1643,6 +1675,67 @@ var Filter = React.createClass({
         );
     }
 });
+
+var Pagination = React.createClass({
+    _handleChangePage: function (key) {
+        var totalPage = this.props.totalPage;
+        this.props.handleChangePage(key, totalPage)
+    },
+    render: function () {
+        var self = this;
+        var currentPage = this.props.currentPage;
+        var totalPage = this.props.totalPage;
+        var maxNumberPage = this.props.maxNumberPage;
+        var rows = [];
+
+        var style = {
+            pointerEvents: currentPage == 1 ? "none" : ""
+        };
+        rows.push(
+            <li key="first" style={{pointerEvents: currentPage == 1 ? "none" : ""}}
+                onClick={this._handleChangePage.bind(null, "first")}>
+                <span className=" disabled page-number">&laquo;</span>
+            </li>);
+        rows.push(
+            <li key="prev" style={{pointerEvents: currentPage == 1 ? "none" : ""}}
+                onClick={this._handleChangePage.bind(null, "prev")}>
+                <span className="page-number">&lsaquo;</span>
+            </li>);
+
+        // process phan trang
+        var diff = Math.floor(maxNumberPage / 2);
+        var start = Math.max(currentPage - diff, 1);
+        var end = 0;
+        if (start == 1) {
+            end = Math.min(totalPage, maxNumberPage);
+        } else {
+            end = Math.min(totalPage, start + maxNumberPage - 1);
+        }
+        for (var i = start; i <= end; i++) {
+            rows.push(
+                <li key={i} className={i == currentPage ? "active" : ""}
+                    onClick={this._handleChangePage.bind(null, i)}>
+                    <span className="page-number">{i}</span>
+                </li>);
+        }
+        rows.push(
+            <li key="next" style={{pointerEvents: currentPage == totalPage ? "none" : ""}}
+                onClick={this._handleChangePage.bind(null, "next")}>
+                <span className="page-number">&rsaquo;</span>
+            </li>);
+        rows.push(
+            <li key="last" style={{pointerEvents: currentPage == totalPage ? "none" : ""}}
+                onClick={this._handleChangePage.bind(null, "last")}>
+                <span className="page-number">&raquo;</span>
+            </li>);
+        return (
+            <ul className="pagination">
+                {rows}
+            </ul>
+        )
+    }
+});
+
 ReactDOM.render(
     <Page
     />
