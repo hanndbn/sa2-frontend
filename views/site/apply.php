@@ -304,9 +304,9 @@ use yii\helpers\Html;
 						.ajax({
 							type : "POST",
 							//url: "http://tuyendung.tinhvan.com/apply/job/get?id="+id,
-							url : "http://192.168.53.33:8080/apply/job/get?id="
-							+ id,
-							//			url: "http://192.168.53.68:8080/apply/job/get?id="+id,
+							//url : "http://192.168.53.33:8080/apply/job/get?id="
+							//+ id,
+							url: "http://192.168.53.68:8080/apply/job/get?id="+id,
 							success : function(msg) {
 								a = JSON.parse(msg);
 								objs = a.fields;
@@ -350,8 +350,8 @@ use yii\helpers\Html;
 						.ajax({
 							type : "POST",
 							//		url: "http://tuyendung.tinhvan.com/apply/captcha/create",
-							url : "http://192.168.53.33:8080/apply/captcha/create",
-							//		url: "http://192.168.53.68:8080/apply/captcha/create",
+							// url : "http://192.168.53.33:8080/apply/captcha/create",
+									url: "http://192.168.53.68:8080/apply/captcha/create",
 							success : function(msg) {
 								objs = JSON.parse(msg);
 								data += '<label>CaptCha</label><div class="field"><div style="display: inherit;"><img src="'+objs['base64']+'"/><span id="refresh_captcha" style="margin-left: 10px;cursor: pointer;" class="fa fa-refresh"></span></div><input type="text" style="margin-top:8px; width:170px" class="input-text requiered" id="captchavalue" value=""><input type="text" style="display:none" id="captchaid" value="'+objs['id']+'"></div>';
@@ -481,9 +481,9 @@ use yii\helpers\Html;
 					data['info'] = infor;
 					console.log(data);
 					//		var url = "http://tuyendung.tinhvan.com/apply/candidate/create?"+ser(data);
-					var url = "http://192.168.53.33:8080/apply/candidate/create?"
-						+ ser(data);
-					//		var url = "http://192.168.53.68:8080/apply/candidate/create?"+ser(data);
+					//var url = "http://192.168.53.33:8080/apply/candidate/create?"
+					//	+ ser(data);
+							var url = "http://192.168.53.68:8080/apply/candidate/create?"+ser(data);
 					console.log(url);
 					loading_show();
 					$
