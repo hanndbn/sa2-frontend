@@ -296,7 +296,23 @@ use yii\helpers\Html;
 	});
 	$(document)
 		.ready(
+
 			function() {
+				if(1 == <?= $job->position?>){
+					$("#spec").val("Lập trình viên");
+				}else if(2 == <?= $job->position?>){
+					$("#spec").val("Nhân viên kinh doanh");
+				}else if(3 == <?= $job->position?>){
+					$("#spec").val("PR / Marketting");
+				}else if(4 == <?= $job->position?>){
+					$("#spec").val("Hành chính nhân sự");
+				}else if(5 == <?= $job->position?>){
+					$("#spec").val("QA / TEST");
+				}else if(6 == <?= $job->position?>){
+					$("#spec").val("Kế toán");
+				}else if(7 == <?= $job->position?>){
+					$("#spec").val("Khác");
+				}
 				function loadForm() {
 					var id = document.getElementById('jobid').value;
 					var data = "";
@@ -304,9 +320,9 @@ use yii\helpers\Html;
 						.ajax({
 							type : "POST",
 							//url: "http://tuyendung.tinhvan.com/apply/job/get?id="+id,
-							//url : "http://192.168.53.33:8080/apply/job/get?id="
-							//+ id,
-							url: "http://192.168.53.68:8080/apply/job/get?id="+id,
+							url : "http://192.168.53.33:8080/apply/job/get?id="
+							+ id,
+							//url: "http://192.168.53.68:8080/apply/job/get?id="+id,
 							success : function(msg) {
 								a = JSON.parse(msg);
 								objs = a.fields;
@@ -326,21 +342,7 @@ use yii\helpers\Html;
 											else
 												container = '#container2';
 										});
-								if(1 == a.position){
-									$("#spec").val("Lập trình viên");
-								}else if(2 == a.position){
-									$("#spec").val("Nhân viên kinh doanh");
-								}else if(3 == a.position){
-									$("#spec").val("PR / Marketting");
-								}else if(4 == a.position){
-									$("#spec").val("Hành chính nhân sự");
-								}else if(5 == a.position){
-									$("#spec").val("QA / TEST");
-								}else if(6 == a.position){
-									$("#spec").val("Kế toán");
-								}else if(7 == a.position){
-									$("#spec").val("Khác");
-								}
+
 							}
 						});
 				}
@@ -361,7 +363,7 @@ use yii\helpers\Html;
 				}
 				//loadCaptCha();
 				//setInterval(function(){loadCaptCha()},300000);
-				loadForm();
+				//	loadForm();
 				var flag = false;
 				function validate() {
 					$('.required').each(function() {
