@@ -25,13 +25,13 @@ use yii\helpers\Html;
 				<div class="panel-body">
 					<table style="border: 0px; width: 100%;">
 						<tr>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
 									<label>Họ và tên</label><span style="color: red">*</span> <input
 										type="text" class="form-control required" name="name"
 										id="account_name" placeholder="Nguyễn Văn A" maxlength="50">
 								</div>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-left: 10px;">
 									<label>Giới tính</label><span style="color: red">*</span> <select
 										class="form-control" id="gender">
@@ -42,7 +42,7 @@ use yii\helpers\Html;
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
 									<label>Ngày sinh</label><span style="color: red">*</span> <input
 										id="birth" type="text"
@@ -50,7 +50,7 @@ use yii\helpers\Html;
 										placeholder="dd-mm-yyyy">
 								</div>
 							</td>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-left: 10px;">
 									<label>Địa chỉ hiện tại</label><span style="color: red">*</span>
 									<input type="text" class="form-control required"
@@ -59,14 +59,14 @@ use yii\helpers\Html;
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
 									<label>Số điện thoại</label><span style="color: red">*</span> <input
 										type="text" class="form-control required" id="phone"
 										maxlength="20">
 								</div>
 							</td>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-left: 10px;">
 									<label>Email</label><span style="color: red">*</span> <input
 										type="text" name="email" class="form-control required"
@@ -76,15 +76,13 @@ use yii\helpers\Html;
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2">
+							<td colspan="2" style="background: white;">
 								<div class="form-group">
 									<label>Facebook</label> <input type="text" class="form-control"
 																   id="facebook-add" maxlength="250">
 								</div>
 							</td>
 						</tr>
-						<div id="container2"></div>
-						<div id="container2"></div>
 					</table>
 				</div>
 			</div>
@@ -95,56 +93,30 @@ use yii\helpers\Html;
 				<div class="panel-body">
 					<table style="border: 0px; width: 100%;">
 						<tr>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
-									<label>Vị trí ứng tuyển</label><span style="color: red">*</span>
-									<select class="form-control required" id="spec">
-										<option value="">Vui lòng chọn ...</option>
-										<option value="Lập trình viên">Lập trình viên</option>
-										<option value="Nhân viên kinh doanh">Nhân viên kinh
-											doanh</option>
-										<option value="PR / Marketting">PR / Marketting</option>
-										<option value="Hành chính nhân sự">Hành chính nhân sự</option>
-										<option value="QA / TEST">QA / TEST</option>
-										<option value="Kế toán">Kế toán</option>
-										<option value="Khác">Khác</option>
-									</select>
+									<label>Tên trường</label><span style="color: red">*</span>
+									<input type="text" class="form-control required" name="name"
+										id="university-name" placeholder="Chỉ ghi thông tin bằng cấp cao nhất" >
 								</div>
 							</td>
-							<td>
-								<div class="form-group" style="margin-left: 10px;">
-									<label>Thời gian sẵn sàng làm việc</label><span
-										style="color: red">*</span> <input id="start-date" type="text"
-																		   class="datepicker form-control required"
-																		   placeholder="dd-mm-yyyy">
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="form-group" style="margin-right: 10px;">
-									<label>Tên trường</label><span style="color: red">*</span> <input
-										type="text" class="form-control required" name="name"
-										id="university-name" maxlength="250">
-								</div>
-							</td>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-left: 10px;">
 									<label>Hình thức đào tạo</label><span style="color: red">*</span>
 									<input type="text" class="form-control required" name="name"
-										   id="type-of-trainning" maxlength="250">
+										   id="type-of-trainning" maxlength="250" >
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
 									<label>Chuyên ngành</label><span style="color: red">*</span> <input
 										type="text" class="form-control required" name="name"
 										id="mayjor" maxlength="250">
 								</div>
 							</td>
-							<td>
+							<td style="background: white;">
 								<div class="form-group" style="margin-left: 10px;">
 									<label>Xếp loại</label><span style="color: red">*</span> <select
 										class="form-control required" id="rank">
@@ -157,7 +129,7 @@ use yii\helpers\Html;
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2">
+							<td colspan="2" style="background: white;">
 								<div class="form-group">
 									<label>Các chứng chỉ, bằng cấp khác</label>
 									<textarea class="form-control" name="name" id="otherquality"
@@ -167,8 +139,34 @@ use yii\helpers\Html;
 								</div>
 							</td>
 						</tr>
+                        <tr>
+                            <td style="background: white;">
+                                <div class="form-group" style="margin-right: 10px;">
+                                    <label>Vị trí ứng tuyển</label><span style="color: red">*</span>
+                                    <select class="form-control required" id="spec">
+                                        <option value="">Vui lòng chọn ...</option>
+                                        <option value="Lập trình viên">Lập trình viên</option>
+                                        <option value="Nhân viên kinh doanh">Nhân viên kinh
+                                            doanh</option>
+                                        <option value="PR / Marketting">PR / Marketting</option>
+                                        <option value="Hành chính nhân sự">Hành chính nhân sự</option>
+                                        <option value="QA / TEST">QA / TEST</option>
+                                        <option value="Kế toán">Kế toán</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td style="background: white;">
+                                <div class="form-group" style="margin-left: 10px;">
+                                    <label>Thời gian sẵn sàng làm việc</label><span
+                                        style="color: red">*</span> <input id="start-date" type="text"
+                                                                           class="datepicker form-control required"
+                                                                           placeholder="dd-mm-yyyy">
+                                </div>
+                            </td>
+                        </tr>
 						<tr>
-							<td colspan="2">
+							<td colspan="2" style="background: white;">
 								<div class="form-group">
 									<label>Quá trình công tác</label><span style="color: red">*</span>
 									<textarea class="form-control required" name="name" id="exp"
@@ -190,7 +188,7 @@ use yii\helpers\Html;
 				<div class="panel-body">
 					<table style="border: 0px; width: 100%;">
 						<tr>
-							<td>
+							<td style="background: white;">
 								<div class="form-group">
 									<label>Lý do muốn làm việc tại Tinh Vân</label>
 									<textarea class="form-control" name="name" id="result" rows="5"
@@ -200,7 +198,7 @@ use yii\helpers\Html;
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td style="background: white;">
 								<div class="form-group">
 									<label>Biết thông tin tuyển dụng qua kênh nào?</label> <input
 										type="text" class="form-control" name="name" id="recruitement"
@@ -219,20 +217,20 @@ use yii\helpers\Html;
 					<table style="border: 0px; width: 100%;">
 						<div class="form-group">
 							<tr>
-								<td colspan="2">
+								<td colspan="2" style="background: white;">
 									<div style="width: 50%;margin: 10px 0 10px;">
 										Nếu bạn không có mẫu CV thì có thể tải <a <?php if($job->cvform=="") :?>href="http://tuyendung.tinhvan.com/public/CV.doc"<?php else:?>href="<?=$job->cvform?>"<?php endif;?> title="">tại đây.</a>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<td>
+								<td style="background: white;">
 									<div class="field upload_file">
 										<input type="radio" id="r1" name="optionsRadios"
 											   class="optionsRadios" value="file" checked>
 									</div>
 								</td>
-								<td>
+								<td style="background: white;">
 									<div class="field upload_file">
 										<form id="submit-job-form" class="job-manager-form"
 											  enctype="multipart/form-data">
@@ -246,11 +244,11 @@ use yii\helpers\Html;
 								</td>
 							</tr>
 							<tr>
-								<td>
+								<td style="background: white;">
 									<input type="radio" id="r2" name="optionsRadios"
 										   class="optionsRadios" value="link">
 								</td>
-								<td>
+								<td style="background: white;">
 									<input type="text"
 										   class="input-text form-control" name="link_website"
 										   id="link_website" placeholder="http://" value="" maxlength="250">
@@ -259,7 +257,7 @@ use yii\helpers\Html;
 						</div>
 
 						<tr>
-							<td colspan="2">
+							<td colspan="2" style="background: white;">
 								<div class="form-group">
 									<div id="captcha"></div>
 									<div id="loading"></div>
@@ -296,7 +294,23 @@ use yii\helpers\Html;
 	});
 	$(document)
 		.ready(
+
 			function() {
+				if(1 == <?= $job->position?>){
+					$("#spec").val("Lập trình viên");
+				}else if(2 == <?= $job->position?>){
+					$("#spec").val("Nhân viên kinh doanh");
+				}else if(3 == <?= $job->position?>){
+					$("#spec").val("PR / Marketting");
+				}else if(4 == <?= $job->position?>){
+					$("#spec").val("Hành chính nhân sự");
+				}else if(5 == <?= $job->position?>){
+					$("#spec").val("QA / TEST");
+				}else if(6 == <?= $job->position?>){
+					$("#spec").val("Kế toán");
+				}else if(7 == <?= $job->position?>){
+					$("#spec").val("Khác");
+				}
 				function loadForm() {
 					var id = document.getElementById('jobid').value;
 					var data = "";
@@ -311,9 +325,7 @@ use yii\helpers\Html;
 								a = JSON.parse(msg);
 								objs = a.fields;
 								var container = '#container2';
-								$
-									.each(
-										objs,
+								$.each(objs,
 										function(key, value) {
 											data = '<div class="form-group"><label>'
 												+ value.name
@@ -326,21 +338,7 @@ use yii\helpers\Html;
 											else
 												container = '#container2';
 										});
-								if(1 == a.position){
-									$("#spec").val("Lập trình viên");
-								}else if(2 == a.position){
-									$("#spec").val("Nhân viên kinh doanh");
-								}else if(3 == a.position){
-									$("#spec").val("PR / Marketting");
-								}else if(4 == a.position){
-									$("#spec").val("Hành chính nhân sự");
-								}else if(5 == a.position){
-									$("#spec").val("QA / TEST");
-								}else if(6 == a.position){
-									$("#spec").val("Kế toán");
-								}else if(7 == a.position){
-									$("#spec").val("Khác");
-								}
+
 							}
 						});
 				}
@@ -361,7 +359,7 @@ use yii\helpers\Html;
 				}
 				//loadCaptCha();
 				//setInterval(function(){loadCaptCha()},300000);
-				loadForm();
+				//	loadForm();
 				var flag = false;
 				function validate() {
 					$('.required').each(function() {
