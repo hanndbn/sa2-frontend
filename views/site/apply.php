@@ -97,7 +97,7 @@ use yii\helpers\Html;
 								<div class="form-group" style="margin-right: 10px;">
 									<label>Tên trường</label><span style="color: red">*</span>
 									<input type="text" class="form-control required" name="name"
-										id="university-name" placeholder="Chỉ ghi thông tin bằng cấp cao nhất" >
+										id="university-name" placeholder="Chỉ ghi thông tin bằng cấp cao nhất" maxlength="250" >
 								</div>
 							</td>
 							<td style="background: white;">
@@ -140,19 +140,15 @@ use yii\helpers\Html;
 							</td>
 						</tr>
                         <tr>
-                            <td style="background: white;">
+                            <td style="background: white; max-width: 198px">
                                 <div class="form-group" style="margin-right: 10px;">
                                     <label>Vị trí ứng tuyển</label><span style="color: red">*</span>
                                     <select class="form-control required" id="spec">
                                         <option value="">Vui lòng chọn ...</option>
-                                        <option value="Lập trình viên">Lập trình viên</option>
-                                        <option value="Nhân viên kinh doanh">Nhân viên kinh
-                                            doanh</option>
-                                        <option value="PR / Marketting">PR / Marketting</option>
-                                        <option value="Hành chính nhân sự">Hành chính nhân sự</option>
-                                        <option value="QA / TEST">QA / TEST</option>
-                                        <option value="Kế toán">Kế toán</option>
-                                        <option value="Khác">Khác</option>
+										<?php foreach ($lstPosition as $pos){?>
+											<option  value="<?=$pos->id?>"><?=$pos->name?></option>
+										<?php }?>
+
                                     </select>
                                 </div>
                             </td>
@@ -296,21 +292,8 @@ use yii\helpers\Html;
 		.ready(
 
 			function() {
-				if(1 == <?= $job->position?>){
-					$("#spec").val("Lập trình viên");
-				}else if(2 == <?= $job->position?>){
-					$("#spec").val("Nhân viên kinh doanh");
-				}else if(3 == <?= $job->position?>){
-					$("#spec").val("PR / Marketting");
-				}else if(4 == <?= $job->position?>){
-					$("#spec").val("Hành chính nhân sự");
-				}else if(5 == <?= $job->position?>){
-					$("#spec").val("QA / TEST");
-				}else if(6 == <?= $job->position?>){
-					$("#spec").val("Kế toán");
-				}else if(7 == <?= $job->position?>){
-					$("#spec").val("Khác");
-				}
+					$("#spec").val(<?= $job->position?>);
+
 				function loadForm() {
 					var id = document.getElementById('jobid').value;
 					var data = "";
@@ -320,7 +303,7 @@ use yii\helpers\Html;
 							//url: "http://tuyendung.tinhvan.com/apply/job/get?id="+id,
 							//url : "http://192.168.53.33:8080/apply/job/get?id="
 							//+ id,
-							url: "http://192.168.53.68:8080/apply/job/get?id="+id,
+							url: "/apply/job/get?id="+id,
 							success : function(msg) {
 								a = JSON.parse(msg);
 								objs = a.fields;
@@ -349,7 +332,7 @@ use yii\helpers\Html;
 							type : "POST",
 							//		url: "http://tuyendung.tinhvan.com/apply/captcha/create",
 							// url : "http://192.168.53.33:8080/apply/captcha/create",
-									url: "http://192.168.53.68:8080/apply/captcha/create",
+									url: "/apply/captcha/create",
 							success : function(msg) {
 								objs = JSON.parse(msg);
 								data += '<label>CaptCha</label><div class="field"><div style="display: inherit;"><img src="'+objs['base64']+'"/><span id="refresh_captcha" style="margin-left: 10px;cursor: pointer;" class="fa fa-refresh"></span></div><input type="text" style="margin-top:8px; width:170px" class="input-text requiered" id="captchavalue" value=""><input type="text" style="display:none" id="captchaid" value="'+objs['id']+'"></div>';
@@ -481,7 +464,7 @@ use yii\helpers\Html;
 					//		var url = "http://tuyendung.tinhvan.com/apply/candidate/create?"+ser(data);
 					//var url = "http://192.168.53.33:8080/apply/candidate/create?"
 					//	+ ser(data);
-							var url = "http://192.168.53.68:8080/apply/candidate/create?"+ser(data);
+							var url = "/apply/candidate/create?"+ser(data);
 					console.log(url);
 					loading_show();
 					$
