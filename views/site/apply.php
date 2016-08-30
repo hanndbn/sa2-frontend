@@ -95,9 +95,9 @@ use yii\helpers\Html;
 						<tr>
 							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
-									<label>Tên trường đào tạo</label><span style="color: red">*</span> <input
-										type="text" class="form-control required" name="name"
-										id="university-name" maxlength="250" placeholder="Nhập tên có bằng cấp cao nhất">
+									<label>Tên trường</label><span style="color: red">*</span>
+									<input type="text" class="form-control required" name="name"
+										id="university-name" placeholder="Chỉ ghi thông tin bằng cấp cao nhất" >
 								</div>
 							</td>
 							<td style="background: white;">
