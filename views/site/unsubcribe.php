@@ -3,7 +3,7 @@
         var myParam = location.search.split('mail=')[1];
      //   $.post("http://localhost:8080/apply/subscriber/unsubscribe",
       //  $.post("http://192.168.53.68:8080/apply/subscriber/unsubscribe",
-        $.post("http://tuyendung.tinhvan.com/apply/subscriber/unsubscribe",
+        $.post("/apply/subscriber/unsubscribe",
             {
                 email: myParam
             });
