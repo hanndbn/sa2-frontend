@@ -699,7 +699,7 @@ ul, li {
 }
 
 .upload-content label {
-    text-transform: uppercase;
+  /*  text-transform: uppercase; */
 }
 
 .field input[type="text"], input[type="name"], input[type="email"], input[type="phone"], input[type="search"], input[type="password"], input[type="number"] {

@@ -95,47 +95,21 @@ use yii\helpers\Html;
 						<tr>
 							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
-									<label>Vị trí ứng tuyển</label><span style="color: red">*</span>
-									<select class="form-control required" id="spec">
-										<option value="">Vui lòng chọn ...</option>
-										<option value="Lập trình viên">Lập trình viên</option>
-										<option value="Nhân viên kinh doanh">Nhân viên kinh
-											doanh</option>
-										<option value="PR / Marketting">PR / Marketting</option>
-										<option value="Hành chính nhân sự">Hành chính nhân sự</option>
-										<option value="QA / TEST">QA / TEST</option>
-										<option value="Kế toán">Kế toán</option>
-										<option value="Khác">Khác</option>
-									</select>
-								</div>
-							</td>
-							<td style="background: white;">
-								<div class="form-group" style="margin-left: 10px;">
-									<label>Thời gian sẵn sàng làm việc</label><span
-										style="color: red">*</span> <input id="start-date" type="text"
-																		   class="datepicker form-control required"
-																		   placeholder="dd-mm-yyyy">
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td style="background: white;">
-								<div class="form-group" style="margin-right: 10px;">
-									<label>Tên trường</label><span style="color: red">*</span> <input
+									<label>Tên trường đào tạo</label><span style="color: red">*</span> <input
 										type="text" class="form-control required" name="name"
-										id="university-name" maxlength="250">
+										id="university-name" maxlength="250" placeholder="Nhập tên có bằng cấp cao nhất">
 								</div>
 							</td>
 							<td style="background: white;">
 								<div class="form-group" style="margin-left: 10px;">
 									<label>Hình thức đào tạo</label><span style="color: red">*</span>
 									<input type="text" class="form-control required" name="name"
-										   id="type-of-trainning" maxlength="250">
+										   id="type-of-trainning" maxlength="250" >
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<td style="background: white;"
+							<td style="background: white;">
 								<div class="form-group" style="margin-right: 10px;">
 									<label>Chuyên ngành</label><span style="color: red">*</span> <input
 										type="text" class="form-control required" name="name"
@@ -165,6 +139,32 @@ use yii\helpers\Html;
 								</div>
 							</td>
 						</tr>
+                        <tr>
+                            <td style="background: white;">
+                                <div class="form-group" style="margin-right: 10px;">
+                                    <label>Vị trí ứng tuyển</label><span style="color: red">*</span>
+                                    <select class="form-control required" id="spec">
+                                        <option value="">Vui lòng chọn ...</option>
+                                        <option value="Lập trình viên">Lập trình viên</option>
+                                        <option value="Nhân viên kinh doanh">Nhân viên kinh
+                                            doanh</option>
+                                        <option value="PR / Marketting">PR / Marketting</option>
+                                        <option value="Hành chính nhân sự">Hành chính nhân sự</option>
+                                        <option value="QA / TEST">QA / TEST</option>
+                                        <option value="Kế toán">Kế toán</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td style="background: white;">
+                                <div class="form-group" style="margin-left: 10px;">
+                                    <label>Thời gian sẵn sàng làm việc</label><span
+                                        style="color: red">*</span> <input id="start-date" type="text"
+                                                                           class="datepicker form-control required"
+                                                                           placeholder="dd-mm-yyyy">
+                                </div>
+                            </td>
+                        </tr>
 						<tr>
 							<td colspan="2" style="background: white;">
 								<div class="form-group">
