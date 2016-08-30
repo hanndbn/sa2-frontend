@@ -140,7 +140,7 @@ use yii\helpers\Html;
 							</td>
 						</tr>
                         <tr>
-                            <td style="background: white;">
+                            <td style="background: white; max-width: 198px">
                                 <div class="form-group" style="margin-right: 10px;">
                                     <label>Vị trí ứng tuyển</label><span style="color: red">*</span>
                                     <select class="form-control required" id="spec">
