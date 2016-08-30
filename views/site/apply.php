@@ -97,7 +97,7 @@ use yii\helpers\Html;
 								<div class="form-group" style="margin-right: 10px;">
 									<label>Tên trường</label><span style="color: red">*</span>
 									<input type="text" class="form-control required" name="name"
-										id="university-name" placeholder="Chỉ ghi thông tin bằng cấp cao nhất" >
+										id="university-name" placeholder="Chỉ ghi thông tin bằng cấp cao nhất" maxlength="250" >
 								</div>
 							</td>
 							<td style="background: white;">
@@ -145,14 +145,10 @@ use yii\helpers\Html;
                                     <label>Vị trí ứng tuyển</label><span style="color: red">*</span>
                                     <select class="form-control required" id="spec">
                                         <option value="">Vui lòng chọn ...</option>
-                                        <option value="Lập trình viên">Lập trình viên</option>
-                                        <option value="Nhân viên kinh doanh">Nhân viên kinh
-                                            doanh</option>
-                                        <option value="PR / Marketting">PR / Marketting</option>
-                                        <option value="Hành chính nhân sự">Hành chính nhân sự</option>
-                                        <option value="QA / TEST">QA / TEST</option>
-                                        <option value="Kế toán">Kế toán</option>
-                                        <option value="Khác">Khác</option>
+										<?php foreach ($lstPosition as $pos){?>
+											<option  value="<?=$pos->id?>"><?=$pos->name?></option>
+										<?php }?>
+
                                     </select>
                                 </div>
                             </td>
@@ -296,21 +292,8 @@ use yii\helpers\Html;
 		.ready(
 
 			function() {
-				if(1 == <?= $job->position?>){
-					$("#spec").val("Lập trình viên");
-				}else if(2 == <?= $job->position?>){
-					$("#spec").val("Nhân viên kinh doanh");
-				}else if(3 == <?= $job->position?>){
-					$("#spec").val("PR / Marketting");
-				}else if(4 == <?= $job->position?>){
-					$("#spec").val("Hành chính nhân sự");
-				}else if(5 == <?= $job->position?>){
-					$("#spec").val("QA / TEST");
-				}else if(6 == <?= $job->position?>){
-					$("#spec").val("Kế toán");
-				}else if(7 == <?= $job->position?>){
-					$("#spec").val("Khác");
-				}
+					$("#spec").val(<?= $job->position?>);
+
 				function loadForm() {
 					var id = document.getElementById('jobid').value;
 					var data = "";

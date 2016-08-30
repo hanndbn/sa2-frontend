@@ -297,6 +297,7 @@ AppAsset::register($this);
     }(document, 'script', 'facebook-jssdk'));
 </script>
 <!--                    live chat-->
+
 <div id="fb-root"></div>
 <script>
     $(document).ready(function() {

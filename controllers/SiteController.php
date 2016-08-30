@@ -123,7 +123,9 @@ class SiteController extends Controller
     public function actionUngtuyen($id)
     {
         $job = Job::findOne($id);
-        return $this->render('apply', ['job' => $job]);
+        $sqlSelect = 'SELECT * FROM jobposition';
+        $lstPosition = JobPosition::findBySql($sqlSelect)->all();
+        return $this->render('apply', ['job' => $job, 'lstPosition' => $lstPosition]);
     }
 
     public function actionAjaxjob()
