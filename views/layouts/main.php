@@ -270,9 +270,9 @@ AppAsset::register($this);
                 <div>
 
                     <div class="foot_so" style="float:right">
-                        <a target="_blank" href="https://www.facebook.com/TinhvanGroup"><img src="./icon/linkedin.png" pagespeed_url_hash="473393423"></a>
+                        <a target="_blank" href="https://www.facebook.com/TinhvanGroup"><img src="./icon/facebook.png" pagespeed_url_hash="473393423"></a>
                         <a target="_blank" href="https://twitter.com/tinhvangroup"><img src="./icon/twitter.png" pagespeed_url_hash="1842586480"></a>
-                        <a target="_blank" href="https://www.linkedin.com/company/tinh-van-corp"><img src="./icon/facebook.png" pagespeed_url_hash="2923697231"></a>
+                        <a target="_blank" href="https://www.linkedin.com/company/tinh-van-corp"><img src="./icon/linkedin.png" pagespeed_url_hash="2923697231"></a>
                     </div>
                     <div class="foot_find" style="float:right;margin-right: 20px;">
                         <p>
