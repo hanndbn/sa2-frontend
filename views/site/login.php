@@ -1,5 +1,5 @@
 <div class="login-align">
-    <img alt="Apply2" src="http://apply.vuonuom.tv/res/Image/login.png">
+    <img alt="Apply2" src="http://my.tinhvan.com/wp-content/themes/mytinhvan/images/logo.png">
     <h1>
       Đăng nhập
     </h1>
