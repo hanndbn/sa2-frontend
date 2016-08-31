@@ -11,10 +11,10 @@
 
 		<div class="search_jobs ">
 
-			<div class="search_keywords col-lg-2">
-				<input type="text" name="keyword" id="keyword" placeholder="Nhập tiêu đề công việc" value="">
+			<div class="search_keywords col-lg-2" style="width: 20%;">
+				<input type="text" name="keyword" id="keyword" placeholder="Nhập tiêu đề công việc" value="" style="width: 100%;">
 			</div>
-			<div class="col-lg-2">
+			<div class="col-lg-2" style="width: 20%;">
 				<div class="select" >
 					<select name="position" id="position" class="search_region" style="border: 0px;">
 						<option value="">Vị Trí</option>
@@ -38,7 +38,7 @@
 					<option class="level-0" value="Trên 30 triệu">Trên 30 triệu</option>
 				</select></div></div>
 
-				<div class="search_categories col-lg-2">
+				<div class="search_categories col-lg-2" style="width: 20%;">
 					<div class="select"><select name="company" id="company" class="search_region" style="border: 0px;">
 						<option value="0">Công ty</option>
 							<?php foreach ($org as $org) :?>
@@ -47,7 +47,7 @@
 					</select></div>
 				</div>
 
-				<div class="search_categories col-lg-2">
+				<div class="search_categories col-lg-2" style="width: 20%;">
 					<div class="select"><select name="address" id="address" class="search_region" style="border: 0px;">
 						<option value="">Địa Điểm</option>
 						<option class="level-0" value="Hà Nội">Hà Nội</option>
@@ -57,7 +57,7 @@
 					</select></div>
 				</div>
 
-				<div class="search_submit col-lg-2">
+				<div class="search_submit col-lg-2" style="width: 20%;">
 					<input type="button" name="submit" id="search" value="Tìm kiếm">
 				</div>
 
