@@ -231,7 +231,7 @@ use yii\helpers\Html;
 										<form id="submit-job-form" class="job-manager-form"
 											  enctype="multipart/form-data">
 											<input type="file" id="file_cv" class="input-text"
-												   name="file_cv" accept="docx|doc|pdf placeholder="">
+												   name="file_cv" accept="docx|doc|pdfplaceholder="">
 										</form>
 										<small class="description" style="margin-left:15px;"> Định dạng docx, doc, pdf
 											dung lượng tối đa là 2MB.
@@ -462,9 +462,9 @@ use yii\helpers\Html;
 					data['info'] = infor;
 					console.log(data);
 					//		var url = "http://tuyendung.tinhvan.com/apply/candidate/create?"+ser(data);
-					//var url = "http://192.168.53.33:8080/apply/candidate/create?"
-					//	+ ser(data);
-							var url = "/apply/candidate/create?"+ser(data);
+					var url = "http://192.168.53.33:8080/apply/candidate/create?"
+						+ ser(data);
+					//		var url = "/apply/candidate/create?"+ser(data);
 					console.log(url);
 					loading_show();
 					$
@@ -478,7 +478,7 @@ use yii\helpers\Html;
 							contentType : false,
 							error : function(xhr, status, error) {
 								loading_hide();
-								alert("Địa chỉ mail không tồn tại!");
+								alert("Có lỗi trong quá trình ứng tuyến!");
 							},
 							xhr : function() {
 								myXhr = $.ajaxSettings.xhr();
