@@ -246,7 +246,7 @@ AppAsset::register($this);
                     Lầu 2 – D1 Tòa nhà Mirae Business,  268 Tô Hiến Thành  Phường 15, Quận 10, Tp. Hồ Chí Minh <br/>
                     <b>Điện thoại:</b> (08) 6296 6481<br/>
                     <b>Fax:</b> (08) 6296 6482<br/>
-                    <b>Email:</b>  hcm@tinhvan.com
+                    <b>Email:</b>  info@tinhvan.com
                 </li>
             </ul>
 
