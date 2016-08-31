@@ -23,7 +23,7 @@
 				</div>
 			</div>
 
-			<div class="search_location col-lg-2">
+			<div class="search_location col-lg-2" style="display:none">
 				<div class="select"><select name="salary" id="salary" class="search_region" style="border: 0px;">
 					<option value="">Mức Lương</option>
 					<option class="level-0" value="Thỏa thuận">Thỏa thuận</option>
@@ -50,6 +50,8 @@
 						<option value="">Địa Điểm</option>
 						<option class="level-0" value="Hà Nội">Hà Nội</option>
 						<option class="level-0" value="Hồ Chí Minh">Hồ Chí Minh</option>
+						<option class="level-0" value="Đà Nẵng">Đà Nẵng</option>
+						<option class="level-0" value="Japan">Japan</option>
 					</select></div>
 				</div>
 

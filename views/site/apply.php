@@ -281,7 +281,7 @@ use yii\helpers\Html;
 			//nextText: '&rarr;',
 			//prevText: '&larr;',
 			showOtherMonths : true,
-			//dateFormat: 'dd MM yy',
+			dateFormat: 'dd-mm-yy',
 			dayNamesMin : [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
 			//showOn: "button",
 			//buttonImage: "img/calendar-blue.png",
