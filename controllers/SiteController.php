@@ -432,18 +432,23 @@ class SiteController extends Controller
         libxml_use_internal_errors(true);
         $article = '';
         $src = '';
+        $link = '';
         if (isset($dom)) {
             $dom->loadHTML($ret);
             $data = $dom->getElementsByTagName('article')->item(0);
             if (isset($data)) {
                 $article = $data->getElementsByTagName('section')->item(0)->nodeValue;
                 $image = $data->getElementsByTagName('img')->item(0);
+                $link = $data->getElementsByTagName('a')->item(0);
                 if (isset($image)) {
                     $src = $image->getAttribute('src');
                 }
+                if(isset($link)){
+                    $link = $link->getAttribute('href');
+                }
             }
         }
-        $data = array('article' => $article, 'image' => $src, 'msg' => $ret);
+        $data = array('article' => $article, 'image' => $src, 'msg' => $ret,'link'=>$link);
         $result = json_encode($data);
         return $result;
     }
