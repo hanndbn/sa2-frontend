@@ -1569,7 +1569,7 @@ var Page = React.createClass({
             $("body").css("background", "url(img/bg2.jpg) #0F1F2D no-repeat center center fixed");
             component.push(<Login
                 key="-1"
-                url="../web/authenlogin"
+                url="/authenlogin"
                 handleCookie={this.handleCookie}
             />);
         } else {
@@ -1586,13 +1586,13 @@ var Page = React.createClass({
             if (this.state.selected === 0) {
                 component.push(<UserList
                     key="1"
-                    url="../web/ajaxuser"
+                    url="/ajaxuser"
                     headerFilter="user"
                 />)
             } else if (this.state.selected === 1) {
                 component.push(<DivisionList
                     key="2"
-                    url="../web/ajaxdivision"
+                    url="/ajaxdivision"
                     headerFilter="division"
                 />)
             }

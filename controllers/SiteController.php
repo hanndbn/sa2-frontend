@@ -249,7 +249,7 @@ class SiteController extends Controller
         }
 
         $user = User::find()
-            ->where(['username' => $username, 'password' => md5($password),'status'=>'0'])
+            ->where(['username' => $username, 'password' => md5($password),'status'=>'0','role'=>'ADMIN'])
             ->asArray();
         if ($user->count() > 0) {
             return $user->one()['role'];
