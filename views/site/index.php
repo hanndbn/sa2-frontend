@@ -87,9 +87,9 @@ header('Content-Type: application/json');
            {
                $('.loadingTV').hide();
                var objData = jQuery.parseJSON(msg);
-               //alert(objData.msg);
                $('#image-tv').attr('src',objData.image)
                $('#article-tv').text(objData.article);
+               $('#link-tv').attr('href',objData.link);
                $.ajax
                ({
                    type: "POST",
@@ -104,12 +104,13 @@ header('Content-Type: application/json');
                        var objData = jQuery.parseJSON(msg);
                        $('#image-xl').attr('src',objData.image)
                        $('#article-xl').text(objData.article);
+                       $('#link-xl').attr('href',objData.link);
                        $.ajax
                        ({
                            type: "POST",
                            url: "<?=Url::toRoute('site/getsourcedata')?>",
                            data: {
-                               url: 'http://my.tinhvan.com/category/hanh_trinh_tuoi_20/'
+                               url: 'http://my.tinhvan.com/category/hanh_trinh_tuoi_20/hinh_anh/'
                            },
                            async: true,
                            success: function(msg)
@@ -119,6 +120,7 @@ header('Content-Type: application/json');
                                //alert(objData.msg);
                                $('#image-ht').attr('src',objData.image)
                                $('#article-ht').text(objData.article);
+                               $('#link-ht').attr('href',objData.link);
                            }
                        });
                    }
@@ -190,7 +192,7 @@ header('Content-Type: application/json');
    <li class="slogan" style="min-height: 200px;">
     <h3><span>Người Tinh Vân</span></h3>
     <p style="text-align: justify; font-style: italic;float:left">
-      <a target="_blank" href="http://my.tinhvan.com/category/nguoi_tinhvan/"><img src="" style='width:120px;padding-right:10px;float:left;' id="image-tv"></a>
+      <a target="_blank" href="http://my.tinhvan.com/category/nguoi_tinhvan/" id="link-tv"><img src="" style='width:160px;padding-right:10px;float:left;max-height: 123px;' id="image-tv"></a>
       <span style="font-size: 13px;" id="article-tv"></span>
         <div style="padding-left: 74px;margin-top:  51px;" class="loadingTV">
           <img src='<?=Yii::$app->request->baseUrl?>/img/ajax-loader.gif'/>
@@ -198,7 +200,7 @@ header('Content-Type: application/json');
     </li>
     <li style="min-height: 200px;">
       <h3 style=''><span>Xa Lộ Tinh Vân</span></h3>
-        <a target="_blank" href="http://my.tinhvan.com/category/xa-lo-tinh-van/"><img src="" style='width:120px;padding-right:10px;float:left;' id="image-xl"></a>
+        <a target="_blank" href="http://my.tinhvan.com/category/xa-lo-tinh-van/" id="link-xl"><img src="" style='width:160px;padding-right:10px;float:left;max-height: 123px;' id="image-xl"></a>
         <span style="font-size: 13px;" id="article-xl"></span>
         <div style="padding-left: 74px;margin-top:  51px;" class="loadingXL">
             <img src='<?=Yii::$app->request->baseUrl?>/img/ajax-loader.gif' />
@@ -206,7 +208,7 @@ header('Content-Type: application/json');
     </li>
     <li style="min-height: 200px;">
       <h3 style=''><span>Hành Trình Tuổi 20</span></h3>
-        <a target="_blank" href="http://my.tinhvan.com/category/hanh_trinh_tuoi_20/"><img src=""  style='width:120px;padding-right:10px;float:left;' id="image-ht"></a>
+        <a target="_blank" href="http://my.tinhvan.com/category/hanh_trinh_tuoi_20/hinh_anh/" id="link-ht"><img src=""  style='width:160px;padding-right:10px;float:left;max-height: 123px;' id="image-ht"></a>
         <span style="font-size: 13px;" id="article-ht"></span>
         <div style="padding-left: 74px;margin-top:  51px;" class="loadingHT">
             <img src='<?=Yii::$app->request->baseUrl?>/img/ajax-loader.gif'/>
