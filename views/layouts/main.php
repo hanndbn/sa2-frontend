@@ -265,7 +265,7 @@ AppAsset::register($this);
         <div class="col-xs-12">
             <div style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc; overflow: hidden;">
                 <div class="foot-left" title="develop by Đàm Xuân Lập">
-                    © 2014 Tinhvan.com, Tinhvan Group. All rights reserved.
+                    <?=date("Y") ?> Tinhvan.com, Tinhvan Group. All rights reserved.
                 </div>
                 <div>
 

@@ -100,11 +100,19 @@ use yii\helpers\Html;
 										id="university-name" placeholder="Chỉ ghi thông tin bằng cấp cao nhất" maxlength="250" >
 								</div>
 							</td>
-							<td style="background: white;">
+							<td style="background: white; max-width: 198px">
 								<div class="form-group" style="margin-left: 10px;">
 									<label>Hình thức đào tạo</label><span style="color: red">*</span>
-									<input type="text" class="form-control required" name="name"
-										   id="type-of-trainning" maxlength="250" >
+<!--									<input type="text" class="form-control required" name="name"
+										   id="type-of-trainning" maxlength="250" > -->
+									<select class="form-control required" id="type-of-trainning">
+										<option value="">Vui lòng chọn ...</option>
+										<option value="Đại học chính quy">Đại học chính quy</option>
+										<option value="Đại học vừa làm vừa học (hệ Tại chức)">Đại học vừa làm vừa học (hệ Tại chức)</option>
+										<option value="Đào tạo liên thông">Đào tạo liên thông</option>
+										<option value="Đại học từ xa">Đại học từ xa</option>
+										<option value="Liên kết đào tạo quốc tế">Liên kết đào tạo quốc tế</option>
+									</select>
 								</div>
 							</td>
 						</tr>
