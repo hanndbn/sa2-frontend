@@ -11,9 +11,11 @@
 
 		<div class="search_jobs ">
 
-			<div class="search_keywords col-lg-4">
+			<div class="search_keywords col-lg-2">
 				<input type="text" name="keyword" id="keyword" placeholder="Nhập tiêu đề công việc" value="">
-				<div class="select" style="float: right;width: 50%" >
+			</div>
+			<div class="col-lg-2">
+				<div class="select" >
 					<select name="position" id="position" class="search_region" style="border: 0px;">
 						<option value="">Vị Trí</option>
 						<?php foreach ($lstPosition as $item){?>
