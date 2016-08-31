@@ -523,7 +523,7 @@ use yii\helpers\Html;
 										alert('Định dạng file đính kèm không đúng');
 									}
 								} else {
-									alert('Có lỗi trong quá trình Ứng tuyển xin vui lòng kiểm tra lại');
+									alert('Định dạng email không đúng!!');
 								}
 							} else {
 								alert('Bạn chưa nhập đầy đủ thông tin');
